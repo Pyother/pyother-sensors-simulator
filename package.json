@@ -1,8 +1,11 @@
 {
   "name": "pyother-sensors-simulator",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Web app serving as a simulator of a readings from sensors (currently distance sensors supported). You can visualize readings and select methods of filtering and denoising data. ",
   "main": "scripts/index.js",
+  "bin": {
+    "pyother-sensors-simulator": "./scripts/setup.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
