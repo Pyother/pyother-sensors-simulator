@@ -1,7 +1,21 @@
+// * React and Redux:
+import { useSelector } from 'react-redux';
+ 
+// * Views:
+import ConfigurationView from './views/configurationView/ConfigurationView';
+import MainView from './views/mainView/MainView';
+
 const App = () => {
+
+    const view = useSelector(state => state.view.view);
+
     return (
         <>
-            <h1>Hello World</h1>
+            {
+                view === 'configuration' ? 
+                <ConfigurationView /> :
+                <MainView />
+            }
         </>
     )
 }

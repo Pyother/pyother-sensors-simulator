@@ -1,0 +1,16 @@
+@import './utils.css';
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", serif;
+}
+
+:root {
+    --bg-primary: #f8f8f8;
+    --bg-secondary: #f0f0f0;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --accent-primary: #481e9c;
+    --accent-secondary: #bb5daf;
+}
