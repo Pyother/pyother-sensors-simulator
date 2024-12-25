@@ -1,0 +1,28 @@
+{
+    "availableSensors": [
+        {
+            "name": "HCSR04",
+            "measurementType": "distance"
+        }
+    ],
+    "availableTasks": [
+        {
+            "name": "distance measurement",
+            "sensorTypesRequired": [
+                "distance"
+            ],
+            "sensorTypesOptional": [
+                
+            ]
+        },
+        {
+            "name": "location measurement",
+            "sensorTypesRequired": [
+                "encoders"
+            ],
+            "sensorTypesOptional": [
+                "distance"
+            ]
+        }
+    ]
+}
