@@ -9,7 +9,7 @@ import ConfigReducer from '../features/data/ConfigSlice';
 const store = configureStore({
     reducer: {
         view: ViewReducer,
-        mode: ConfigReducer,
+        config: ConfigReducer,
     }
 });
 

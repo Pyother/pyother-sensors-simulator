@@ -2,7 +2,19 @@
     "availableSensors": [
         {
             "name": "HCSR04",
-            "measurementType": "distance"
+            "measurementType": "distance",
+            "precision": 0.01,
+            "range": 2
+        }
+    ],
+    "availableMeasurementTypes": [
+        {
+            "name": "distance",
+            "unit": "m"
+        },
+        {
+            "name": "encoders",
+            "unit": "m"
         }
     ],
     "availableTasks": [
@@ -23,6 +35,16 @@
             "sensorTypesOptional": [
                 "distance"
             ]
+        },
+        {
+            "name": "lidar rotation measurement",
+            "sensorTypesRequired": [
+                "lidar"
+            ],
+            "sensorTypesOptional": [
+                
+            ]
         }
+
     ]
 }

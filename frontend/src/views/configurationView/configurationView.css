@@ -1,0 +1,17 @@
+@media (max-width: 768px) {
+    .configuration-container {
+       width: 100%
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1000px) {
+    .configuration-container {
+       width: 50%
+    }
+}
+
+@media (min-width: 1000px) {
+    .configuration-container {
+       width: 30%
+    }
+}

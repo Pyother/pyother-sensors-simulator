@@ -7,10 +7,19 @@ body {
 }
 
 :root {
+    /* Themes: */
     --bg-primary: #f8f8f8;
     --bg-secondary: #f0f0f0;
     --text-primary: #000000;
     --text-secondary: #333333;
     --accent-primary: #481e9c;
     --accent-secondary: #bb5daf;
+
+    /* Layout: */
+    --padding: 1em;
+    --border-radius: 0.5em;
+}
+
+.app {
+    padding: var(--padding);
 }

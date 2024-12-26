@@ -2,6 +2,16 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setInitialState } from './features/data/ConfigSlice';
+
+// * MUI:
+import { 
+    Stack,
+    AppBar, 
+    Toolbar, 
+    Typography, 
+    IconButton, 
+    Button 
+} from '@mui/material';
  
 // * Views:
 import ConfigurationView from './views/configurationView/ConfigurationView';
@@ -22,11 +32,20 @@ const App = () => {
 
     return (
         <>
+            <AppBar position="static">
+                <Toolbar className="bg-secondary">
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Sensors Simulator
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <Stack className="app center">
             {
                 view === 'configuration' ? 
                 <ConfigurationView /> :
                 <MainView />
             }
+            </Stack>
         </>
     )
 }

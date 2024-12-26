@@ -3,3 +3,21 @@
     justify-content: center;
     align-items: center;
 }
+
+.full-width {
+    width: 100% !important;
+}
+
+.select {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-secondary) !important;
+    border: none !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: none !important;
+}
+
+.bg-secondary {
+    background-color: var(--bg-secondary) !important;
+    box-shadow: none !important;
+    color: var(--text-primary) !important;
+}
