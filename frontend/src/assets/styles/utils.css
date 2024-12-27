@@ -21,3 +21,8 @@
     box-shadow: none !important;
     color: var(--text-primary) !important;
 }
+
+.text-secondary {
+    font-size: small;
+    color: var(--text-secondary) !important;
+}

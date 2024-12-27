@@ -1,0 +1,15 @@
+.task-item-title {
+    text-transform: capitalize;
+}
+
+.task-item-container {
+    padding: var(--padding);
+    margin-right: var(--padding) !important;
+    margin-bottom: var(--padding) !important;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+}
+
+.confirmation-container {
+    padding: var(--padding);
+}
