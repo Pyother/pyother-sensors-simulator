@@ -1,0 +1,5 @@
+.chart-item-container {
+    background-color: var(--bg-secondary);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+}

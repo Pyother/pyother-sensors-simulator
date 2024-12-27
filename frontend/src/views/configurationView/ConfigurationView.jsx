@@ -2,6 +2,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addSelection, removeSelection } from '../../features/data/SelectionsSlice';
+import { setView } from '../../features/layout/ViewSlice';
 
 // * MUI:
 import {
@@ -27,6 +28,7 @@ import './configurationView.css';
 import colorsTheme from '../../assets/themes/colorsTheme';
 
 const ConfigurationView = () => {
+
     const dispatch = useDispatch();
 
     const config = useSelector((state) => state.config);
@@ -111,7 +113,7 @@ const ConfigurationView = () => {
                             variant="contained"
                             color="primary"
                             style={{width: 'fit-content'}}
-                            onClick={() => console.log('Confirm')}
+                            onClick={() => dispatch(setView('main'))}
                         >
                             Confirm and go to dashboard
                         </Button>

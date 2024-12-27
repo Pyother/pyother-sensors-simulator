@@ -42,7 +42,6 @@ const TaskItem = ({ task }) => {
             optionalSensors: optionalSensorsArray
         };
         dispatch(updateSelection(taskToUpdate));
-        console.log(selections);
     };
 
     return (
@@ -57,7 +56,7 @@ const TaskItem = ({ task }) => {
                     >
                         {task.name}
                     </Typography>
-                    <p className="text-secondary">(Place for description)</p>
+                    <p className="text-secondary">{task.description}</p>
                     <FormControl fullWidth>
                         <InputLabel>Required sensors (select at least one)</InputLabel>
                         <Select
@@ -66,9 +65,13 @@ const TaskItem = ({ task }) => {
                             value={requiredSensorsArray}
                             onChange={(event) => setRequiredSensorsArray([...event.target.value])}
                         >
-                            {config.sensors.map((sensor, index) => (
-                                <MenuItem key={index} value={sensor.name}>{sensor.name}</MenuItem>
-                            ))}
+                            {config.sensors
+                                .filter(sensor => 
+                                    task.sensorTypesRequired.includes(sensor.measurementType)
+                                ).map(sensor =>
+                                    <MenuItem key={sensor.name} value={sensor.name}>{sensor.name}</MenuItem>
+                                )
+                            }
                         </Select>
                     </FormControl>
                     {
@@ -81,9 +84,13 @@ const TaskItem = ({ task }) => {
                                 value={optionalSensorsArray}
                                 onChange={(event) => setOptionalSensorsArray([...event.target.value])}
                             >
-                                {config.sensors.map((sensor, index) => (
-                                    <MenuItem key={index} value={sensor.name}>{sensor.name}</MenuItem>
-                                ))}
+                                {config.sensors
+                                    .filter(sensor => 
+                                        task.sensorTypesOptional.includes(sensor.measurementType)
+                                    ).map(sensor =>
+                                        <MenuItem key={sensor.name} value={sensor.name}>{sensor.name}</MenuItem>
+                                    )
+                                }
                             </Select>
                         </FormControl> : null
                     }

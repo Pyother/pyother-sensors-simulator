@@ -3,8 +3,26 @@
         {
             "name": "HCSR04",
             "measurementType": "distance",
-            "precision": 0.01,
+            "precision": 0.003,
+            "frequency": 40,
+            "fieldOfView": 15,
+            "range": 4
+        },
+        {
+            "name": "VL53L0X",
+            "measurementType": "distance",
+            "precision": 0.001,
+            "frequency": 50,
+            "fieldOfView": 25,
             "range": 2
+        },
+        {
+            "name": "LIDAR-Lite v3",
+            "measurementType": "distance",
+            "precision": 0.025,
+            "frequency": 500,
+            "fieldOfView": 0.5,
+            "range": 40
         }
     ],
     "availableMeasurementTypes": [
@@ -20,30 +38,36 @@
     "availableTasks": [
         {
             "name": "distance measurement",
+            "description": "Measures the distance between the robot and an object in front of it.",
             "sensorTypesRequired": [
                 "distance"
             ],
             "sensorTypesOptional": [
                 
-            ]
+            ],
+            "inputObjectRequired": true
         },
         {
             "name": "location measurement",
+            "description": "Measures the location of the robot in the environment.",
             "sensorTypesRequired": [
                 "encoders"
             ],
             "sensorTypesOptional": [
                 "distance"
-            ]
+            ],
+            "inputObjectRequired": false
         },
         {
             "name": "lidar rotation measurement",
+            "description": "Measures the rotation of the lidar sensor.",
             "sensorTypesRequired": [
                 "lidar"
             ],
             "sensorTypesOptional": [
                 
-            ]
+            ],
+            "inputObjectRequired": true
         }
 
     ]
