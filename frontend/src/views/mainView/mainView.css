@@ -1,3 +1,12 @@
 .main-view-container {
     width: 100%;
 }
+
+.generator-container {
+    padding: var(--padding);
+}
+
+.generator-canvas {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+}
