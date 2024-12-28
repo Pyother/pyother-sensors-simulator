@@ -14,6 +14,7 @@ body {
     --text-secondary: #333333;
     --accent-primary: #481e9c;
     --accent-secondary: #bb5daf;
+    --border-color: #b8b8b8;
 
     /* Layout: */
     --padding: 1em;
@@ -22,4 +23,16 @@ body {
 
 .app {
     padding: var(--padding);
+}
+
+@media (max-width: 768px) {
+    .app {
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .app {
+        width: 75%;
+    }
 }

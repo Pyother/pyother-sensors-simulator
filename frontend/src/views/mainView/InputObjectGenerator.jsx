@@ -1,6 +1,6 @@
 // React and Redux:
 import React, { useRef, useEffect, useState } from "react";
-import { seDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addObject } from "../../features/data/InputObjectsSlice";
 
 // * MUI:

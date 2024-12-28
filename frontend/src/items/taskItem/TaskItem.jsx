@@ -45,7 +45,7 @@ const TaskItem = ({ task }) => {
     };
 
     return (
-        <Grid item xs={12} sm={4} md={3} className="task-item-container">
+        <Grid item xs={12} sm={5.7} md={3.8} className="task-item-container">
             <ThemeProvider theme={colorsTheme}>
             {
                 !taskAdded ? 

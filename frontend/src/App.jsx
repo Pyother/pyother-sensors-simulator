@@ -10,12 +10,18 @@ import {
     Toolbar, 
     Typography, 
     IconButton, 
+    Divider,
     Button 
 } from '@mui/material';
  
 // * Views:
 import ConfigurationView from './views/configurationView/ConfigurationView';
 import MainView from './views/mainView/MainView';
+
+// * Icons:
+import { GiMicrochip } from "react-icons/gi";
+import { GoGear } from "react-icons/go";
+import { GoHome } from "react-icons/go";
 
 // * Serivces:
 import getConfig from './services/data/getConfig';
@@ -32,20 +38,23 @@ const App = () => {
 
     return (
         <>
-            <AppBar position="static">
+            <AppBar position="static" className="center" style={{boxShadow: 'none', width: '100%', borderBottom: '1px solid var(--border-color)'}}>
                 <Toolbar className="bg-secondary">
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <GiMicrochip style={{fontSize: 'x-large', marginRight: '0.5em'}} />
+                    <Typography variant="h6" component="div">
                         Sensors Simulator
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Stack className="app center">
-            {
-                view === 'configuration' ? 
-                <ConfigurationView /> :
-                <MainView />
-            }
-            </Stack>
+            <div className="center">
+                <Stack className="app center">
+                {
+                    view === 'configuration' ? 
+                    <ConfigurationView /> :
+                    <MainView />
+                }
+                </Stack>
+            </div>
         </>
     )
 }

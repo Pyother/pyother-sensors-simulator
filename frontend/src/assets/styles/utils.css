@@ -1,3 +1,7 @@
+header {
+    background-color: var(--bg-secondary) !important;
+}
+
 .center {
     display: flex;
     justify-content: center;
