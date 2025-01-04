@@ -1,14 +1,23 @@
-.chart-item-container {
-    background-color: var(--bg-secondary);
+.chart-container, .console-container, .chart-item-container  {
     padding: var(--padding);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
 }
 
+.chart-item-container {
+    background-color: var(--bg-primary);
+}
+
 .chart-container {
     width: calc(100% - 2 * var(--padding));
-    padding: var(--padding);
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
     background-color: var(--bg-primary);
+}
+
+.console-container {
+    width: fit-content;
+    background-color: var(--bg-secondary);
+}
+
+.console-cell {
+    width: calc(3 * var(--padding));
 }

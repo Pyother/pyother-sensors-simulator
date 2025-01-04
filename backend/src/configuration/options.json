@@ -45,7 +45,8 @@
             "sensorTypesOptional": [
                 
             ],
-            "inputObjectRequired": true
+            "inputObjectRequired": true,
+            "movementRequired": true
         },
         {
             "name": "location measurement",
@@ -56,7 +57,8 @@
             "sensorTypesOptional": [
                 "distance"
             ],
-            "inputObjectRequired": false
+            "inputObjectRequired": false,
+            "movementRequired": true
         },
         {
             "name": "lidar rotation measurement",
@@ -67,7 +69,8 @@
             "sensorTypesOptional": [
                 
             ],
-            "inputObjectRequired": true
+            "inputObjectRequired": true,
+            "movementRequired": true
         }
 
     ]
