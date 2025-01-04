@@ -28,5 +28,6 @@ header {
 
 .text-secondary {
     font-size: small;
+    margin-top: 0;
     color: var(--text-secondary) !important;
 }

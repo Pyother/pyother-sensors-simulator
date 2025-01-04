@@ -10,3 +10,13 @@
     background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
 }
+
+.table-container {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.table-head-container {
+    background-color: var(--bg-tertiary);
+}
