@@ -16,16 +16,23 @@ import {
     FormControl,
     MenuItem,
     InputLabel,
+    IconButton,
+    Button
 } from '@mui/material';
 
 // * Own items:
 import Chart from './Chart';
 import Console from './Console';
 
+// * Icons: 
+import { HiOutlineSave } from "react-icons/hi";
+import { HiOutlineArrowUturnLeft } from "react-icons/hi2";
+import { HiOutlineArrowUturnRight } from "react-icons/hi2";
+
 // * Styles:
 import './chartItem.css';
 
-export const PostionContext = createContext();
+export const PositionContext = createContext();
 
 const ChartItem = ({ task }) => {
 
@@ -41,7 +48,8 @@ const ChartItem = ({ task }) => {
             name: itemFromConfig.name,
             description: itemFromConfig.description,
             inputObjectRequired: itemFromConfig.inputObjectRequired,
-            movementRequired: itemFromConfig.movementRequired
+            movementRequired: itemFromConfig.movementRequired,
+            angleRegulation: itemFromConfig.sensorAngleRegulationRequired
         });
     }, [config, task]);
 
@@ -50,7 +58,7 @@ const ChartItem = ({ task }) => {
             item xs={12} sm={12} md={6} 
             className="chart-item-container"
         >   
-            <PostionContext.Provider value={{ position, setPosition }}> 
+            <PositionContext.Provider value={{ position, setPosition }}> 
                 <Stack spacing={2}>
                     <Typography variant="body1" className="task-item-title">{task.name}</Typography>
                     <p className="text-secondary">
@@ -78,15 +86,30 @@ const ChartItem = ({ task }) => {
                         ) : null
                     }
                     <Chart inputObject={inputObject} />
+                    <Stack direction="row" spacing={2}>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                        >
+                            New measurement
+                        </Button>
+                        <IconButton>
+                            <HiOutlineArrowUturnLeft />
+                        </IconButton>
+                        <IconButton>
+                            <HiOutlineArrowUturnRight />
+                        </IconButton>
+                        <IconButton>
+                            <HiOutlineSave />
+                        </IconButton>
+                    </Stack>
                     {
                         chartProps.movementRequired ? (
-                            <div className="center">
-                                <Console />
-                            </div>
+                            <Console angleRegulation={chartProps.angleRegulation} />
                         ) : null
                     }
                 </Stack>
-            </PostionContext.Provider>
+            </PositionContext.Provider>
         </Grid>
     )
 }

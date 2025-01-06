@@ -46,7 +46,8 @@
                 
             ],
             "inputObjectRequired": true,
-            "movementRequired": true
+            "movementRequired": true,
+            "sensorAngleRegulationRequired": true
         },
         {
             "name": "location measurement",
@@ -58,7 +59,8 @@
                 "distance"
             ],
             "inputObjectRequired": false,
-            "movementRequired": true
+            "movementRequired": true,
+            "sensorAngleRegulationRequired": false
         },
         {
             "name": "lidar rotation measurement",
@@ -70,7 +72,8 @@
                 
             ],
             "inputObjectRequired": true,
-            "movementRequired": true
+            "movementRequired": true,
+            "sensorAngleRegulationRequired": false
         }
 
     ]

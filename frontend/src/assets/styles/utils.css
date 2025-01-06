@@ -12,6 +12,10 @@ header {
     width: 100% !important;
 }
 
+.quarter-width {
+    width: 25% !important;
+}
+
 .select {
     color: var(--text-primary) !important;
     background-color: var(--bg-secondary) !important;
