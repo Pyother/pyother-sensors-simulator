@@ -2,7 +2,6 @@
 import React, { 
     useState, 
     useEffect, 
-    useContext, 
     createContext 
 } from 'react';
 import { useSelector } from 'react-redux';
@@ -32,15 +31,22 @@ import { HiOutlineArrowUturnRight } from "react-icons/hi2";
 // * Styles:
 import './chartItem.css';
 
-export const PositionContext = createContext();
+export const ConsoleContext = createContext();
 
 const ChartItem = ({ task }) => {
 
     const config = useSelector((state) => state.config);
     const inputObjects = useSelector((state) => state.inputObjects.objectsArray);
     const [chartProps, setChartProps] = useState({});
+    const [consoleProps, setConsoleProps] = useState({
+        position: {
+            x: 0,
+            y: 0
+        },
+        movementStep: 10,
+        angle: 0
+    });
     const [inputObject, setInputObject] = useState({ name: "", points: [] });
-    const [position, setPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         const itemFromConfig = config.tasks.find((item) => item.name === task.name);
@@ -58,7 +64,7 @@ const ChartItem = ({ task }) => {
             item xs={12} sm={12} md={6} 
             className="chart-item-container"
         >   
-            <PositionContext.Provider value={{ position, setPosition }}> 
+            <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
                 <Stack spacing={2}>
                     <Typography variant="body1" className="task-item-title">{task.name}</Typography>
                     <p className="text-secondary">
@@ -104,12 +110,15 @@ const ChartItem = ({ task }) => {
                         </IconButton>
                     </Stack>
                     {
-                        chartProps.movementRequired ? (
-                            <Console angleRegulation={chartProps.angleRegulation} />
+                        chartProps.movementRequired || chartProps.angleRegulation ? (
+                            <Console 
+                                movement={chartProps.movementRequired}
+                                angleRegulation={chartProps.angleRegulation} 
+                            />
                         ) : null
                     }
                 </Stack>
-            </PositionContext.Provider>
+            </ConsoleContext.Provider>
         </Grid>
     )
 }

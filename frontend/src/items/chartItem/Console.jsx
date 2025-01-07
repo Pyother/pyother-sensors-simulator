@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { PositionContext } from './ChartItem';
+import React, { useState, useEffect, useContext } from 'react';
+import { ConsoleContext } from './ChartItem';
 
 // * MUI:
 import {
@@ -17,9 +17,9 @@ import { HiArrowRight } from "react-icons/hi";
 // * Styles:
 import './chartItem.css';
 
-const Console = ({ angleRegulation }) => {
+const Console = ({ movement, angleRegulation }) => {
 
-    //const { position, setPosition } = useContext(PositionContext);
+    const { consoleProps, setConsoleProps } = useContext(ConsoleContext);
     const [movementStep, setMovementStep] = useState(10);
 
     const valuetext = (value, sliderType) => {
@@ -53,13 +53,48 @@ const Console = ({ angleRegulation }) => {
         }
     ];
 
+    useEffect(() => {
+        console.log(consoleProps);
+    }, [consoleProps]);
+
+    const changePosition = (direction) => {
+        const { x, y } = consoleProps.position;
+        const movementStep = consoleProps.movementStep;
+        switch (direction) {
+            case 'up':
+                setConsoleProps({ ...consoleProps, position: { x, y: y + movementStep } });
+                break;
+            case 'down':
+                setConsoleProps({ ...consoleProps, position: { x, y: y - movementStep } });
+                break;
+            case 'left':
+                setConsoleProps({ ...consoleProps, position: { x: x - movementStep, y } });
+                break;
+            case 'right':
+                setConsoleProps({ ...consoleProps, position: { x: x + movementStep, y } });
+                break;
+            default:
+                break;
+        }
+    }
+
+    const regulateAngle = (angle) => {
+        setConsoleProps({ ...consoleProps, angle });
+    }
+
+    const changeMovementStep = (step) => {
+        setConsoleProps({ ...consoleProps, movementStep: step });
+    }
+
     return (
         <Stack spacing={2} className="center full-width">
             <Stack className="console-container center" spacing={1}>
                 <Stack direction="row" spacing={2}>
                     <div className="console-cell"></div>
                     <div className="console-cell">
-                        <IconButton>
+                        <IconButton
+                            onClick={() => changePosition('up')}
+                        >
                             <HiArrowUp />
                         </IconButton>
                     </div>
@@ -67,13 +102,17 @@ const Console = ({ angleRegulation }) => {
                 </Stack>
                 <Stack direction="row" spacing={2}>
                     <div className="console-cell">
-                        <IconButton>
+                        <IconButton
+                            onClick={() => changePosition('left')}
+                        >
                             <HiArrowLeft />
                         </IconButton>
                     </div>
                     <div className="console-cell"></div>
                     <div className="console-cell">
-                        <IconButton>
+                        <IconButton
+                            onClick={() => changePosition('right')}
+                        >
                             <HiArrowRight />
                         </IconButton>
                     </div>
@@ -81,7 +120,9 @@ const Console = ({ angleRegulation }) => {
                 <Stack direction="row" spacing={2}>
                     <div className="console-cell"></div>
                     <div className="console-cell">
-                        <IconButton>
+                        <IconButton
+                            onClick={() => changePosition('down')}
+                        >
                             <HiArrowDown />
                         </IconButton>
                     </div>
@@ -89,22 +130,24 @@ const Console = ({ angleRegulation }) => {
                 </Stack>
             </Stack>
             <Stack direction="row" spacing={8} className="full-width" style={{display: 'flex', justifyContent: 'center'}}>
-                <Stack >
-                    <p className="text-secondary">Movement step</p>
-                    <Slider
-                        min={0.1}
-                        max={50}
-                        step={0.1}
-                        defaultValue={10}
-                        onChange={(e, value) => setMovementStep(value)}
-                        size="small"
-                        aria-label="Movement step"
-                        valueLabelDisplay="auto"
-                        getAriaValueText={(value) => valuetext(value, "movementStep")}
-                        marks={movementSliderMarks}
-                        style={{ marginBottom: '2em' }}
-                    />
-                </Stack>
+                {
+                    movement ?
+                        <Stack>
+                            <p className="text-secondary">Movement step</p>
+                            <Slider
+                                min={0.1}
+                                max={50}
+                                step={0.1}
+                                defaultValue={10}
+                                size="small"
+                                aria-label="Movement step"
+                                valueLabelDisplay="auto"
+                                getAriaValueText={(value) => valuetext(value, "movementStep")}
+                                marks={movementSliderMarks}
+                                onChange={(e, value) => changeMovementStep(value)}
+                            />
+                        </Stack> : null
+                }
                 {
                     angleRegulation ?
                         <Stack >
@@ -119,6 +162,7 @@ const Console = ({ angleRegulation }) => {
                                 valueLabelDisplay="auto"
                                 getAriaValueText={(value) => valuetext(value, "angle")}
                                 marks={angleSliderMarks}
+                                onChange={(e, value) => regulateAngle(value)}
                             />
                         </Stack> : null
                 }
