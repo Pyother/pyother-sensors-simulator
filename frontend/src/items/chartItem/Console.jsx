@@ -53,10 +53,6 @@ const Console = ({ movement, angleRegulation }) => {
         }
     ];
 
-    useEffect(() => {
-        console.log(consoleProps);
-    }, [consoleProps]);
-
     const changePosition = (direction) => {
         const { x, y } = consoleProps.position;
         const movementStep = consoleProps.movementStep;
@@ -145,6 +141,7 @@ const Console = ({ movement, angleRegulation }) => {
                                 getAriaValueText={(value) => valuetext(value, "movementStep")}
                                 marks={movementSliderMarks}
                                 onChange={(e, value) => changeMovementStep(value)}
+                                style={{marginBottom: '3em'}}
                             />
                         </Stack> : null
                 }
@@ -163,6 +160,7 @@ const Console = ({ movement, angleRegulation }) => {
                                 getAriaValueText={(value) => valuetext(value, "angle")}
                                 marks={angleSliderMarks}
                                 onChange={(e, value) => regulateAngle(value)}
+                                style={{marginBottom: '3em'}}
                             />
                         </Stack> : null
                 }

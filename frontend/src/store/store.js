@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 // * Layout features:
 import ViewReducer from '../features/layout/ViewSlice';
+import DeviceTypeReducer from '../features/layout/DeviceTypeSlice';
 
 // * Data features:
 import ConfigReducer from '../features/data/ConfigSlice';
@@ -14,6 +15,7 @@ const store = configureStore({
         config: ConfigReducer,
         selections: SelectionsReducer,
         inputObjects: InputObjectsReducer,
+        deviceType: DeviceTypeReducer,
     }
 });
 

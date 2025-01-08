@@ -16,6 +16,7 @@ import {
     MenuItem,
     InputLabel,
     IconButton,
+    TextField,
     Button
 } from '@mui/material';
 
@@ -60,66 +61,84 @@ const ChartItem = ({ task }) => {
     }, [config, task]);
 
     return (
-        <Grid 
-            item xs={12} sm={12} md={6} 
-            className="chart-item-container"
-        >   
-            <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
-                <Stack spacing={2}>
-                    <Typography variant="body1" className="task-item-title">{task.name}</Typography>
-                    <p className="text-secondary">
-                        {chartProps.description ? chartProps.description : "No description available"}
-                    </p>
-                    {
-                        chartProps.inputObjectRequired ? (
-                            <FormControl fullWidth>
-                                <InputLabel>Input objects</InputLabel>
-                                <Select
-                                    className="select"
-                                    value={inputObject}
-                                    onChange={(e) => setInputObject(e.target.value)}
-                                    label="Input objects"
-                                >
-                                    {
-                                        inputObjects.map((item, index) => (
-                                            <MenuItem key={index} value={item}>
-                                                {item.name}
-                                            </MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                        ) : null
-                    }
-                    <Chart inputObject={inputObject} />
-                    <Stack direction="row" spacing={2}>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                        >
-                            New measurement
-                        </Button>
-                        <IconButton>
-                            <HiOutlineArrowUturnLeft />
-                        </IconButton>
-                        <IconButton>
-                            <HiOutlineArrowUturnRight />
-                        </IconButton>
-                        <IconButton>
-                            <HiOutlineSave />
-                        </IconButton>
+        <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
+            <Grid container className="chart-item-container" >
+                <Grid item xs={12} sm={12} md={6} >
+                    <Stack spacing={2}>
+                        <Typography variant="body1" className="task-item-title">{task.name}</Typography>
+                        <p className="text-secondary">
+                            {chartProps.description ? chartProps.description : "No description available"}
+                        </p>
+                        {
+                            chartProps.inputObjectRequired ? (
+                                <FormControl fullWidth>
+                                    <InputLabel>Input objects</InputLabel>
+                                    <Select
+                                        className="select"
+                                        value={inputObject}
+                                        onChange={(e) => setInputObject(e.target.value)}
+                                        label="Input objects"
+                                    >
+                                        {
+                                            inputObjects.map((item, index) => (
+                                                <MenuItem key={index} value={item}>
+                                                    {item.name}
+                                                </MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                            ) : null
+                        }
+                        <Stack direction="row" spacing={2}>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                            >
+                                Measure
+                            </Button>
+                            <IconButton>
+                                <HiOutlineArrowUturnLeft />
+                            </IconButton>
+                            <IconButton>
+                                <HiOutlineArrowUturnRight />
+                            </IconButton>
+                            <IconButton>
+                                <HiOutlineSave />
+                            </IconButton>
+                            {
+                                chartProps.movementRequired ?
+                                <>
+                                    <TextField 
+                                        className="select" 
+                                        label="Position X"
+                                        value={consoleProps.position.x}
+                                        onChange={(e) => setConsoleProps({ ...consoleProps, position: { x: e.target.value, y: consoleProps.position.y } })}
+                                    />
+                                    <TextField 
+                                        className="select" 
+                                        label="Position Y"
+                                        value={consoleProps.position.y}
+                                        onChange={(e) => setConsoleProps({ ...consoleProps, position: { x: consoleProps.position.x, y: e.target.value } })}
+                                    />
+                                </> : null
+                            }
+                        </Stack>
+                        {
+                            chartProps.movementRequired || chartProps.angleRegulation ? (
+                                <Console 
+                                    movement={chartProps.movementRequired}
+                                    angleRegulation={chartProps.angleRegulation} 
+                                />
+                            ) : null
+                        }
                     </Stack>
-                    {
-                        chartProps.movementRequired || chartProps.angleRegulation ? (
-                            <Console 
-                                movement={chartProps.movementRequired}
-                                angleRegulation={chartProps.angleRegulation} 
-                            />
-                        ) : null
-                    }
-                </Stack>
-            </ConsoleContext.Provider>
-        </Grid>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6}>
+                    <Chart inputObject={inputObject} />
+                </Grid>
+            </Grid>
+        </ConsoleContext.Provider>
     )
 }
 

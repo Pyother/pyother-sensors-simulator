@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setInitialState } from './features/data/ConfigSlice';
+import { setDeviceType } from './features/layout/DeviceTypeSlice';
 
 // * MUI:
 import { 
     Stack,
     AppBar, 
     Toolbar, 
-    Typography, 
+    Typography,
     IconButton, 
     Divider,
     Button 
@@ -35,6 +36,19 @@ const App = () => {
     useEffect(() => {
         getConfig(dispatch, setInitialState);
     }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            dispatch(setDeviceType(window.innerWidth));
+        }
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    }, [dispatch]);
 
     return (
         <>
