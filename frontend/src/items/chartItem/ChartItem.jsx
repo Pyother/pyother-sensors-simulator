@@ -33,6 +33,7 @@ import { HiOutlineArrowUturnRight } from "react-icons/hi2";
 import './chartItem.css';
 
 export const ConsoleContext = createContext();
+export const InputObjectContext = createContext();
 
 const ChartItem = ({ task }) => {
 
@@ -62,6 +63,7 @@ const ChartItem = ({ task }) => {
 
     return (
         <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
+        <InputObjectContext.Provider value={{ inputObject, setInputObject }}>
             <Grid container className="chart-item-container" >
                 <Grid item xs={12} sm={12} md={6} >
                     <Stack spacing={2}>
@@ -138,6 +140,7 @@ const ChartItem = ({ task }) => {
                     <Chart inputObject={inputObject} />
                 </Grid>
             </Grid>
+        </InputObjectContext.Provider>
         </ConsoleContext.Provider>
     )
 }

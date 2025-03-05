@@ -1,14 +1,15 @@
-// * React and Redux:
 import React, { useEffect, useContext, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ConsoleContext } from './ChartItem';
+import { ConsoleContext, InputObjectContext } from './ChartItem';
 import * as d3 from 'd3';
 import './chartItem.css';
 
 const Chart = () => {
+    
     const { consoleProps } = useContext(ConsoleContext);
-    const chartRef = useRef(null); 
-    const containerRef = useRef(null); 
+    const { inputObject } = useContext(InputObjectContext);
+    const chartRef = useRef(null);
+    const containerRef = useRef(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const deviceType = useSelector((state) => state.deviceType.deviceType);
 
@@ -24,7 +25,7 @@ const Chart = () => {
 
     useEffect(() => {
         calculateDimensions();
-        window.addEventListener('resize', calculateDimensions); 
+        window.addEventListener('resize', calculateDimensions);
 
         return () => {
             window.removeEventListener('resize', calculateDimensions);
@@ -32,6 +33,7 @@ const Chart = () => {
     }, [deviceType]);
 
     useEffect(() => {
+
         if (dimensions.width === 0 || dimensions.height === 0) return;
 
         const { width, height } = dimensions;
@@ -39,34 +41,66 @@ const Chart = () => {
 
         const svg = d3.select(chartRef.current)
             .attr('width', width)
-            .attr('height', height)
+            .attr('height', height);
 
         const xScale = d3.scaleLinear()
-            .domain([-500, 500]) 
+            .domain([-500, 500])
             .range([margin, width - margin]);
 
         const yScale = d3.scaleLinear()
-            .domain([-500, 500]) 
-            .range([height - margin, margin]); 
+            .domain([-500, 500])
+            .range([height - margin, margin]);
 
-        const xAxis = d3.axisBottom(xScale).ticks(10); 
-        const yAxis = d3.axisLeft(yScale).ticks(10);  
+        const xAxis = d3.axisBottom(xScale).ticks(10);
+        const yAxis = d3.axisLeft(yScale).ticks(10);
 
         svg.select('.x-axis')
-            .attr('transform', `translate(0, ${yScale(0)})`) 
+            .attr('transform', `translate(0, ${yScale(0)})`)
             .call(xAxis);
 
         svg.select('.y-axis')
-            .attr('transform', `translate(${xScale(0)}, 0)`) 
+            .attr('transform', `translate(${xScale(0)}, 0)`)
             .call(yAxis);
 
-        if (!svg.select('.data-point').node()) {
-            svg.append('circle')
-                .attr('class', 'data-point')
-                .attr('r', 5)
-                .attr('fill', '#003366');
-        }
-    }, [dimensions]);
+        // Rysowanie punktów i linii na podstawie inputObject
+        const points = inputObject.points.map((point) => ({
+            x: parseFloat(point.x * 100),
+            y: parseFloat(point.y * 100)
+        })) || [];
+
+        // Usunięcie poprzednich danych
+        svg.selectAll('.data-line').remove();
+        svg.selectAll('.data-point').remove();
+
+        // Rysowanie linii
+        svg.append('g')
+            .selectAll('line')
+            .data(points.slice(1)) // Pomijamy pierwszy punkt, bo nie ma poprzednika
+            .enter()
+            .append('line')
+            .attr('class', 'data-line')
+            .attr('x1', (d, i) => xScale(points[i].x))
+            .attr('y1', (d, i) => yScale(points[i].y))
+            .attr('x2', (d) => xScale(d.x))
+            .attr('y2', (d) => yScale(d.y))
+            .attr('stroke', '#003366')
+            .attr('stroke-width', 2);
+
+        // Rysowanie punktów
+        svg.append('g')
+            .selectAll('circle')
+            .data(points)
+            .enter()
+            .append('circle')
+            .attr('class', 'data-point')
+            .attr('cx', (d) => xScale(d.x))
+            .attr('cy', (d) => yScale(d.y))
+            .attr('r', 5)
+            .attr('fill', '#003366');
+
+        
+
+    }, [dimensions, inputObject]);
 
     useEffect(() => {
         const { width, height } = dimensions;
@@ -87,11 +121,10 @@ const Chart = () => {
                 .select('.data-point')
                 .transition()
                 .duration(300)
-                .attr('cx', xScale(x)) 
-                .attr('cy', yScale(y)); 
+                .attr('cx', xScale(x))
+                .attr('cy', yScale(y));
         }
     }, [consoleProps, dimensions]);
-
 
     return (
         <div
@@ -104,9 +137,7 @@ const Chart = () => {
             className="chart-container"
         >
             <svg ref={chartRef}>
-                {/* Oś X */}
                 <g className="x-axis"></g>
-                {/* Oś Y */}
                 <g className="y-axis"></g>
             </svg>
         </div>

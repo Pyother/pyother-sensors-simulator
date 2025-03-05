@@ -19,6 +19,8 @@ import './chartItem.css';
 
 const Console = ({ movement, angleRegulation }) => {
 
+    
+
     const { consoleProps, setConsoleProps } = useContext(ConsoleContext);
     const [movementStep, setMovementStep] = useState(10);
 
@@ -56,6 +58,7 @@ const Console = ({ movement, angleRegulation }) => {
     const changePosition = (direction) => {
         const { x, y } = consoleProps.position;
         const movementStep = consoleProps.movementStep;
+
         switch (direction) {
             case 'up':
                 setConsoleProps({ ...consoleProps, position: { x, y: y + movementStep } });
