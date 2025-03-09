@@ -22,8 +22,6 @@ const findCrossingPoint = ({ position, direction, objectBoundaries }) => {
         const { start, end, line } = boundary;
         const intersection = findIntersection(sensorPath.line, line);
 
-        console.log('Intersection:', intersection);
-
         if (intersection) {
             // Check if intersection occurs on the correct side of the sensor:
             if (checkDirection({ sensorPosition: position, intersection, direction })) {
@@ -34,8 +32,6 @@ const findCrossingPoint = ({ position, direction, objectBoundaries }) => {
             }
         }
     });
-
-    console.log('Distances:', distances);
 
     // Sorting distances to find the closest intersection point:
     distances.sort((a, b) => {
