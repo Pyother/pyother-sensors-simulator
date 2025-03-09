@@ -25,6 +25,7 @@ const calcObjectBoundaries = ({ inputObject }) => {
         }
     })
 
+    console.log('Boundaries:', boundaries);
     return boundaries;
 }
 
