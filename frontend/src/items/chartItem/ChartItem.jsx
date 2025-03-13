@@ -32,6 +32,9 @@ import { HiOutlineArrowUturnRight } from "react-icons/hi2";
 // * Styles:
 import './chartItem.css';
 
+// * Axios:
+import axios from 'axios';
+
 export const ConsoleContext = createContext();
 export const InputObjectContext = createContext();
 
@@ -60,6 +63,18 @@ const ChartItem = ({ task }) => {
             angleRegulation: itemFromConfig.sensorAngleRegulationRequired
         });
     }, [config, task]);
+
+    const sendMeasurementRequest = () => {
+        axios.post('http://localhost:5000/api/calc/distance', {
+            position: consoleProps.position,
+            direction: consoleProps.angle,
+            inputObject: inputObject.points
+        }).then((response) => {
+            console.log(response.data);
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
 
     return (
         <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
@@ -96,6 +111,7 @@ const ChartItem = ({ task }) => {
                             <Button
                                 variant="outlined"
                                 color="primary"
+                                onClick={sendMeasurementRequest}
                             >
                                 Measure
                             </Button>
