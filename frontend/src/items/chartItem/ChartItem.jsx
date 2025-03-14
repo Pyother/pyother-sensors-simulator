@@ -78,85 +78,97 @@ const ChartItem = ({ task }) => {
 
     return (
         <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
-        <InputObjectContext.Provider value={{ inputObject, setInputObject }}>
-            <Grid container className="chart-item-container" >
-                <Grid item xs={12} sm={12} md={6} >
-                    <Stack spacing={2}>
-                        <Typography variant="body1" className="task-item-title">{task.name}</Typography>
-                        <p className="text-secondary">
-                            {chartProps.description ? chartProps.description : "No description available"}
-                        </p>
-                        {
-                            chartProps.inputObjectRequired ? (
-                                <FormControl fullWidth>
-                                    <InputLabel>Input objects</InputLabel>
-                                    <Select
-                                        className="select"
-                                        value={inputObject}
-                                        onChange={(e) => setInputObject(e.target.value)}
-                                        label="Input objects"
-                                    >
-                                        {
-                                            inputObjects.map((item, index) => (
-                                                <MenuItem key={index} value={item}>
-                                                    {item.name}
-                                                </MenuItem>
-                                            ))
-                                        }
-                                    </Select>
-                                </FormControl>
-                            ) : null
-                        }
-                        <Stack direction="row" spacing={2}>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={sendMeasurementRequest}
-                            >
-                                Measure
-                            </Button>
-                            <IconButton>
-                                <HiOutlineArrowUturnLeft />
-                            </IconButton>
-                            <IconButton>
-                                <HiOutlineArrowUturnRight />
-                            </IconButton>
-                            <IconButton>
-                                <HiOutlineSave />
-                            </IconButton>
+            <InputObjectContext.Provider value={{ inputObject, setInputObject }}>
+                <Grid container className="chart-item-container" >
+                    <Grid item xs={12} sm={12} md={6} >
+                        <Stack spacing={2}>
+                            <Typography variant="body1" className="task-item-title">{task.name}</Typography>
+                            <p className="text-secondary">
+                                {chartProps.description ? chartProps.description : "No description available"}
+                            </p>
                             {
-                                chartProps.movementRequired ?
-                                <>
-                                    <TextField 
-                                        className="select" 
-                                        label="Position X"
-                                        value={consoleProps.position.x}
-                                        onChange={(e) => setConsoleProps({ ...consoleProps, position: { x: e.target.value, y: consoleProps.position.y } })}
+                                chartProps.inputObjectRequired ? (
+                                    <FormControl fullWidth>
+                                        <InputLabel>Input objects</InputLabel>
+                                        <Select
+                                            className="select"
+                                            value={inputObject}
+                                            onChange={(e) => setInputObject(e.target.value)}
+                                            label="Input objects"
+                                        >
+                                            {
+                                                inputObjects.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>
+                                                        {item.name}
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                ) : null
+                            }
+                            <Stack direction="row" spacing={2}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={sendMeasurementRequest}
+                                >
+                                    Measure
+                                </Button>
+                                <IconButton>
+                                    <HiOutlineArrowUturnLeft />
+                                </IconButton>
+                                <IconButton>
+                                    <HiOutlineArrowUturnRight />
+                                </IconButton>
+                                <IconButton>
+                                    <HiOutlineSave />
+                                </IconButton>
+                                {
+                                    chartProps.movementRequired ?
+                                    <>
+                                        <TextField 
+                                            className="select" 
+                                            label="Position X"
+                                            type="number"
+                                            value={consoleProps.position.x}
+                                            onChange={(e) => {
+                                                if (e.target.value > 500 || e.target.value < -500) return;
+                                                else setConsoleProps({ 
+                                                    ...consoleProps, position: { x: Math.round(e.target.value * 100) / 100, y: consoleProps.position.y }
+                                                });
+                                            }}
+                                        />
+                                        <TextField 
+                                            className="select" 
+                                            label="Position Y"
+                                            type="number"
+                                            value={consoleProps.position.y}
+                                            onChange={(e) => { 
+                                                if (e.target.value > 500 || e.target.value < -500) return;
+                                                else setConsoleProps({
+                                                    ...consoleProps, position: { x: consoleProps.position.x, y: Math.round(e.target.value * 100) / 100 }
+                                                });
+                                            }}
+                                        />
+                                    </> : null
+                                }
+                            </Stack>
+                            {
+                                chartProps.movementRequired || chartProps.angleRegulation ? (
+                                    <Console 
+                                        movement={chartProps.movementRequired}
+                                        angleRegulation={chartProps.angleRegulation} 
                                     />
-                                    <TextField 
-                                        className="select" 
-                                        label="Position Y"
-                                        value={consoleProps.position.y}
-                                        onChange={(e) => setConsoleProps({ ...consoleProps, position: { x: consoleProps.position.x, y: e.target.value } })}
-                                    />
-                                </> : null
+                                ) : null
                             }
                         </Stack>
-                        {
-                            chartProps.movementRequired || chartProps.angleRegulation ? (
-                                <Console 
-                                    movement={chartProps.movementRequired}
-                                    angleRegulation={chartProps.angleRegulation} 
-                                />
-                            ) : null
-                        }
-                    </Stack>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={6}>
+                        <Chart inputObject={inputObject} />
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                    <Chart inputObject={inputObject} />
-                </Grid>
-            </Grid>
-        </InputObjectContext.Provider>
+            </InputObjectContext.Provider>
         </ConsoleContext.Provider>
     )
 }

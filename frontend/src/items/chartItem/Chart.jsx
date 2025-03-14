@@ -5,7 +5,6 @@ import * as d3 from 'd3';
 import './chartItem.css';
 
 const Chart = () => {
-    
     const { consoleProps } = useContext(ConsoleContext);
     const { inputObject } = useContext(InputObjectContext);
     const chartRef = useRef(null);
@@ -33,7 +32,6 @@ const Chart = () => {
     }, [deviceType]);
 
     useEffect(() => {
-
         if (dimensions.width === 0 || dimensions.height === 0) return;
 
         const { width, height } = dimensions;
@@ -62,20 +60,17 @@ const Chart = () => {
             .attr('transform', `translate(${xScale(0)}, 0)`)
             .call(yAxis);
 
-        // Rysowanie punktów i linii na podstawie inputObject
+        svg.selectAll('.data-line').remove();
+        svg.selectAll('.data-point').remove();
+
         const points = inputObject.points.map((point) => ({
             x: parseFloat(point.x * 100),
             y: parseFloat(point.y * 100)
         })) || [];
 
-        // Usunięcie poprzednich danych
-        svg.selectAll('.data-line').remove();
-        svg.selectAll('.data-point').remove();
-
-        // Rysowanie linii
         svg.append('g')
             .selectAll('line')
-            .data(points.slice(1)) // Pomijamy pierwszy punkt, bo nie ma poprzednika
+            .data(points.slice(1))
             .enter()
             .append('line')
             .attr('class', 'data-line')
@@ -86,7 +81,6 @@ const Chart = () => {
             .attr('stroke', '#003366')
             .attr('stroke-width', 2);
 
-        // Rysowanie punktów
         svg.append('g')
             .selectAll('circle')
             .data(points)
@@ -98,40 +92,46 @@ const Chart = () => {
             .attr('r', 5)
             .attr('fill', '#003366');
 
-        
-
     }, [dimensions, inputObject]);
 
     useEffect(() => {
+        if (!consoleProps.position) return;
+
         const { width, height } = dimensions;
         const margin = 40;
 
-        if (consoleProps.position) {
-            const { x, y } = consoleProps.position;
+        const xScale = d3.scaleLinear()
+            .domain([-500, 500])
+            .range([margin, width - margin]);
 
-            const xScale = d3.scaleLinear()
-                .domain([-500, 500])
-                .range([margin, width - margin]);
+        const yScale = d3.scaleLinear()
+            .domain([-500, 500])
+            .range([height - margin, margin]);
 
-            const yScale = d3.scaleLinear()
-                .domain([-500, 500])
-                .range([height - margin, margin]);
+        const svg = d3.select(chartRef.current);
 
-            d3.select(chartRef.current)
-                .select('.data-point')
-                .transition()
-                .duration(300)
-                .attr('cx', xScale(x))
-                .attr('cy', yScale(y));
+        let sensorPoint = svg.select('.sensor-point');
+        if (sensorPoint.empty()) {
+            sensorPoint = svg.append('circle')
+                .attr('class', 'sensor-point')
+                .attr('r', 5)
+                .attr('fill', 'red');
         }
+
+        sensorPoint
+            .transition()
+            .duration(300)
+            .attr('cx', xScale(consoleProps.position.x))
+            .attr('cy', yScale(consoleProps.position.y));
+
     }, [consoleProps, dimensions]);
 
     return (
         <div
             ref={containerRef}
             style={{
-                width: 'calc(100% - 0.25em)', // 20px to zapas na scrollbar
-                height: `${dimensions.height}px`, // Dynamiczna wysokość
+                width: 'calc(100% - 0.25em)',
+                height: `${dimensions.height}px`,
                 borderRadius: '0.5em',
             }}
             className="chart-container"

@@ -19,8 +19,6 @@ import './chartItem.css';
 
 const Console = ({ movement, angleRegulation }) => {
 
-    
-
     const { consoleProps, setConsoleProps } = useContext(ConsoleContext);
     const [movementStep, setMovementStep] = useState(10);
 
@@ -61,16 +59,20 @@ const Console = ({ movement, angleRegulation }) => {
 
         switch (direction) {
             case 'up':
-                setConsoleProps({ ...consoleProps, position: { x, y: y + movementStep } });
+                if (consoleProps.position.y + movementStep > 500) return;
+                else setConsoleProps({ ...consoleProps, position: { x, y: y + movementStep } });
                 break;
             case 'down':
-                setConsoleProps({ ...consoleProps, position: { x, y: y - movementStep } });
+                if (consoleProps.position.y - movementStep < -500) return;
+                else setConsoleProps({ ...consoleProps, position: { x, y: y - movementStep } });
                 break;
             case 'left':
-                setConsoleProps({ ...consoleProps, position: { x: x - movementStep, y } });
+                if (consoleProps.position.x - movementStep < -500) return;
+                else setConsoleProps({ ...consoleProps, position: { x: x - movementStep, y } });
                 break;
             case 'right':
-                setConsoleProps({ ...consoleProps, position: { x: x + movementStep, y } });
+                if (consoleProps.position.x + movementStep > 500) return;
+                else setConsoleProps({ ...consoleProps, position: { x: x + movementStep, y } });
                 break;
             default:
                 break;
