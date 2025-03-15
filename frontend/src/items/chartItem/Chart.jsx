@@ -97,6 +97,9 @@ const Chart = () => {
     useEffect(() => {
         if (!consoleProps.position) return;
 
+        let { angle } = consoleProps;
+        if(!angle) angle = 0;
+        const angleInRadians = angle * (Math.PI / 180);
         const { width, height } = dimensions;
         const margin = 40;
 
@@ -111,6 +114,8 @@ const Chart = () => {
         const svg = d3.select(chartRef.current);
 
         let sensorPoint = svg.select('.sensor-point');
+        let sensorLine = svg.select('.sensor-line');
+
         if (sensorPoint.empty()) {
             sensorPoint = svg.append('circle')
                 .attr('class', 'sensor-point')
@@ -118,11 +123,26 @@ const Chart = () => {
                 .attr('fill', 'red');
         }
 
+        if (sensorLine.empty()) {
+            sensorLine = svg.append('line')
+                .attr('class', 'sensor-line')
+                .attr('stroke', 'red')
+                .attr('stroke-width', 2);
+        }
+
         sensorPoint
             .transition()
             .duration(300)
             .attr('cx', xScale(consoleProps.position.x))
             .attr('cy', yScale(consoleProps.position.y));
+
+        sensorLine
+            .transition()
+            .duration(300)
+            .attr('x1', xScale(consoleProps.position.x))
+            .attr('y1', yScale(consoleProps.position.y))
+            .attr('x2', xScale(consoleProps.position.x + 40 * Math.cos(angleInRadians)))
+            .attr('y2', yScale(consoleProps.position.y + 40 * Math.sin(angleInRadians)));
 
     }, [consoleProps, dimensions]);
 
