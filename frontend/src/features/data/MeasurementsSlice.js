@@ -6,7 +6,8 @@ const MeasurementsSlice = createSlice({
         measurementsArray: [],
     },
     reducers: {
-        addMeasurement(state, action) {
+        addMeasurement: (state, action) => {
+            console.log('Adding measurement:', action.payload);
             state.measurementsArray.push(action.payload);
         }
     }

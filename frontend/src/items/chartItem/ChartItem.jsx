@@ -42,7 +42,18 @@ import { v4 as uuidv4 } from 'uuid';
 export const ConsoleContext = createContext();
 export const InputObjectContext = createContext();
 
+
 const ChartItem = ({ task }) => {
+
+    const dispatch = useDispatch();
+
+    // * Features:
+    // - config - tasks parameters.
+    // - inputObjects - list of defined boundaries of solid objects in the environment.
+    // - chartProps - parameters of the current task, taken from the config.
+    // - measurementsObject - object containing all measurements done during the task.
+    // - consoleProps - properties of the console (position, movement step, angle).
+    // - inputObject - object containing the input object for the task.
 
     const config = useSelector((state) => state.config);
     const inputObjects = useSelector((state) => state.inputObjects.objectsArray);
@@ -63,8 +74,10 @@ const ChartItem = ({ task }) => {
     });
     const [inputObject, setInputObject] = useState({ name: "", points: [] });
 
+
     // * Setting task configuration:
     // Items are taken from the config Redux slice.
+
     useEffect(() => {
         const itemFromConfig = config.tasks.find((item) => item.name === task.name);
         setChartProps({
@@ -77,10 +90,12 @@ const ChartItem = ({ task }) => {
 
     }, [config, task]);
 
+
     // * Measurement request:
     // Calculation of the distance measured by each sensor for input object.
     // Input: position, direction, sensor, inputObject.
     // Output: estimated distance for each sensor.
+
     const sendMeasurementRequest = async () => {
 
         const sensorsArray = [task.optionalSensors, ...task.requiredSensors].flat();
@@ -102,18 +117,21 @@ const ChartItem = ({ task }) => {
                 return measurement;
             }));
 
-            console.log('Measurements array:', measurementsArray);
+            // console.log('Measurements array:', measurementsArray);
+            dispatch(addMeasurement(measurementsArray));
             return measurementsArray;
+
         } catch (error) {
             console.log('Error in sendMeasurementRequest:', error);
             return null;
         }
     };
 
+
     return (
         <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
             <InputObjectContext.Provider value={{ inputObject, setInputObject }}>
-                <Grid container className="chart-item-container" >
+                <Grid container className="chart-item-container">
                     <Grid item xs={12} sm={12} md={6} >
                         <Stack spacing={2}>
                             <Typography variant="body1" className="task-item-title">{task.name}</Typography>

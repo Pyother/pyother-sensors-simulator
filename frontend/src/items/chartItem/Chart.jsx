@@ -1,6 +1,9 @@
+// * React and Redux:
 import React, { useEffect, useContext, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ConsoleContext, InputObjectContext } from './ChartItem';
+
+// * D3:
 import * as d3 from 'd3';
 import './chartItem.css';
 
@@ -12,6 +15,7 @@ const Chart = () => {
     const containerRef = useRef(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const deviceType = useSelector((state) => state.deviceType.deviceType);
+    const measurements = useSelector((state) => state.measurements.measurementsArray);
 
     const calculateDimensions = () => {
         if (containerRef.current) {
@@ -22,6 +26,62 @@ const Chart = () => {
             });
         }
     };
+
+    // * Triggering after each measurement:
+    // Displaying measurements on the chart.
+    useEffect(() => {
+
+        if (measurements.length === 0 || dimensions.width === 0 || dimensions.height === 0) return;
+
+        const { width, height } = dimensions;
+        const margin = 40;
+
+        const xScale = d3.scaleLinear()
+            .domain([-500, 500])
+            .range([margin, width - margin]);
+
+        const yScale = d3.scaleLinear()
+            .domain([-500, 500])
+            .range([height - margin, margin]);
+
+        const svg = d3.select(chartRef.current);
+
+        svg.selectAll('.measurement-point').remove();
+        svg.selectAll('.measurement-line').remove();
+
+        measurements.forEach((cycle) => {
+            const points = cycle.map(meas => ({
+                x: parseFloat(meas.distance.x * 100),
+                y: parseFloat(meas.distance.y * 100),
+            }));
+
+            svg.append('g')
+                .selectAll('circle')
+                .data(points)
+                .enter()
+                .append('circle')
+                .attr('class', 'measurement-point')
+                .attr('cx', d => xScale(d.x))
+                .attr('cy', d => yScale(d.y))
+                .attr('r', 4)
+                .attr('fill', 'green');
+
+            if (points.length > 1) {
+                svg.append('g')
+                    .selectAll('line')
+                    .data(points.slice(1))
+                    .enter()
+                    .append('line')
+                    .attr('class', 'measurement-line')
+                    .attr('x1', (d, i) => xScale(points[i].x))
+                    .attr('y1', (d, i) => yScale(points[i].y))
+                    .attr('x2', d => xScale(d.x))
+                    .attr('y2', d => yScale(d.y))
+                    .attr('stroke', 'green')
+                    .attr('stroke-width', 1.5);
+            }
+        });
+    }, [measurements]);
 
     useEffect(() => {
         calculateDimensions();
