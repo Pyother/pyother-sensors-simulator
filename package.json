@@ -23,5 +23,8 @@
     "testing"
   ],
   "author": "Piotr Sobol",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^11.1.0"
+  }
 }

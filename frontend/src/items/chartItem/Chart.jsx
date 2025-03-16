@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import './chartItem.css';
 
 const Chart = () => {
+    
     const { consoleProps } = useContext(ConsoleContext);
     const { inputObject } = useContext(InputObjectContext);
     const chartRef = useRef(null);

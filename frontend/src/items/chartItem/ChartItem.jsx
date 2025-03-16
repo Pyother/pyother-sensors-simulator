@@ -4,7 +4,8 @@ import React, {
     useEffect, 
     createContext 
 } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { addMeasurement } from '../../features/data/MeasurementsSlice';
 
 // * MUI:
 import {
@@ -35,6 +36,9 @@ import './chartItem.css';
 // * Axios:
 import axios from 'axios';
 
+// * UUID:
+import { v4 as uuidv4 } from 'uuid';
+
 export const ConsoleContext = createContext();
 export const InputObjectContext = createContext();
 
@@ -43,6 +47,12 @@ const ChartItem = ({ task }) => {
     const config = useSelector((state) => state.config);
     const inputObjects = useSelector((state) => state.inputObjects.objectsArray);
     const [chartProps, setChartProps] = useState({});
+    const [measurementsObject, setMeasurementsObject] = useState({
+        id: uuidv4(),
+        task: task.name,
+        inputObject: null,
+        measurements: []
+    });
     const [consoleProps, setConsoleProps] = useState({
         position: {
             x: 0,
@@ -53,6 +63,8 @@ const ChartItem = ({ task }) => {
     });
     const [inputObject, setInputObject] = useState({ name: "", points: [] });
 
+    // * Setting task configuration:
+    // Items are taken from the config Redux slice.
     useEffect(() => {
         const itemFromConfig = config.tasks.find((item) => item.name === task.name);
         setChartProps({
@@ -62,18 +74,40 @@ const ChartItem = ({ task }) => {
             movementRequired: itemFromConfig.movementRequired,
             angleRegulation: itemFromConfig.sensorAngleRegulationRequired
         });
+
     }, [config, task]);
 
-    const sendMeasurementRequest = () => {
-        axios.post('http://localhost:5000/api/calc/distance', {
-            position: consoleProps.position,
-            direction: consoleProps.angle,
-            inputObject: inputObject.points
-        }).then((response) => {
-            console.log(response.data);
-        }).catch((error) => {
-            console.log(error);
-        });
+    // * Measurement request:
+    // Calculation of the distance measured by each sensor for input object.
+    // Input: position, direction, sensor, inputObject.
+    // Output: estimated distance for each sensor.
+    const sendMeasurementRequest = async () => {
+
+        const sensorsArray = [task.optionalSensors, ...task.requiredSensors].flat();
+
+        try {
+            const measurementsArray = await Promise.all(sensorsArray.map(async (sensor) => {
+                let measurement = { sensor };
+                try {
+                    const response = await axios.post('http://localhost:5000/api/calc/distance', {
+                        position: consoleProps.position,
+                        direction: consoleProps.angle,
+                        sensor: sensor,
+                        inputObject: inputObject.points
+                    });
+                    measurement.distance = response.data;
+                } catch (error) {
+                    console.log(error);
+                }
+                return measurement;
+            }));
+
+            console.log('Measurements array:', measurementsArray);
+            return measurementsArray;
+        } catch (error) {
+            console.log('Error in sendMeasurementRequest:', error);
+            return null;
+        }
     };
 
     return (

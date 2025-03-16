@@ -8,6 +8,7 @@ import DeviceTypeReducer from '../features/layout/DeviceTypeSlice';
 import ConfigReducer from '../features/data/ConfigSlice';
 import SelectionsReducer from '../features/data/SelectionsSlice';
 import InputObjectsReducer from '../features/data/InputObjectsSlice';
+import MeasurementsReducer from '../features/data/MeasurementsSlice';
 
 const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
         selections: SelectionsReducer,
         inputObjects: InputObjectsReducer,
         deviceType: DeviceTypeReducer,
+        measurements: MeasurementsReducer
     }
 });
 

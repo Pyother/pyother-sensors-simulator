@@ -39,9 +39,11 @@ const MainView = () => {
     
     const [openDialog, setOpenDialog] = useState(false);
 
+    /*
     useEffect(() => {
         console.log(selections);
     }, []);
+    */
 
     return (
         <ThemeProvider theme={colorsTheme}>
