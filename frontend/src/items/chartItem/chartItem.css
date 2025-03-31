@@ -1,11 +1,11 @@
 .console-container {
     padding: var(--padding);
     border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
+    /*border: 1px solid var(--border-color);*/
 }
 
 .chart-item-container {
-    border: 1px solid var(--border-color);
+    /*border: 1px solid var(--border-color);*/
     border-radius: var(--border-radius);
     background-color: var(--bg-primary);
     padding: var(--padding);

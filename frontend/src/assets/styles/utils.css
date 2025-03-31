@@ -16,6 +16,18 @@ header {
     width: 25% !important;
 }
 
+.button {
+    padding: calc(var(--padding) / 2) var(--padding) !important;
+    background-color: var(--bg-secondary) !important;
+    text-transform: lowercase !important; 
+}
+
+.icon-button {
+    padding: calc(var(--padding) / 2) !important;
+    background-color: var(--bg-secondary) !important;
+    border-radius: var(--border-radius) !important;
+}
+
 .select {
     color: var(--text-primary) !important;
     background-color: var(--bg-secondary) !important;
@@ -34,4 +46,12 @@ header {
     font-size: small;
     margin-top: 0;
     color: var(--text-secondary) !important;
+}
+
+/*
+    MUI classes customization:
+*/
+
+.MuiOutlinedInput-notchedOutline {
+    border: 0 !important;
 }

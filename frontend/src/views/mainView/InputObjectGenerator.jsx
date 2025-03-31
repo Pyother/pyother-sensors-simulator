@@ -259,7 +259,7 @@ const InputObjectGenerator = () => {
                                         variant="contained"
                                         color="primary"
                                         onClick={() => {
-                                            console.log(points);
+                                            // console.log(points);
                                             setPoints([]);
                                             if(objectName.length > 0) {
                                                 dispatch(addObject({ name: objectName, points: points }));

@@ -7,7 +7,7 @@ import React, {
 import { useSelector, useDispatch } from 'react-redux';
 import { addMeasurement } from '../../features/data/MeasurementsSlice';
 
-// * MUI:
+// * MUI and StyledComponents:
 import {
     Grid,
     Stack,
@@ -20,6 +20,7 @@ import {
     TextField,
     Button
 } from '@mui/material';
+import StyledButton from '../../components/styledComponents/StyledButton';
 
 // * Own items:
 import Chart from './Chart';
@@ -147,6 +148,7 @@ const ChartItem = ({ task }) => {
                                             value={inputObject}
                                             onChange={(e) => setInputObject(e.target.value)}
                                             label="Input objects"
+                                            size="small"
                                         >
                                             {
                                                 inputObjects.map((item, index) => (
@@ -160,20 +162,17 @@ const ChartItem = ({ task }) => {
                                 ) : null
                             }
                             <Stack direction="row" spacing={2}>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
+                                <StyledButton
+                                    name="Measure"
                                     onClick={sendMeasurementRequest}
-                                >
-                                    Measure
-                                </Button>
-                                <IconButton>
+                                />
+                                <IconButton className="icon-button">
                                     <HiOutlineArrowUturnLeft />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton className="icon-button">
                                     <HiOutlineArrowUturnRight />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton className="icon-button">
                                     <HiOutlineSave />
                                 </IconButton>
                                 {
@@ -183,6 +182,7 @@ const ChartItem = ({ task }) => {
                                             className="select" 
                                             label="Position X"
                                             type="number"
+                                            size="small"
                                             value={consoleProps.position.x}
                                             onChange={(e) => {
                                                 if (e.target.value > 500 || e.target.value < -500) return;
@@ -195,6 +195,7 @@ const ChartItem = ({ task }) => {
                                             className="select" 
                                             label="Position Y"
                                             type="number"
+                                            size="small"
                                             value={consoleProps.position.y}
                                             onChange={(e) => { 
                                                 if (e.target.value > 500 || e.target.value < -500) return;

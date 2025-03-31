@@ -52,7 +52,7 @@ const App = () => {
 
     return (
         <>
-            <AppBar position="static" className="center" style={{boxShadow: 'none', width: '100%', borderBottom: '1px solid var(--border-color)', position: 'fixed', top: 0, left: 0, zIndex: 1000}}>
+            <AppBar position="static" className="center" style={{boxShadow: 'none', width: '100%', position: 'fixed', top: 0, left: 0, zIndex: 1000}}>
                 <Toolbar className="bg-secondary">
                     <GiMicrochip style={{fontSize: 'x-large', marginRight: '0.5em'}} />
                     <Typography variant="h6" component="div">
@@ -60,7 +60,7 @@ const App = () => {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <div className="center">
+            <div className="center" style={{padding: 'var(--padding)'}}>
                 <Stack className="app center">
                 {
                     view === 'configuration' ? 

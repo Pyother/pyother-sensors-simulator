@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addSelection, removeSelection } from '../../features/data/SelectionsSlice';
 import { setView } from '../../features/layout/ViewSlice';
 
-// * MUI:
+// * MUI and Styled Components:
 import {
     Grid,
     Typography,
@@ -19,6 +19,7 @@ import {
     Box
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import StyledButton from '../../components/styledComponents/StyledButton'; 
 
 // * Items:
 import TaskItem from '../../items/taskItem/TaskItem';
@@ -109,14 +110,10 @@ const ConfigurationView = () => {
                                 ))
                             }
                         </Stack>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            style={{width: 'fit-content'}}
+                        <StyledButton 
+                            name="Confirm and go to dashboard" 
                             onClick={() => dispatch(setView('main'))}
-                        >
-                            Confirm and go to dashboard
-                        </Button>
+                        />
                     </Stack>
                 )}
             </Stack>

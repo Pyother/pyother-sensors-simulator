@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeObject } from '../../features/data/InputObjectsSlice';
 
-// * MUI:
+// * MUI and Styled Components:
 import { 
     Grid,
     Stack, 
@@ -20,6 +20,7 @@ import {
     TableRow,
     Paper,
 } from '@mui/material';
+import StyledButton from '../../components/styledComponents/StyledButton';
 
 // * Items:
 import ChartItem from '../../items/chartItem/ChartItem';
@@ -93,13 +94,10 @@ const MainView = () => {
                                             }
                                         </TableCell>
                                         <TableCell>
-                                            <Button 
-                                                variant="contained"
-                                                color="secondary"
+                                            <StyledButton 
+                                                name="Remove"
                                                 onClick={() => dispatch(removeObject(object))}
-                                            >
-                                                Remove
-                                            </Button>
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -110,12 +108,10 @@ const MainView = () => {
                     <p className="text-secondary">No input objects</p>
                 }
                 <Stack direction="row" spacing={2}>
-                    <Button 
-                        variant="contained" 
+                    <StyledButton 
+                        name="New object"
                         onClick={() => setOpenDialog(true)}
-                    >
-                        New object
-                    </Button>
+                    />
                 </Stack>
                 <Typography variant="h6">Charts</Typography>
                 <Grid container spacing={2}>
