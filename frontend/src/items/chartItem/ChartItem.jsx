@@ -74,7 +74,7 @@ const ChartItem = ({ task }) => {
         angle: 0
     });
     const [inputObject, setInputObject] = useState({ name: "", points: [] });
-
+    const measurementsArray = useSelector(state => state.measurements.measurementsArray);
 
     // * Setting task configuration:
     // Items are taken from the config Redux slice.
@@ -102,7 +102,7 @@ const ChartItem = ({ task }) => {
         const sensorsArray = [task.optionalSensors, ...task.requiredSensors].flat();
 
         try {
-            const measurementsArray = await Promise.all(sensorsArray.map(async (sensor) => {
+            const measurements = await Promise.all(sensorsArray.map(async (sensor) => {
                 let measurement = { sensor };
                 try {
                     const response = await axios.post('http://localhost:5000/api/calc/distance', {
@@ -118,16 +118,16 @@ const ChartItem = ({ task }) => {
                 return measurement;
             }));
 
-            // console.log('Measurements array:', measurementsArray);
-            dispatch(addMeasurement(measurementsArray));
-            return measurementsArray;
+            dispatch(addMeasurement(measurements)).then(() => {
+                console.log('Measurements added to Redux store:', measurementsArray);
+            });
+            return measurements;
 
         } catch (error) {
             console.log('Error in sendMeasurementRequest:', error);
             return null;
         }
     };
-
 
     return (
         <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 

@@ -2,9 +2,25 @@ header {
     background-color: var(--bg-secondary) !important;
 }
 
+/* 
+    Layout:
+*/
+
 .center {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.right {
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
 }
 
@@ -16,6 +32,10 @@ header {
     width: 25% !important;
 }
 
+/* 
+    Standard components:
+*/
+
 .button {
     padding: calc(var(--padding) / 2) var(--padding) !important;
     background-color: var(--bg-secondary) !important;
@@ -24,8 +44,14 @@ header {
 
 .icon-button {
     padding: calc(var(--padding) / 2) !important;
-    background-color: var(--bg-secondary) !important;
+    background-color: var(--bg-tertiary) !important;
     border-radius: var(--border-radius) !important;
+}
+
+.icon-button:hover {
+    animation-name: colorChangeAccent;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
 }
 
 .select {
@@ -36,17 +62,39 @@ header {
     box-shadow: none !important;
 }
 
+/*
+    Colors:
+*/
+
 .bg-secondary {
     background-color: var(--bg-secondary) !important;
     box-shadow: none !important;
     color: var(--text-primary) !important;
 }
 
+/* 
+    Text styles:
+*/
+
 .text-secondary {
     font-size: small;
     margin-top: 0;
     color: var(--text-secondary) !important;
 }
+
+/* 
+    Animations:
+*/
+
+@keyframes colorChangeAccent {
+    0% {
+        color: inherit;
+    }
+    100% {
+        color: var(--accent-primary);
+    }
+}
+
 
 /*
     MUI classes customization:
@@ -55,3 +103,5 @@ header {
 .MuiOutlinedInput-notchedOutline {
     border: 0 !important;
 }
+
+

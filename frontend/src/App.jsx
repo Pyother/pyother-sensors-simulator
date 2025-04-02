@@ -5,24 +5,14 @@ import { setInitialState } from './features/data/ConfigSlice';
 import { setDeviceType } from './features/layout/DeviceTypeSlice';
 
 // * MUI:
-import { 
-    Stack,
-    AppBar, 
-    Toolbar, 
-    Typography,
-    IconButton, 
-    Divider,
-    Button 
-} from '@mui/material';
+import { Stack } from '@mui/material';
  
 // * Views:
 import ConfigurationView from './views/configurationView/ConfigurationView';
 import MainView from './views/mainView/MainView';
 
-// * Icons:
-import { GiMicrochip } from "react-icons/gi";
-import { GoGear } from "react-icons/go";
-import { GoHome } from "react-icons/go";
+// * Components:
+import Header from './components/header/Header';
 
 // * Serivces:
 import getConfig from './services/data/getConfig';
@@ -52,14 +42,7 @@ const App = () => {
 
     return (
         <>
-            <AppBar position="static" className="center" style={{boxShadow: 'none', width: '100%', position: 'fixed', top: 0, left: 0, zIndex: 1000}}>
-                <Toolbar className="bg-secondary">
-                    <GiMicrochip style={{fontSize: 'x-large', marginRight: '0.5em'}} />
-                    <Typography variant="h6" component="div">
-                        Sensors Simulator
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <Header />
             <div className="center" style={{padding: 'var(--padding)'}}>
                 <Stack className="app center">
                 {
