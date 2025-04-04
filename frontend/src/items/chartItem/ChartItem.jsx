@@ -135,7 +135,7 @@ const ChartItem = ({ task }) => {
                 <Grid container className="chart-item-container">
                     <Grid item xs={12} sm={12} md={6} >
                         <Stack spacing={2}>
-                            <Typography variant="body1" className="task-item-title">{task.name}</Typography>
+                            <Typography variant="h6" className="task-item-title">{task.name}</Typography>
                             <p className="text-secondary">
                                 {chartProps.description ? chartProps.description : "No description available"}
                             </p>

@@ -51,7 +51,7 @@ const TaskItem = ({ task }) => {
                 !taskAdded ? 
                 <Stack spacing={2}>
                     <Typography 
-                        variant="body1"
+                        variant="h6"
                         className="task-item-title"
                     >
                         {task.name}
@@ -112,7 +112,7 @@ const TaskItem = ({ task }) => {
                     displayConfirmation ?
                     <>
                         <Typography 
-                            variant="body1"
+                            variant="h6"
                             className="task-item-title"
                         >
                             {task.name}

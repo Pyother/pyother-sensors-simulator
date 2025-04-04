@@ -8,7 +8,7 @@
     margin-bottom: var(--padding) !important;
     background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
+    /*border: 1px solid var(--border-color);*/
 }
 
 .confirmation-container {
