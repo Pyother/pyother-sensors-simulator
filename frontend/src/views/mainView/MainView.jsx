@@ -114,7 +114,7 @@ const MainView = () => {
                     />
                 </Stack>
                 <Typography variant="h6">Charts</Typography>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} style={{width: '100%'}}>
                     {selections
                         .filter((selection) => selection.confirmed)
                         .map((selection, index) => (

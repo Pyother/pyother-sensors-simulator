@@ -43,7 +43,7 @@ const App = () => {
     return (
         <>
             <Header />
-            <div className="center" style={{padding: 'var(--padding)'}}>
+            <div className="center" style={{paddingTop: 'var(--padding)'}}>
                 <Stack className="app center">
                 {
                     view === 'configuration' ? 
@@ -55,5 +55,6 @@ const App = () => {
         </>
     )
 }
+
 
 export default App;

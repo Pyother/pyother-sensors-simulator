@@ -24,17 +24,26 @@ body {
 }
 
 .app {
-    padding: var(--padding) !important;
+    
 }
 
 @media (max-width: 768px) {
     .app {
-        width: 100%;
+        width: calc(100% - (var(--padding) * 2));
+        padding: 0 calc(var(--padding)) !important;
     }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 900px) {
     .app {
-        width: 75% !important;
+        width: calc(100% - (var(--padding) * 8));
+        padding: 0 calc(var(--padding) * 4) !important;
+    }
+}
+
+@media (min-width: 900px) {
+    .app {
+        width: calc(100% - (var(--padding) * 16));
+        padding: 0 calc(var(--padding) * 8) !important;
     }
 }

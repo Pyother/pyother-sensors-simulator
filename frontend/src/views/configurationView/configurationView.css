@@ -1,5 +1,4 @@
 .configuration-container {
     width: 100%;
     margin-bottom: calc(2 * var(--padding));
-    margin-top: calc(4 * var(--padding));
 }
