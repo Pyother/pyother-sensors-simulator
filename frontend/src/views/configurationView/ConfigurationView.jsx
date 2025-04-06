@@ -87,17 +87,23 @@ const ConfigurationView = () => {
                     </Select>
                 </FormControl>
                 {selections.length > 0 && (
-                    <Stack spacing={2} className="full-width">
+                    <>
                         <Typography variant="h6" className="full-width">Selected tasks</Typography>
-                        <Grid container>
+                        <Grid container spacing={2} className="full-width" >
                             {selections
                                 .map((selection, index) => {
                                     const taskData = config.tasks.find((t) => t.name === selection.name);
                                     if (!taskData) return null;
-                                    return <TaskItem key={index} task={taskData} />;
-                                })}
+                                    return (
+                                        <TaskItem
+                                            key={index} 
+                                            task={taskData} 
+                                        />
+                                    )
+                                }
+                            )}
                         </Grid>
-                    </Stack>
+                    </>
                 )}
                 {selections.length > 0 && selections.some((selector) => selector.confirmed) && (
                     <Stack className="full-width" spacing={2}>

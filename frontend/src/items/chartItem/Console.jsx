@@ -140,7 +140,7 @@ const Console = ({ movement, angleRegulation }) => {
                                 max={50}
                                 step={0.1}
                                 defaultValue={10}
-                                size="small"
+                                size="normal"
                                 aria-label="Movement step"
                                 valueLabelDisplay="auto"
                                 getAriaValueText={(value) => valuetext(value, "movementStep")}
@@ -159,7 +159,7 @@ const Console = ({ movement, angleRegulation }) => {
                                 max={180}
                                 step={1}
                                 defaultValue={0}
-                                size="small"
+                                size="normal"
                                 aria-label="Angle regulation"
                                 valueLabelDisplay="auto"
                                 getAriaValueText={(value) => valuetext(value, "angle")}

@@ -38,21 +38,45 @@ header {
 
 .button {
     padding: calc(var(--padding) / 2) var(--padding) !important;
-    background-color: var(--bg-secondary) !important;
-    text-transform: lowercase !important; 
-}
-
-.icon-button {
-    padding: calc(var(--padding) / 2) !important;
-    background-color: var(--bg-tertiary) !important;
+    background: linear-gradient(to right bottom, var(--accent-primary), var(--accent-secondary));
+    text-transform: lowercase !important;
+    color: #fff !important;
     border-radius: var(--border-radius) !important;
 }
 
-.icon-button:hover {
-    animation-name: colorChangeAccent;
-    animation-duration: 0.3s;
-    animation-fill-mode: forwards;
+.icon-button {
+    position: relative;
+    color: var(--text-secondary) !important;
+    padding: calc(var(--padding) / 2) !important;
+    background-color: var(--bg-tertiary) !important;
+    border-radius: var(--border-radius) !important;
+    overflow: hidden;
+    transition: color 0.5s ease;
 }
+
+.icon-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right bottom, var(--accent-primary), var(--accent-secondary));
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 0;
+}
+
+.icon-button:hover {
+    color: white !important;
+}
+
+.icon-button:hover::before {
+    opacity: 1;
+}
+
+.icon-button > * {
+    position: relative;
+    z-index: 1;
+}
+
 
 .select {
     color: var(--text-primary) !important;
@@ -89,9 +113,11 @@ header {
 @keyframes colorChangeAccent {
     0% {
         color: inherit;
+        background: inherit;
     }
     100% {
-        color: var(--accent-primary);
+        color: white !important;
+        background: linear-gradient(to right bottom, var(--accent-primary), var(--accent-secondary));
     }
 }
 

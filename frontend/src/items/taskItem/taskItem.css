@@ -4,11 +4,12 @@
 
 .task-item-container {
     padding: var(--padding);
-    margin-right: var(--padding) !important;
+    /*margin-right: var(--padding) !important;*/
     margin-bottom: var(--padding) !important;
     background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
     /*border: 1px solid var(--border-color);*/
+    width: 100% !important;
 }
 
 .confirmation-container {
