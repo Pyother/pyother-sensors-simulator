@@ -8,6 +8,7 @@ import {
     Grid,
     Stack, 
     Button,
+    IconButton,
     Typography,
     ThemeProvider,
     Dialog, 
@@ -19,8 +20,10 @@ import {
     TableHead,
     TableRow,
     Paper,
+    Divider
 } from '@mui/material';
 import StyledButton from '../../components/styledComponents/StyledButton';
+import { BsFiletypeCsv } from "react-icons/bs";
 
 // * Items:
 import ChartItem from '../../items/chartItem/ChartItem';
@@ -71,7 +74,7 @@ const MainView = () => {
                             </TableHead>
                             <TableBody>
                                 {inputObjectsArray.map((object, index) => (
-                                    <TableRow key={index}>
+                                    <TableRow key={index} hover>
                                         <TableCell>{object.name}</TableCell>
                                         <TableCell>{object.points.length}</TableCell>
                                         <TableCell>
@@ -112,6 +115,9 @@ const MainView = () => {
                         name="New object"
                         onClick={() => setOpenDialog(true)}
                     />
+                    <IconButton className="icon-button" disabled>
+                        <BsFiletypeCsv className="icon" />
+                    </IconButton>
                 </Stack>
                 <Typography variant="h6">Charts</Typography>
                 <Grid container spacing={2} style={{width: '100%'}}>

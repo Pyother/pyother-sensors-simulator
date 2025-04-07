@@ -86,6 +86,7 @@ const ChartItem = ({ task }) => {
             description: itemFromConfig.description,
             inputObjectRequired: itemFromConfig.inputObjectRequired,
             movementRequired: itemFromConfig.movementRequired,
+            multipleSensorSlots: itemFromConfig.multipleSensorSlots,
             angleRegulation: itemFromConfig.sensorAngleRegulationRequired
         });
 

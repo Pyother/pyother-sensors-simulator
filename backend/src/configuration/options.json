@@ -47,6 +47,7 @@
             ],
             "inputObjectRequired": true,
             "movementRequired": true,
+            "multipleSensorSlots": false,
             "sensorAngleRegulationRequired": true
         },
         {
@@ -60,20 +61,31 @@
             ],
             "inputObjectRequired": false,
             "movementRequired": true,
+            "multipleSensorSlots": false,
             "sensorAngleRegulationRequired": false
         },
         {
-            "name": "lidar rotation measurement",
+            "name": "360 distance measurement",
             "description": "Measures the rotation of the lidar sensor.",
-            "sensorTypesRequired": [
-                "lidar"
-            ],
-            "sensorTypesOptional": [
-                
-            ],
+            "sensorTypesRequired": ["lidar"],
+            "sensorTypesOptional": [],
             "inputObjectRequired": true,
             "movementRequired": true,
+            "multipleSensorSlots": false,
             "sensorAngleRegulationRequired": false
+        },
+        {
+            "name": "locatization and mapping",
+            "description": "Basing on the distance measurements, the robot creates a map of the environment and localizes itself in it.",
+            "sensorTypesRequired": ["distance"],
+            "sensorTypesOptional": [],
+            "inputObjectRequired": true,
+            "movementRequired": true,
+            "multipleSensorSlots": {
+                "sensorTypes": ["distance"],
+                "max": 8
+            },
+            "sensorAngleRegulationRequired": true
         }
 
     ]
