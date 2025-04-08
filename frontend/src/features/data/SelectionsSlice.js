@@ -18,7 +18,7 @@ const SelectionsSlice = createSlice({
         updateSelection(state, action) {
             const index = state.selectionsArray.findIndex(selection => selection.name === action.payload.name);
             if (index !== -1) {
-                state.selectionsArray[index] = { ...state.selectionsArray[index], ...action.payload };
+                state.selectionsArray[index] = { ...state.selectionsArray[index], ...action.payload.data };
             }
         }
     }

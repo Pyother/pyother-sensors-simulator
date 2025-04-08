@@ -37,9 +37,9 @@ const TaskItem = ({ task }) => {
     const handleConfirmTask = () => {
         const taskToUpdate = {
             name: task.name,
-            confirmed: true,
-            requiredSensors: requiredSensorsArray,
-            optionalSensors: optionalSensorsArray
+            data: {
+                confirmed: true
+            }
         };
         dispatch(updateSelection(taskToUpdate));
     };

@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addMeasurement } from '../../features/data/MeasurementsSlice';
+import { updateSelection } from '../../features/data/SelectionsSlice';
 
 // * MUI and StyledComponents:
 import {
@@ -37,8 +38,9 @@ import './chartItem.css';
 // * Axios:
 import axios from 'axios';
 
-// * UUID:
+// * Utils:
 import { v4 as uuidv4 } from 'uuid';
+import taskNameGenerator from '../../services/utils/taskNameGenerator';
 
 export const ConsoleContext = createContext();
 export const InputObjectContext = createContext();
@@ -74,7 +76,10 @@ const ChartItem = ({ task }) => {
         angle: 0
     });
     const [inputObject, setInputObject] = useState({ name: "", points: [] });
+
     const measurementsArray = useSelector(state => state.measurements.measurementsArray);
+    const deviceType = useSelector(state => state.deviceType.deviceType);
+    const selections = useSelector((state) => state.selections.selectionsArray);
 
     // * Setting task configuration:
     // Items are taken from the config Redux slice.
@@ -89,7 +94,6 @@ const ChartItem = ({ task }) => {
             multipleSensorSlots: itemFromConfig.multipleSensorSlots,
             angleRegulation: itemFromConfig.sensorAngleRegulationRequired
         });
-
     }, [config, task]);
 
 
@@ -134,7 +138,7 @@ const ChartItem = ({ task }) => {
         <ConsoleContext.Provider value={{ consoleProps, setConsoleProps }}> 
             <InputObjectContext.Provider value={{ inputObject, setInputObject }}>
                 <Grid container className="chart-item-container">
-                    <Grid item xs={12} sm={12} md={6} >
+                    <Grid item xs={12} sm={12} md={6} id={taskNameGenerator(task.name)} >
                         <Stack spacing={2}>
                             <Typography variant="h6" className="task-item-title">{task.name}</Typography>
                             <p className="text-secondary">
@@ -147,7 +151,18 @@ const ChartItem = ({ task }) => {
                                         <Select
                                             className="select"
                                             value={inputObject}
-                                            onChange={(e) => setInputObject(e.target.value)}
+                                            onChange={(e) => {
+                                                setInputObject(e.target.value);
+                                                const existingInputObjects = task.inputObjects || [];
+                                                dispatch(updateSelection(
+                                                    {
+                                                        name: task.name,
+                                                        data: {
+                                                            inputObjects: existingInputObjects.concat(e.target.value)
+                                                        }
+                                                    }
+                                                ))
+                                            }}
                                             label="Input objects"
                                             size="small"
                                         >
