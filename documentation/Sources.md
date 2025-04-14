@@ -1,29 +1,23 @@
-# Metody naukowe
+# Spis źródeł wraz z wnioskami wyciągniętymi na ich podstawie
 
-### Źródła naukowe
-
-* Thrun, S., Burgard, W., & Fox, D. (2005). Probabilistic Robotics.
-* Welch, G., & Bishop, G. (1995). An Introduction to the Kalman Filter
-opisują te metody w kontekście filtrów Kalmana.
-* [Multi Sensor Fusion for Navigation and Mapping in
-Autonomous Vehicles: Accurate Localization in
-Urban Environments](https://arxiv.org/pdf/2103.13719), Li Qingqing1, Jorge Pena Queralta, Tuan Nguyen Gia, Zhuo Zou, Tomi Westerlund
-
-### Założenia pracy
-
-* Opisanie lokalizacji i otoczenia pojazdu za pomocą równania, którego argumentami są odczyty czujników pomiarowych różnego typu. 
-* **Stowrzenie równania modelu pomiarowego** - każdy czujnik posiada równanie pomiarowe, które zwraca odczytaną wartość z uwzględnieniem tego, jak charakterystyka czujnika (typ czujnika, typ pomiaru, środowisko testowe) wpływa na szum. 
+* **Rodzaje czujników odległości**:
   
-    Równanie pomiaru:
-    ```math
-    z_t = h(x_t) + v_t
-    ```
-    gdzie:
-    * *h* - funkcja pomiarowa.
-    * *v* - szum pomiarowy.
+    * czujniki indukcyjne - poprzez pomiar intensywności pola magnetycznego możliwe jest określenie odlegołości od konkretnego przedmiotu (sprawdza się na małych odległościach, ponieważ większość czujników jest w stanie wykryć jedynie wysokie wartości magnetyczne). 
+    * czujniki pojemnościowe - służą do pomiaru poziomu cieczy, granulatów oraz proszków, zazwyczaj poprzez kontakt bezpośredni z substancją. 
+    * czujniki optoelektryczne i czujniki ultradźwiękowe - są przeznaczone do pomiaru odległości w przedziale od kilkunastu centymetrów do kilkudziesięciu / kilkuset metrów. 
   
-* **Stworzenie równania globalnego** - jest to równanie opisujące ruch i położenie urządzenia. W każdym kolejnym kroku jest ono aktualizowane na podstawie równań pomiarowch reprezentujących danych czujnik. Jedną z koncepcji pozwalających na kontrolowanie odczytów jest nadanie równaniom pomiarowym wag, za pomocą których można kontrolować istotoność poszczególnego czujnika. 
+    Źródło: Balluff - https://www.balluff.com/pl-pl/podstawy-automatyki/pomiar/pomiar-pomiar-odleglosci#:~:text=Technologie%20czujnik%C3%B3w%20*%20czujniki%20indukcyjne%20mierz%C4%85%20w,przeznaczone%20s%C4%85%20do%20odleg%C5%82o%C5%9Bci%20mierzonych%20w%20metrach.
 
-    ```math
-    x^t​=argmin​=1∑N​(zt(i)​−hi​(xt​))T(Rt(i)​) −1(zt(i)​−hi​(xt​))
-    ```
+* **Rodzaje czujników odległości**:
+  
+    
+    
+    Źródło: artykuł serwisu Botland - https://botland.com.pl/blog/czujnik-odleglosci-co-to-jest-i-do-czego-sluzy/
+
+* ****
+
+    Źródło: https://ieeexplore.ieee.org/document/7925771
+
+* **Rola chropowatości powierzchni w pomiarach za pomocą czujników laserowych**
+* **Rola absorbcji w pomiarach za pomocą czujników laserowych** 
+* **Rola współczynnika odbicia w pomiarach za pomocą czujników laserowych** 

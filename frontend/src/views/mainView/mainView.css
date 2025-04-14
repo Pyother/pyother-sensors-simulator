@@ -22,6 +22,11 @@
     background-color: var(--bg-tertiary);
 }
 
+.selections-tree-container {
+    align-self: flex-start;
+    height: '100%', 
+}
+
 /*
     Customization for MUI Tree:
 */
@@ -33,4 +38,19 @@
 
 .css-1nxw7ux-MuiTreeItem-content.Mui-selected {
     background-color: var(--bg-secondary) !important;
+}
+
+@media (max-width: 1200px) {
+    .selections-tree-container {
+        position: relative !important;
+        padding-bottom: calc(var(--padding) * 2);
+    }
+}
+
+@media (min-width: 1200px) {
+    .selections-tree-container {
+        position: sticky;
+        top: 0;
+        padding-right: calc(var(--padding) * 2);
+    }
 }

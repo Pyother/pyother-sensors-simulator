@@ -1,6 +1,10 @@
-const config = require('./src/configuration/options.json');
+// * Node modules: 
 const path = require('path');
 const express = require('express');
+
+// * JSON files:
+const config = require('./src/configuration/options.json');
+const materials = require('./src/configuration/materials.json');
 
 // * Functions:
 const calcDistance = require('./src/services/calculations/calcDistance');
@@ -17,6 +21,11 @@ function api (app) {
    // * Configuration:
    app.get('/api/config', (req, res) => {
       res.json(config);
+   });
+
+   // * Materials:
+   app.get('/api/materials', (req, res) => {
+      res.json(materials);
    });
 
    // * Distance calculation:

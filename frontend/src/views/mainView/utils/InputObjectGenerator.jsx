@@ -1,9 +1,9 @@
-// React and Redux:
+// * React and Redux:
 import React, { useRef, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addObject } from "../../features/data/InputObjectsSlice";
+import { addObject } from "../../../features/data/InputObjectsSlice";
 
-// * MUI:
+// * UI components:
 import {
     Stack, 
     IconButton, 
@@ -13,6 +13,7 @@ import {
     InputAdornment,
     ThemeProvider
 } from '@mui/material';
+import StyledButton from '../../../components/styledComponents/StyledButton';
 
 // * Icons:
 import { HiOutlineArrowUturnLeft } from "react-icons/hi2";
@@ -21,7 +22,7 @@ import { HiCheck } from "react-icons/hi";
 import { HiOutlineX } from "react-icons/hi";
 
 // * Styles:
-import colorsTheme from "../../assets/themes/colorsTheme";
+import colorsTheme from "../../../assets/themes/colorsTheme";
 
 const InputObjectGenerator = () => {
 
@@ -34,6 +35,10 @@ const InputObjectGenerator = () => {
     const [scale, setScale] = useState(1);
     const [redoStack, setRedoStack] = useState([]);
     const [objectName, setObjectName] = useState("");
+    
+    const [reflectivityFactor, setReflectivityFactor] = useState(0.5); 
+    const [absorptionFactor, setAbsorptionFactor] = useState(0.5);
+    const [roughnessFactor, setRoughnessFactor] = useState(0.5);
 
     const draw = (ctx) => {
 
@@ -275,6 +280,26 @@ const InputObjectGenerator = () => {
                         }}
                     />
                 </Stack>
+                <Stack direction="row">
+                    <TextField
+                        type="number"
+                        label="Reflectivity factor"
+                        placeholder="Reflectivity factor"
+                    />
+                    <TextField
+                        type="number"
+                        label="Absorption factor"
+                        placeholder="Absorption factor"
+                    />
+                    <TextField
+                        type="number"
+                        label="Roughness factor"
+                        placeholder="Roughness factor"
+                    />
+                </Stack>
+                <StyledButton
+                    name="Generate"
+                />
             </Stack>
         </ThemeProvider>
     );

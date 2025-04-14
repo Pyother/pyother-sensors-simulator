@@ -104,6 +104,14 @@ const ChartItem = ({ task }) => {
 
     const sendMeasurementRequest = async () => {
 
+        console.log('sendMeasurementRequest called');
+        const props = {
+            position: consoleProps.position,
+            direction: consoleProps.angle,
+            inputObject: inputObject.points
+        };
+        console.log('props:', props);
+
         const sensorsArray = [task.optionalSensors, ...task.requiredSensors].flat();
 
         try {
@@ -113,9 +121,9 @@ const ChartItem = ({ task }) => {
                     const response = await axios.post('http://localhost:5000/api/calc/distance', {
                         position: consoleProps.position,
                         direction: consoleProps.angle,
-                        sensor: sensor,
                         inputObject: inputObject.points
                     });
+                    console.log(response.data);
                     measurement.distance = response.data;
                 } catch (error) {
                     console.log(error);
@@ -123,9 +131,7 @@ const ChartItem = ({ task }) => {
                 return measurement;
             }));
 
-            dispatch(addMeasurement(measurements)).then(() => {
-                console.log('Measurements added to Redux store:', measurementsArray);
-            });
+            dispatch(addMeasurement(measurements));
             return measurements;
 
         } catch (error) {
@@ -150,20 +156,20 @@ const ChartItem = ({ task }) => {
                                         <InputLabel>Input objects</InputLabel>
                                         <Select
                                             className="select"
-                                            value={inputObject}
+                                            value={inputObject.name}
                                             onChange={(e) => {
+                                                console.log(e.target.value);
                                                 setInputObject(e.target.value);
-                                                const existingInputObjects = task.inputObjects || [];
                                                 dispatch(updateSelection(
                                                     {
                                                         name: task.name,
                                                         data: {
-                                                            inputObjects: existingInputObjects.concat(e.target.value)
+                                                            inputObjects: [e.target.value]
                                                         }
                                                     }
                                                 ))
                                             }}
-                                            label="Input objects"
+                                            label="Input object"
                                             size="small"
                                         >
                                             {

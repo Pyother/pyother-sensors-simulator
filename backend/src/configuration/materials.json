@@ -1,0 +1,28 @@
+{
+    "surfacesParams": [
+        {
+            "name": "Wood",
+            "absorptionFactor": 0.5,
+            "reflectivityFactor": 0.5,
+            "roughness": 0.5
+        },
+        {
+            "name": "Metal",
+            "absorptionFactor": 0.1,
+            "reflectivityFactor": 0.9,
+            "roughness": 0.2
+        },
+        {
+            "name": "Plastic",
+            "absorptionFactor": 0.3,
+            "reflectivityFactor": 0.7,
+            "roughness": 0.4
+        },
+        {
+            "name": "Glass",
+            "absorptionFactor": 0.05,
+            "reflectivityFactor": 0.95,
+            "roughness": 0.1
+        }
+    ]
+}

@@ -32,6 +32,10 @@ header {
     width: 25% !important;
 }
 
+.no-padding {
+    padding: 0 !important;
+}
+
 /* 
     Standard components:
 */
