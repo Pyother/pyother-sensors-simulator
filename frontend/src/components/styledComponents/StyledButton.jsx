@@ -6,10 +6,11 @@ import {
     Button
 } from '@mui/material';
 
-const StyledButton = ({ name, onClick }) => {
+const StyledButton = ({ name, onClick, disabled }) => {
     return (
         <Button
-            className="button"
+            disabled={disabled}
+            className={disabled ? 'button disabled' : 'button'}
             onClick={onClick}
         >
             {name}

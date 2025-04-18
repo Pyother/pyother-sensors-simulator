@@ -1,16 +1,19 @@
 // * React and Redux:
 import React, { useRef, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addObject } from "../../../features/data/InputObjectsSlice";
 
 // * UI components:
 import {
     Stack, 
+    Select,
     IconButton, 
     Typography,
     Button,
     TextField,
+    Divider,
     InputAdornment,
+    MenuItem,
     ThemeProvider
 } from '@mui/material';
 import StyledButton from '../../../components/styledComponents/StyledButton';
@@ -35,10 +38,13 @@ const InputObjectGenerator = () => {
     const [scale, setScale] = useState(1);
     const [redoStack, setRedoStack] = useState([]);
     const [objectName, setObjectName] = useState("");
-    
+    const surfacesParams = useSelector((state) => state.materials.surfacesParams);
+
+    // * States for surface parameters:
     const [reflectivityFactor, setReflectivityFactor] = useState(0.5); 
     const [absorptionFactor, setAbsorptionFactor] = useState(0.5);
     const [roughnessFactor, setRoughnessFactor] = useState(0.5);
+    const [selectedMaterial, setSelectedMaterial] = useState(null);
 
     const draw = (ctx) => {
 
@@ -214,7 +220,7 @@ const InputObjectGenerator = () => {
         <ThemeProvider theme={colorsTheme}>
             <Stack spacing={2} className="generator-container">
                 <Typography variant="body1">Input object generator</Typography>
-                <div>
+                <div className="center">
                     <canvas
                         ref={canvasRef}
                         onClick={handleCanvasClick}
@@ -254,51 +260,76 @@ const InputObjectGenerator = () => {
                     <TextField
                         label="Object name"
                         placeholder="Object name"
+                        className="input"
                         fullWidth
                         value={objectName}
                         onChange={(e) => setObjectName(e.target.value)}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => {
-                                            // console.log(points);
-                                            setPoints([]);
-                                            if(objectName.length > 0) {
-                                                dispatch(addObject({ name: objectName, points: points }));
-                                                setObjectName("");
-                                            }
-                                        }}
-                                        disabled={points.length === 0 || objectName.length === 0}
-                                    >
-                                        <HiCheck />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
                     />
                 </Stack>
-                <Stack direction="row">
+                <Select
+                    label="Surface type"
+                    className="select"
+                    placeholder="Surface type"
+                    value={selectedMaterial ? selectedMaterial.name : ""}
+                >
+                    {surfacesParams.map((surface, index) => (
+                        <MenuItem key={index} value={surface.name}
+                            onClick={() => {
+                                setSelectedMaterial(surface);
+                                setAbsorptionFactor(surface.absorptionFactor);
+                                setReflectivityFactor(surface.reflectivityFactor);
+                                setRoughnessFactor(surface.roughness);
+                            }}
+                        >
+                            <Stack direction="row" spacing={2} >
+                                <p>{surface.name}</p>
+                            </Stack>
+                        </MenuItem>
+                    ))}
+                </Select>
+                <Stack direction="row" spacing={2}>
                     <TextField
                         type="number"
                         label="Reflectivity factor"
                         placeholder="Reflectivity factor"
+                        className="input"
+                        value={reflectivityFactor}
                     />
                     <TextField
                         type="number"
                         label="Absorption factor"
                         placeholder="Absorption factor"
+                        className="input"
+                        value={absorptionFactor}
                     />
                     <TextField
                         type="number"
                         label="Roughness factor"
                         placeholder="Roughness factor"
+                        className="input"
+                        value={roughnessFactor}
                     />
                 </Stack>
                 <StyledButton
+                    onClick={() => {
+                        setPoints([]);
+                        if(objectName.length > 0) {
+                            dispatch(addObject({ 
+                                name: objectName, 
+                                points: points,
+                                absorptionFactor: absorptionFactor,
+                                reflectivityFactor: reflectivityFactor,
+                                roughnessFactor: roughnessFactor,
+                            }));
+                            setObjectName("");
+                            setSelectedMaterial(null);
+                            setReflectivityFactor(0);
+                            setAbsorptionFactor(0);
+                            setRoughnessFactor(0);
+                        }
+                    }}
                     name="Generate"
+                    disabled={points.length === 0 || objectName.length === 0}
                 />
             </Stack>
         </ThemeProvider>

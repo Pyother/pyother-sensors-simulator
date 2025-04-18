@@ -7,6 +7,9 @@ import { ConsoleContext, InputObjectContext } from './ChartItem';
 import * as d3 from 'd3';
 import './chartItem.css';
 
+// * Services:
+import getColorFromScale from '../../services/utils/getColorFromScale';
+
 const Chart = () => {
     
     const { consoleProps } = useContext(ConsoleContext);
@@ -139,7 +142,11 @@ const Chart = () => {
             .attr('y1', (d, i) => yScale(points[i].y))
             .attr('x2', (d) => xScale(d.x))
             .attr('y2', (d) => yScale(d.y))
-            .attr('stroke', '#003366')
+            .attr('stroke', getColorFromScale({
+                value: 0.95,
+                colorMin: "rgb(0, 0, 255)",
+                colorMax: "rgb(255, 0, 0)"
+            }))
             .attr('stroke-width', 2);
 
         svg.append('g')
@@ -151,7 +158,7 @@ const Chart = () => {
             .attr('cx', (d) => xScale(d.x))
             .attr('cy', (d) => yScale(d.y))
             .attr('r', 5)
-            .attr('fill', '#003366');
+            .attr('fill', '#c232b5');
 
     }, [dimensions, inputObject]);
 

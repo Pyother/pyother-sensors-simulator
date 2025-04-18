@@ -3,7 +3,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setInitialState } from './features/data/ConfigSlice';
 import { setDeviceType } from './features/layout/DeviceTypeSlice';
-
+import { setMaterials } from './features/data/MaterialsSlice';
+ 
 // * MUI:
 import { Stack } from '@mui/material';
  
@@ -15,7 +16,7 @@ import MainView from './views/mainView/MainView';
 import Header from './components/header/Header';
 
 // * Serivces:
-import getConfig from './services/data/getConfig';
+import getData from './services/data/getData';
 
 const App = () => {
 
@@ -24,7 +25,8 @@ const App = () => {
 
     // * Config: initial state:
     useEffect(() => {
-        getConfig(dispatch, setInitialState);
+        getData('config', dispatch, setInitialState);
+        getData('materials', dispatch, setMaterials);
     }, []);
 
     useEffect(() => {

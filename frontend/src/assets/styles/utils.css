@@ -36,6 +36,11 @@ header {
     padding: 0 !important;
 }
 
+.disabled {
+    pointer-events: none !important;
+    opacity: 0.5 !important;
+}
+
 /* 
     Standard components:
 */
@@ -81,13 +86,18 @@ header {
     z-index: 1;
 }
 
-
 .select {
     color: var(--text-primary) !important;
     background-color: var(--bg-secondary) !important;
     border: none !important;
     border-radius: var(--border-radius) !important;
     box-shadow: none !important;
+}
+
+.input {
+    background-color:  var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: var(--border-radius) !important;
 }
 
 /*
