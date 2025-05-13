@@ -3,12 +3,12 @@ const calcObjectBoundaries = require('./calcObjectBoundaries');
 const findCrossingPoint = require('./findCrossingPoint');
 const { v4: uuidv4 } = require('uuid');
 
-// * ↓ Global variables:
-// Equational factors.
-const BOUNDARIES = []; 
-const CROSSING_POINTS = [];
-
 const calcDistance = ({ position, direction, sensor, inputObjects = [] }) => {
+
+    // * ↓ Variables:
+    // Equational factors.
+    const BOUNDARIES = []; 
+    const CROSSING_POINTS = [];
 
     // * ↓ 1. Boundaries:
     // Calculating boundaries for each object.
@@ -67,7 +67,6 @@ const calcDistance = ({ position, direction, sensor, inputObjects = [] }) => {
     });
     console.log('Output:', CROSSING_POINTS[0]);
     return CROSSING_POINTS[0];
-
 
 }
 

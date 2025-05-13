@@ -1,10 +1,6 @@
 // * Imports: 
 const calcDistance = require('./calcDistance');
 
-// * ↓ Global variables:
-// Equational factors. 
-const ACCURATE_DISTANCE = {};
-
 // * ↓ Main function
 // Entry point for the calculations module.
 /**
@@ -23,7 +19,7 @@ const ACCURATE_DISTANCE = {};
  *                                              "direction": {number} // (0-360)
  *                                          }
  *
- * @param {Array<Object>} environment   → array of objects representing the environment.
+ * @param {Array<Object>} inputObjects  → array of objects representing the environment.
  * 
  *                                          Each object has the following structure:
  *                                          {
@@ -42,13 +38,20 @@ const calculate = ({
     calculationType,    
     sensor,              
     coords,             
-    enviroment           
+    inputObjects = []           
 }) => {
+
+    // * ↓ Variables:
+    // Equational factors. 
+    let ACCURATE_DISTANCE = {};
 
     // * ↓ 1. Real (accurate) distance calculation:
     // 
     ACCURATE_DISTANCE = calcDistance({
-        
+        position: coords.position,
+        direction: coords.direction,
+        sensor: sensor,
+        inputObjects: inputObjects
     });
 
     // * ↓ 2. Sensors and Environment: 
@@ -56,6 +59,8 @@ const calculate = ({
 
 
     // * ↓ 3. 
+
+    return ACCURATE_DISTANCE;
 
 };
 
