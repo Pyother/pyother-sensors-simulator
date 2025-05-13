@@ -23,8 +23,10 @@ const findCrossingPoint = ({ position, direction, objectBoundaries }) => {
         const intersection = findIntersection(sensorPath.line, line);
 
         if (intersection) {
+            
             // Check if intersection occurs on the correct side of the sensor:
             if (checkDirection({ sensorPosition: position, intersection, direction })) {
+
                 // Check if intersection belongs to the boundary segment:
                 if (segmentBelonging({ point: intersection, start, end })) {
                     distances.push(intersection);
@@ -99,6 +101,7 @@ const checkDirection = ({ sensorPosition, intersection, direction }) => {
 };
 
 const segmentBelonging = ({ point, start, end }) =>  {
+    
     const isBetween = (a, b, c) => {
         return (a >= b && a <= c) || (a >= c && a <= b);
     };

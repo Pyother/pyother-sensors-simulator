@@ -1,39 +1,31 @@
-// * Node modules: 
-const path = require('path');
+// 
 const express = require('express');
-
-// * JSON files:
+const path = require('path');
 const config = require('./src/configuration/options.json');
 const materials = require('./src/configuration/materials.json');
+const calcDistance = require('./src/calculations/calcDistance');
 
-// * Functions:
-const calcDistance = require('./src/services/calculations/calcDistance');
+const router = express.Router();
 
-function api (app) {
+// * Test
+router.get('/test', (req, res) => {
+   res.json({ message: 'API is working!' });
+});
 
-   app.use(express.static(path.join(__dirname, '../frontend/dist')));
-   app.use(express.json());
+// * Configuration
+router.get('/config', (req, res) => {
+   res.json(config);
+});
 
-   app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-   });
-   
-   // * Configuration:
-   app.get('/api/config', (req, res) => {
-      res.json(config);
-   });
+// * Materials
+router.get('/materials', (req, res) => {
+   res.json(materials);
+});
 
-   // * Materials:
-   app.get('/api/materials', (req, res) => {
-      res.json(materials);
-   });
+// * Distance calculation
+router.post('/calc/distance', (req, res) => {
+   const { position, direction, sensor, inputObjects } = req.body;
+   res.json(calcDistance({ position, direction, sensor, inputObjects }));
+});
 
-   // * Distance calculation:
-   app.post('/api/calc/distance', (req, res) => {
-      const { position, direction, sensor, inputObject } = req.body;
-      res.send(calcDistance({ position, direction, sensor, inputObject }));
-   });
-
-}
-
-module.exports = api;
+module.exports = router;
