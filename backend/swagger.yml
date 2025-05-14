@@ -1,0 +1,58 @@
+openapi: "3.0.3"
+info:
+  title: Pyother Sensors Simulator API
+  description: Test environment API for simulating sensor readings. 
+  version: "0.1"
+servers:
+  - url: https://masterthesis.pyother.pl
+paths:
+  /api/config:
+    get:
+      responses:
+        "200":
+          description: OK
+  /api/materials:
+    get:
+      responses:
+        "200":
+          description: OK
+  /api/calc/distance:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                    y:
+                      type: number
+                direction:
+                  type: number
+                inputObject:
+                  type: object
+                  properties:
+                    name: 
+                      type: string
+                    points:
+                      type: array
+                      items: 
+                        type: object
+                        properties:
+                          x:
+                            type: number
+                          y:
+                            type: number
+                    absorptionFactor: 
+                      type: number
+                    reflectivityFactor:
+                      type: number
+                    roughnessFactor:
+                      type: number
+      responses:
+        "200":
+          description: OK
