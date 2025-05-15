@@ -1,28 +1,52 @@
 {
     "availableSensors": [
         {
+            "id": 1,
             "name": "HCSR04",
+            "producer": null,
             "measurementType": "distance",
-            "precision": 0.003,
+            "sensorType": "ultrasonic",
+            "resolution": null,
+            "frequency": 40,
+            "fieldOfView": 30,
+            "minRange": 20,
+            "maxRange": 4000
+        },
+        {
+            "id": 2,
+            "name": "Grove - Ultrasonic Ranger",
+            "producer": null,
+            "measurementType": "distance",
+            "sensorType": "ultrasonic",
+            "resolution": 10,
             "frequency": 40,
             "fieldOfView": 15,
-            "range": 4
+            "minRange": 20,
+            "maxRange": 3500
         },
         {
-            "name": "VL53L0X",
+            "id": 3,
+            "name": "WPSE306N",
+            "producer": "Velleman",
             "measurementType": "distance",
-            "precision": 0.001,
+            "sensorType": "ultrasonic",
+            "resolution": 3,
+            "frequency": 40,
+            "fieldOfView": 15,
+            "minRange": 30,
+            "maxRange": 5500
+        },
+        {
+            "id": 4,
+            "name": "Gravity URM09",
+            "producer": "DFRobot",
+            "measurementType": "distance",
+            "sensorType": "ultrasonic",
+            "resolution": 10,
             "frequency": 50,
-            "fieldOfView": 25,
-            "range": 2
-        },
-        {
-            "name": "LIDAR-Lite v3",
-            "measurementType": "distance",
-            "precision": 0.025,
-            "frequency": 500,
-            "fieldOfView": 0.5,
-            "range": 40
+            "fieldOfView": null,
+            "minRange": 20,
+            "maxRange": 5000
         }
     ],
     "availableMeasurementTypes": [

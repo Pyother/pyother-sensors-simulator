@@ -24,14 +24,21 @@ router.get('/materials', (req, res) => {
 
 // * Distance calculation
 router.post('/calc/distance', (req, res) => {
-   const { position, direction, sensor, inputObjects } = req.body;
+   const { position, direction, angleStep, sensor, inputObjects } = req.body;
+
+   if (!position || !direction) {
+      return res.status(400).json({ error: 'Missing required parameters' });
+   }
+   
    const coords = { position, direction };
-   res.json(calculate({
+   return res.json(calculate({
       calculationType: "distance",
-      coords,
       sensor,
+      coords,
+      angleStep,
       inputObjects
    }));
+   
 });
 
 module.exports = router;

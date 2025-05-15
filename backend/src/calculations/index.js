@@ -1,5 +1,7 @@
 // * Imports: 
-const calcDistance = require('./calcDistance');
+const calcAccurateDistance = require('./calcAccurateDistance');
+const Sensor = require('./sensorModel/Sensor');
+const { v4: uuidv4 } = require('uuid');
 
 // * ↓ Main function
 // Entry point for the calculations module.
@@ -37,30 +39,41 @@ const calcDistance = require('./calcDistance');
 const calculate = ({
     calculationType,    
     sensor,              
-    coords,             
+    coords, 
+    angleStep,            
     inputObjects = []           
 }) => {
 
     // * ↓ Variables:
     // Equational factors. 
-    let ACCURATE_DISTANCE = {};
+    let ACCURATE_DISTANCES = [];
+    let SENSOR;
 
-    // * ↓ 1. Real (accurate) distance calculation:
-    // 
-    ACCURATE_DISTANCE = calcDistance({
-        position: coords.position,
-        direction: coords.direction,
-        sensor: sensor,
-        inputObjects: inputObjects
-    });
+    // * ↓ 0. Data preparation:
+    inputObjects.forEach((object) => object.id = uuidv4());
 
-    // * ↓ 2. Sensors and Environment: 
-    // Initializing the sensors and environment objects.
+    // * ↓ 1. Sensor: 
+    // Initializing the sensor object.
+    SENSOR = new Sensor(sensor);
 
+    // * ↓ 2. Accurate distance:
+    // Calculation of the accurate distance for all angle steps in sensor's field of view.
+    if(SENSOR.fieldOfView && angleStep <= 1) {
+        for (let angle = -SENSOR.fieldOfView / 2; angle <= SENSOR.fieldOfView / 2; angle += angleStep) {
+            ACCURATE_DISTANCES.push(calcAccurateDistance({
+                position: coords.position,
+                direction: coords.direction + angle,
+                sensor: SENSOR,
+                inputObjects
+            }));
+        }
+    } else {
+        throw new Error(`Angle step must be less than or equal to 1 degree for sensors with a field of view.`);
+    }
 
     // * ↓ 3. 
 
-    return ACCURATE_DISTANCE;
+    return ACCURATE_DISTANCES;
 
 };
 
