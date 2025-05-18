@@ -1,6 +1,7 @@
 // * Imports: 
 const calcAccurateDistance = require('./calcAccurateDistance');
 const Sensor = require('./sensorModel/Sensor');
+const Measurement = require('./measurementModel/Measurement');
 const { v4: uuidv4 } = require('uuid');
 
 // * ↓ Main function
@@ -72,8 +73,10 @@ const calculate = ({
     }
 
     // * ↓ 3. 
+    //
+    const MEASUREMENT = new Measurement(ACCURATE_DISTANCES, SENSOR);
 
-    return ACCURATE_DISTANCES;
+    return MEASUREMENT.getResult();
 
 };
 

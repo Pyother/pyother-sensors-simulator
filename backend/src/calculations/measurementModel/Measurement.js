@@ -10,11 +10,12 @@ class Measurement {
     }
 
     getResult() {
-
+        setEnvironmentalWages(this.accurateDistances);
+        this.accurateDistances.sort((a, b) => b.sigma - a.sigma);
+        return this.accurateDistances[0];
     }
 }
 
 Measurement.prototype.setEnvironmentalWages = setEnvironmentalWages;
-
 
 module.exports = Measurement;
