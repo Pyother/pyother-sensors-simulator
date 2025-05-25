@@ -24,6 +24,12 @@
     button:hover {
         background-color: #e0e0e0 !important;
     }
+
+    input {
+        padding: calc(var(--spacing) / 2) !important;
+        border: var(--border) !important;
+        border-radius: calc(var(--spacing) / 2) !important;
+    }
 }
 
 @layer utilities {
@@ -43,13 +49,13 @@
         border-bottom: var(--border);
     }
 
-    @media (min-width: 1200px) {
+    @media (min-width: 1400px) {
         .lg-screen-spacing-header {
             padding: var(--spacing) calc(var(--spacing) * 2) !important;   
         }
 
         .lg-screen-spacing-content {
-            padding: calc(2 * var(--spacing)) calc(var(--spacing) * 16) !important;
+            padding: calc(2 * var(--spacing)) calc(var(--spacing) * 18) !important;
         }
     }
 }
