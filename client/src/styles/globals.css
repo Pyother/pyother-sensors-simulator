@@ -18,6 +18,11 @@
         border-radius: calc(var(--spacing) / 2) !important;
         background-color: var(--color-bg-primary) !important;
         border: var(--border) !important;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #e0e0e0 !important;
     }
 }
 
@@ -28,13 +33,23 @@
         min-height: 100vh;
     }
 
+    .content {
+        width: 100%;
+        border: var(--border);
+        border-radius: calc(var(--spacing) / 2);
+    }
+
+    .border-bottom {
+        border-bottom: var(--border);
+    }
+
     @media (min-width: 1200px) {
         .lg-screen-spacing-header {
             padding: var(--spacing) calc(var(--spacing) * 2) !important;   
         }
 
         .lg-screen-spacing-content {
-            padding: calc(2 * var(--spacing)) calc(var(--spacing) * 8) !important;
+            padding: calc(2 * var(--spacing)) calc(var(--spacing) * 16) !important;
         }
     }
 }
