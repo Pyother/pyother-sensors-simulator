@@ -2,7 +2,12 @@
 import React, { useState } from 'react';
 
 // * Components:
-import { Header, Footer, Content, Form } from '../components';
+import { 
+    Header, 
+    Footer, 
+    Content, 
+    Form
+} from '../components';
 
 const Home = () => {
 

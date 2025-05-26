@@ -3,6 +3,7 @@
 :root {
     --spacing: 1em;
     --color-bg-primary: #f0f0f0;
+    --color-text-secondary: #666;
     --border: 1px solid #ccc;
 }
 
@@ -19,6 +20,7 @@
         background-color: var(--color-bg-primary) !important;
         border: var(--border) !important;
         cursor: pointer;
+        height: fit-content !important;
     }
 
     button:hover {
@@ -47,6 +49,26 @@
 
     .border-bottom {
         border-bottom: var(--border);
+    }
+
+    .item {
+        padding: calc(var(--spacing) / 2) !important;
+        border-radius: calc(var(--spacing) / 2) !important;
+        border: var(--border) !important;
+    }
+
+    .chip {
+        padding: calc(var(--spacing) / 4) calc(var(--spacing) / 2) !important;
+        border-radius: var(--spacing) !important;
+        background-color: var(--color-bg-primary) !important;
+        border: var(--border);
+        width: fit-content !important; 
+    }
+
+    /* Texts: */
+
+    .text-secondary {
+        color: var(--color-text-secondary) !important;
     }
 
     @media (min-width: 1400px) {
