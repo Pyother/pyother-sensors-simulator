@@ -4,19 +4,19 @@ import React, { useState } from 'react';
 // * UI:
 import { IoClose, IoAddSharp, IoOpenOutline, IoRemoveOutline } from "react-icons/io5";
 
-const SensorItem = ({ id, name, type, link, onSelect, onUnselect }) => {
+const SensorItem = ({ item, onSelect, onUnselect }) => {
 
     const [isSelected, setIsSelected] = useState(false);
 
     return (
         <div className="item w-full flex flex-row space-x-1">
             <div className="flex flex-col space-y-0.25">
-                <p>{name}</p>
+                <p>{item.name}</p>
                 <p className="text-sm text-secondary">
-                    <strong>Type: </strong>{type}
+                    <strong>Type: </strong>{item.type}
                 </p>
                 <p className="text-sm text-secondary">
-                    <strong>Documentation: </strong><a href={link}>{link}</a>
+                    <strong>Documentation: </strong><a href={item.link}>{item.link}</a>
                 </p>
             </div>
             <div className="flex justify-end w-full">
@@ -24,9 +24,9 @@ const SensorItem = ({ id, name, type, link, onSelect, onUnselect }) => {
                     className="text-2xl"
                     onClick={() => {
                         if (isSelected) {
-                            onUnselect(id);
+                            onUnselect(item.id);
                         } else {
-                            onSelect(id, name);
+                            onSelect(item.id, item.name);
                         }
                         setIsSelected(!isSelected);
                     }}           

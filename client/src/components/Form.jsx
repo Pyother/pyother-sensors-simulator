@@ -48,6 +48,8 @@ const Form = () => {
                 title="Available Sensors"
                 isOpen={modalOpen}
                 closeEvent={() => setModalOpen(false)}
+                multipleSelections={true}
+                itemsType="sensors"
                 childrenArray={[
                     { id: 1, name: 'Grove - Ultrasonic Ranger', chip: 'ultrasonic', link: 'https://botland.com.pl/ultradzwiekowe-czujniki-odleglosci/1420-ultradzwiekowy-czujnik-odleglosci-hc-sr04-2-200cm-justpi-5903351241366.html' },
                     { id: 2, name: 'Sensor 2', chip: 'optical', link: 'https://example.com/sensor2' },
@@ -61,10 +63,15 @@ const Form = () => {
                 ]}
                 selectionsArray={selectionsArray}
                 onSelect={(id, name) => {
-                    setSelectionsArray(prev => [...prev, { id, name }]);
+                    setSelectionsArray(prev => {
+                        if (prev.some(s => s.id === id)) {
+                            return prev; 
+                        }
+                        return [...prev, { id, name }];
+                    });
                 }}
                 onUnselect={(id) => {
-                    setSelectionsArray(prev => prev.filter(item => item.id !== id));
+                    setSelectionsArray(prev => prev.filter(s => s.id !== id));
                 }}
             />
         </>

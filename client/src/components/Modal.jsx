@@ -1,5 +1,5 @@
 // * React:
-import React from 'react';
+import React, { useState } from 'react';
 
 // * UI:
 import { IoClose, IoAddSharp, IoOpenOutline } from "react-icons/io5";
@@ -8,12 +8,16 @@ import SensorItem from './items/SensorItem';
 const Modal = ({ 
     title, 
     isOpen, 
-    closeEvent, 
+    closeEvent,
+    multipleSelections,
+    itemsType, 
     childrenArray, 
+    selection,
     selectionsArray,
     onSelect, 
     onUnselect
 }) => {
+
     return (
         <div className={`fixed inset-0 z-50 flex items-center justify-center ${isOpen ? '' : 'hidden'} p-1`}>
             <div className="absolute inset-0 bg-gray-900 opacity-75"></div>
@@ -25,26 +29,27 @@ const Modal = ({
                     </button>
                 </div>
                 <div className="flex flex-col overflow-y-auto space-y-1">
-                    {childrenArray && childrenArray.map((item, index) => (
+                    {itemsType === 'sensors' && childrenArray.map(item => (
                         <SensorItem 
-                            key={index} 
-                            name={item.name} 
-                            type={item.chip} 
-                            link={item.link}
-                            onSelect={() => onSelect(item.id, item.name)}
-                            onUnselect={() => onUnselect(item.id)}
+                            key={item.id} 
+                            item={item} 
+                            onSelect={onSelect} 
+                            onUnselect={onUnselect} 
                         />
                     ))}
                 </div>
                 <p>
-                    {selectionsArray.length > 0 ? <strong>Selections: </strong> : null} 
-                    {selectionsArray.length > 0
-                        ? selectionsArray.map(s => s.name).join(', ')
-                        : null}
+                    {
+                        selection || selectionsArray.length > 0 ?
+                        <><strong>Selected: </strong> {
+                            multipleSelections ? selectionsArray.map(s => s.name).join(', ')
+                            : selection.name
+                        } </> : null
+                    }
                 </p>
                 <div className="flex justify-end">
                     <button onClick={closeEvent}>
-                        Confirm
+                        Close
                     </button>
                 </div>
             </div>
