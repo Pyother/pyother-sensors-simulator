@@ -22,7 +22,7 @@ const Home = () => {
                 children={
                     <>
                         <div className="hidden md:flex md:flex-row md:space-x-1 w-full">
-                            <div className="flex flex-col space-y-1 basis-3/4">
+                            <div className="flex flex-col space-y-0.5 basis-3/4">
                                 <Form />
                             </div>
                             <div className="flex flex-col items-center justify-center space-y-1 basis-[125%]">

@@ -4,46 +4,140 @@ import React, { useState } from 'react';
 // * Components:
 import Modal from './Modal';
 
+// * Actions: 
+import { verifyData, sendRequest } from '../actions';
+
 const Form = () => {
 
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectionsArray, setSelectionsArray] = useState([]);
+
+    // * → Form data:
+    const [positionX, setPositionX] = useState(0);
+    const [positionY, setPositionY] = useState(0);
+    const [direction, setDirection] = useState(0);
+    const [angleStep, setAngleStep] = useState(1);
+    const [sensorsArray, setSensorsArray] = useState([]);
+
+    // * → Errors:
+    const [error, setError] = useState(null);
+
+    const handleError = (error) => {
+        setError(error);
+        setTimeout(() => {
+            setError(null);
+        }, 5000);
+    } 
 
     return (
         <>
+            {/* POSITION */}
             <div className="flex flex-row space-x-1 justify-center">
-                <input
-                    className="max-w-[7.5em]" 
-                    type="number"
-                    placeholder="X"
-                />
-                <input 
-                    className="max-w-[7.5em]" 
-                    type="number"
-                    placeholder="Y"
-                />
+                <div className="flex flex-col space-y-0.5">
+                    <p className="text-sm">Position x</p>
+                    <input
+                        className="max-w-[7.5em]" 
+                        type="number"
+                        placeholder="X"
+                        value={positionX}
+                        onChange={(e) => setPositionX(e.target.value)}
+                    />  
+                </div>
+                <div className="flex flex-col space-y-0.5">
+                    <p className="text-sm">Position y</p>
+                    <input 
+                        className="max-w-[7.5em]" 
+                        type="number"
+                        placeholder="Y"
+                        value={positionY}
+                        onChange={(e) => setPositionY(e.target.value)}
+                    />
+                </div>
             </div>
+
+            {/* DIRECTION */}
+            <p className="text-sm">Direction</p>
             <input
                 type="number"
                 placeholder="Direction (degrees)"
+                value={direction}
+                onChange={(e) => setDirection(e.target.value)}
             />
+
+            {/* ANGLE STEP */}
+            <p className="text-sm">Angle step</p>
             <input
                 type="number"
                 placeholder="Angle step (degrees)"
+                value={angleStep}
+                onChange={(e) => setAngleStep(e.target.value)}
             />
+
+            {/* SENSORS */}
+            <p className="text-sm">Sensors</p>
             <input
                 type="text"
                 placeholder="Sensor"
                 onClick={() => setModalOpen(true)}
                 value={
-                    selectionsArray.length > 0 
-                    ? selectionsArray.map(s => s.name).join(', ') 
+                    sensorsArray.length > 0 
+                    ? sensorsArray.map(s => s.name).join(', ') 
                     : ''
                 }
+                onChange={() => {}}
             />
-            <button>
+
+            {/* Error: */}
+            {
+                error && (
+                    <p className="text-red-500 text-sm">
+                        {error}
+                    </p>
+                )
+            }
+
+
+            {/* SENDING REQUEST */}
+            <button
+                className="mt-0.5"
+            
+                onClick={async () => {
+
+                    // * → Creating data:
+                    if (sensorsArray.length === 0) {
+                        handleError('No sensors selected');
+                        return;
+                    }
+                    
+                    const datapack = sensorsArray.map((s) => ({
+                        position: {
+                            x: parseFloat(positionX),
+                            y: parseFloat(positionY)
+                        },
+                        direction: parseFloat(direction),
+                        angleStep: parseFloat(angleStep),
+                        sensor: s.id,
+                        inputObject: {
+
+                        }
+                    }))
+
+                    // * → Data verification:
+                    datapack.forEach((data) => {
+                        const result = verifyData(data);
+                        if (result?.error) {
+                            handleError(result.errorMessage);
+                            return;
+                        }
+                    })
+
+                    // * → Sending request:
+                    // TODO
+                }}
+            >
                 Calculate
             </button>
+
+            {/* Sensor's modal */}
             <Modal 
                 title="Available Sensors"
                 isOpen={modalOpen}
@@ -61,9 +155,9 @@ const Form = () => {
                     { id: 8, name: 'Sensor 2', chip: 'optical', link: 'https://example.com/sensor2' },
                     { id: 9, name: 'Sensor 3', chip: 'ultrasonic', link: 'https://example.com/sensor3' }
                 ]}
-                selectionsArray={selectionsArray}
+                selectionsArray={sensorsArray}
                 onSelect={(id, name) => {
-                    setSelectionsArray(prev => {
+                    setSensorsArray(prev => {
                         if (prev.some(s => s.id === id)) {
                             return prev; 
                         }
@@ -71,7 +165,7 @@ const Form = () => {
                     });
                 }}
                 onUnselect={(id) => {
-                    setSelectionsArray(prev => prev.filter(s => s.id !== id));
+                    setSensorsArray(prev => prev.filter(s => s.id !== id));
                 }}
             />
         </>

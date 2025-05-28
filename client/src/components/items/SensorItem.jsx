@@ -13,7 +13,7 @@ const SensorItem = ({ item, onSelect, onUnselect }) => {
             <div className="flex flex-col space-y-0.25">
                 <p>{item.name}</p>
                 <p className="text-sm text-secondary">
-                    <strong>Type: </strong>{item.type}
+                    <strong>Type: </strong>{item.chip}
                 </p>
                 <p className="text-sm text-secondary">
                     <strong>Documentation: </strong><a href={item.link}>{item.link}</a>
