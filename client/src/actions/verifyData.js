@@ -79,6 +79,10 @@ const verifyData = (data) => {
     // * → Input object verification:
     // TODO
 
+    return {
+        error: false
+    }
+
 }
 
 export default verifyData;

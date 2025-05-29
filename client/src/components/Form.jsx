@@ -1,5 +1,7 @@
-// * React:
+// * React and Redux:
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addCalc } from '../features/CalcsSlice';
 
 // * Components:
 import Modal from './Modal';
@@ -8,6 +10,8 @@ import Modal from './Modal';
 import { verifyData, sendRequest } from '../actions';
 
 const Form = () => {
+
+    const dispatch = useDispatch();
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -119,7 +123,7 @@ const Form = () => {
                         inputObject: {
 
                         }
-                    }))
+                    }));
 
                     // * → Data verification:
                     datapack.forEach((data) => {
@@ -128,10 +132,19 @@ const Form = () => {
                             handleError(result.errorMessage);
                             return;
                         }
-                    })
+                    });
+
+                    console.log('Datapack:', datapack);
 
                     // * → Sending request:
-                    // TODO
+                    datapack.forEach(async (dataItem) => {
+                        const result = await sendRequest({ 
+                            data: dataItem,
+                            setResponse: (response) => {
+                                dispatch(addCalc(response));
+                            }
+                        });
+                    });
                 }}
             >
                 Calculate
