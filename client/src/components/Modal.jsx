@@ -12,6 +12,7 @@ const Modal = ({
     multipleSelections,
     itemsType, 
     childrenArray, 
+    message,
     selection,
     selectionsArray,
     onSelect, 
@@ -37,16 +38,20 @@ const Modal = ({
                             onUnselect={onUnselect} 
                         />
                     ))}
+                    {itemsType === 'message' && <p>{message}</p>}
                 </div>
-                <p>
-                    {
-                        selection || selectionsArray.length > 0 ?
-                        <><strong>Selected: </strong> {
-                            multipleSelections ? selectionsArray.map(s => s.name).join(', ')
-                            : selection.name
-                        } </> : null
-                    }
-                </p>
+                {
+                    itemsType !== 'message' ? 
+                    <p>
+                        {
+                            selection || selectionsArray.length > 0 ?
+                            <><strong>Selected: </strong> {
+                                multipleSelections ? selectionsArray.map(s => s.name).join(', ')
+                                : selection.name
+                            } </> : null
+                        }
+                    </p> : null
+                }
                 <div className="flex justify-end">
                     <button onClick={closeEvent}>
                         Close

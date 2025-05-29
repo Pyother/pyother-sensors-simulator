@@ -13,7 +13,8 @@ const Form = () => {
 
     const dispatch = useDispatch();
 
-    const [modalOpen, setModalOpen] = useState(false);
+    const [sensorsModalOpen, setSensorsModalOpen] = useState(false);
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     // * → Form data:
     const [positionX, setPositionX] = useState(0);
@@ -30,7 +31,7 @@ const Form = () => {
         setTimeout(() => {
             setError(null);
         }, 5000);
-    } 
+    }
 
     return (
         <>
@@ -81,7 +82,7 @@ const Form = () => {
             <input
                 type="text"
                 placeholder="Sensor"
-                onClick={() => setModalOpen(true)}
+                onClick={() => setSensorsModalOpen(true)}
                 value={
                     sensorsArray.length > 0 
                     ? sensorsArray.map(s => s.name).join(', ') 
@@ -92,13 +93,12 @@ const Form = () => {
 
             {/* Error: */}
             {
-                error && (
+                error && !errorModalOpen ? 
                     <p className="text-red-500 text-sm">
                         {error}
                     </p>
-                )
+                : null
             }
-
 
             {/* SENDING REQUEST */}
             <button
@@ -142,6 +142,10 @@ const Form = () => {
                             data: dataItem,
                             setResponse: (response) => {
                                 dispatch(addCalc(response));
+                            }, 
+                            setError: (err) => {
+                                setError(err);
+                                setErrorModalOpen(true);
                             }
                         });
                     });
@@ -153,8 +157,8 @@ const Form = () => {
             {/* Sensor's modal */}
             <Modal 
                 title="Available Sensors"
-                isOpen={modalOpen}
-                closeEvent={() => setModalOpen(false)}
+                isOpen={sensorsModalOpen}
+                closeEvent={() => setSensorsModalOpen(false)}
                 multipleSelections={true}
                 itemsType="sensors"
                 childrenArray={[
@@ -180,6 +184,18 @@ const Form = () => {
                 onUnselect={(id) => {
                     setSensorsArray(prev => prev.filter(s => s.id !== id));
                 }}
+            />
+
+            {/* Error's modal */}
+            <Modal 
+                title="Error"
+                isOpen={errorModalOpen}
+                closeEvent={() => {
+                    setErrorModalOpen(false);
+                    setError(null);
+                }}
+                itemsType="message"
+                message={error}
             />
         </>
     )

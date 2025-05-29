@@ -41,7 +41,8 @@ const sendRequest = async ({ data, setResponse, setError }) => {
             }
         }).catch((error) => {
             if (setError) {
-                setError(error);
+                console.log('Error:', error.message);
+                setError(error.message);
             }
         });
 }
