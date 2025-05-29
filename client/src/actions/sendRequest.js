@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const sendRequest = async ({ data, setResponse, setError }) => {
-    const url = 'http://127.0.0.1:5002/api/calc/distance';
+    const url = `${import.meta.env.VITE_APP_BASE_URL}/api/calc/distance`;
     const body = {
         position: {
             x: data?.position?.x,
