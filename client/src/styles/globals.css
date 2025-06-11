@@ -42,6 +42,8 @@
     }
 
     .content {
+        display: flex;
+        flex-direction: column;
         width: 100%;
         border: var(--border);
         border-radius: calc(var(--spacing) / 2);
@@ -64,6 +66,13 @@
         background-color: var(--color-bg-primary) !important;
         border: var(--border);
         width: fit-content !important; 
+    }
+    
+    .carthesian-plane {
+        width: inherit;
+        height: 100%;
+        border-radius: calc(var(--spacing) / 2) !important;
+        border: var(--border) !important;
     }
 
     /* Texts: */

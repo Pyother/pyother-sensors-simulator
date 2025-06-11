@@ -20,7 +20,7 @@ const Content = ({ title, icon, children }) => {
                         {title}
                     </p>
                 </div>
-                <div className="flex flex-col space-y-1 items-center justify-center p-1">
+                <div className="flex flex-col space-y-1 items-center justify-center p-1 h-full">
                     {children}
                 </div>
             </div>
