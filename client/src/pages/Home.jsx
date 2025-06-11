@@ -6,7 +6,8 @@ import {
     Header, 
     Footer, 
     Content, 
-    Form
+    Form,
+    CarthesianPlane
 } from '../components';
 
 const Home = () => {
@@ -21,12 +22,12 @@ const Home = () => {
                 icon="flask"
                 children={
                     <>
-                        <div className="hidden md:flex md:flex-row md:space-x-1 w-full">
+                        <div className="hidden md:flex md:flex-row md:space-x-1 w-full mb-0">
                             <div className="flex flex-col space-y-0.5 basis-3/4">
                                 <Form />
                             </div>
                             <div className="flex flex-col items-center justify-center space-y-1 basis-[125%]">
-                                (Miejsce na wykres)
+                                <CarthesianPlane />
                             </div>
                         </div>
                         <div className="flex md:hidden flex-col space-y-1 w-full">
@@ -38,9 +39,7 @@ const Home = () => {
                                     <p>{isAccordionOpen ? 'Hide chart' : 'Show chart'}</p>
                                 </button>
                                 <div className={`${isAccordionOpen ? 'block' : 'hidden'} transition-all duration-300 ease-in-out`}>
-                                    <div>
-                                        (Miejsce na wykres)
-                                    </div>
+                                    <CarthesianPlane />
                                 </div>
                             </div>
                             {!isAccordionOpen && (

@@ -45,6 +45,7 @@
         width: 100%;
         border: var(--border);
         border-radius: calc(var(--spacing) / 2);
+        height: --webkit-fill-available !important;
     }
 
     .border-bottom {

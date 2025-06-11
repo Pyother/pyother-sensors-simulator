@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@geoman-io/leaflet-geoman-free": "^2.18.3",
     "@heroui/button": "2.2.19",
     "@heroui/code": "2.2.14",
     "@heroui/dropdown": "2.3.19",
@@ -32,9 +33,12 @@
     "axios": "^1.9.0",
     "clsx": "2.1.1",
     "framer-motion": "11.15.0",
+    "leaflet-auto-graticule": "^2.0.0",
+    "leaflet-simple-graticule": "^1.0.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-icons": "^5.5.0",
+    "react-leaflet": "^4.2.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.23.0",
     "tailwind-variants": "0.3.0"
