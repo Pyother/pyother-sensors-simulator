@@ -27,7 +27,7 @@ const Home = () => {
                                 <Form />
                             </div>
                             <div id="a1" className="flex flex-col items-center justify-center space-y-1 basis-[125%]">
-                                <CarthesianPlane />
+                                <CarthesianPlane active={isAccordionOpen} />
                             </div>
                         </div>
                         <div id="b" className="flex md:hidden flex-col space-y-1 w-full flex-1">
@@ -40,7 +40,7 @@ const Home = () => {
                                     <p>{isAccordionOpen ? 'Hide chart' : 'Show chart'}</p>
                                 </button>
                                 <div id="b12" className={`${isAccordionOpen ? 'flex flex-1' : 'hidden'} transition-all duration-300 ease-in-out`}>
-                                    <CarthesianPlane />
+                                    <CarthesianPlane active={isAccordionOpen} />
                                 </div>
                             </div>
                             {!isAccordionOpen && (
