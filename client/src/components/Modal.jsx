@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 
 // * UI:
 import { IoClose, IoAddSharp, IoOpenOutline, IoAlertOutline } from "react-icons/io5";
-import SensorItem from './items/SensorItem';
+import {
+    SensorItem,
+    MaterialItem
+} from './items'; 
 
 const Modal = ({ 
     title, 
@@ -28,9 +31,11 @@ const Modal = ({
                         {itemsType === 'error' ? <IoAlertOutline className="text-red-500" /> : null}
                         {title}
                     </h2>
-                    <button onClick={closeEvent} className="text-2xl">
-                        <IoClose />
-                    </button>
+                    {itemsType === 'materials' ? null : 
+                        <button onClick={closeEvent} className="text-2xl">
+                            <IoClose />
+                        </button>
+                    }
                 </div>
                 <div className="flex flex-col overflow-y-auto space-y-1">
                     {itemsType === 'sensors' && childrenArray.map(item => (
@@ -41,13 +46,22 @@ const Modal = ({
                             onUnselect={onUnselect} 
                         />
                     ))}
+                    {itemsType === 'materials' && childrenArray.map(item => (
+                        <MaterialItem 
+                            key={item.id} 
+                            item={item} 
+                            selection={selection}
+                            onSelect={onSelect}
+                            onUnselect={onUnselect}
+                        />
+                    ))}
                     {itemsType === 'message' || itemsType === 'error' && <p>{message}</p>}
                 </div>
                 {
                     itemsType !== 'message' && itemsType !== 'error' ? 
                     <p>
                         {
-                            selection || selectionsArray.length > 0 ?
+                            selection || selectionsArray?.length > 0 ?
                             <><strong>Selected: </strong> {
                                 multipleSelections ? selectionsArray.map(s => s.name).join(', ')
                                 : selection.name
@@ -57,7 +71,7 @@ const Modal = ({
                 }
                 <div className="flex justify-end">
                     <button onClick={closeEvent}>
-                        Close
+                        { itemsType === 'materials' ? 'Confirm' : 'Close' }
                     </button>
                 </div>
             </div>

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const getConfig = async ({ setData, setError }) => {
 
-    const url = `${import.meta.env.VITE_APP_BASE_URL}/api/config`;
+    const url = `${import.meta.env.VITE_APP_BASE_URL || ''}/api/config`;
 
     axios.get(url)
         .then((response) => {

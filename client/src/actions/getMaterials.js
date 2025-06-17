@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const getMaterials = async ({ setData, setError }) => {
 
-    const url = `${import.meta.env.VITE_APP_BASE_URL}/api/materials`;
+    const url = `${import.meta.env.VITE_APP_BASE_URL || ''}/api/materials`;
 
     axios.get(url)
         .then((response) => {

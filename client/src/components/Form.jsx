@@ -4,6 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addCalc } from '../features/CalcsSlice';
 import { setAvailableSensors } from '../features/ConfigSlice';
 import { setMaterials } from '../features/MaterialsSlice';
+import { toggleDrawingMode } from '../features/DrawingModeSlice';
+import { addObject } from '../features/formFeatures/ObjectsSlice';
+import { removeLastPoint, clearPoints } from '../features/formFeatures/GeometrySlice';
+
+// * UI:
+import { 
+    IoCalculatorOutline, 
+    IoAddOutline, 
+    IoCheckmark 
+} from "react-icons/io5";
 
 // * Components:
 import Modal from './Modal';
@@ -11,12 +21,25 @@ import Modal from './Modal';
 // * Actions: 
 import { verifyData, sendRequest, getConfig, getMaterials } from '../actions';
 
+// * Utils:
+import { v4 as uuidv4 } from 'uuid';
+
+
 const Form = () => {
 
     const dispatch = useDispatch();
-    const availableSensors = useSelector((state) => state.config.availableSensors);
 
+    // * → Redux state selectors:
+    const availableSensors = useSelector((state) => state.config.availableSensors);
+    const drawingModeOn = useSelector((state) => state.drawingMode.on);
+    const materials = useSelector((state) => state.materials.materials);
+    const objects = useSelector((state) => state.objects.selectedObjects);
+    const geometry = useSelector((state) => state.geometry.points);
+
+    // * → Modals controllers:
     const [sensorsModalOpen, setSensorsModalOpen] = useState(false);
+    const [materialsModalOpen, setMaterialsModalOpen] = useState(false);
+    const [objectsModalOpen, setObjectsModalOpen] = useState(false);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     // * → Form data:
@@ -25,6 +48,10 @@ const Form = () => {
     const [direction, setDirection] = useState(0);
     const [angleStep, setAngleStep] = useState(1);
     const [sensorsArray, setSensorsArray] = useState([]);
+    const [objectsArray, setObjectsArray] = useState([]);
+
+    // * → Objects creation:
+    const [selectedMaterial, setSelectedMaterial] = useState(null);
 
     // * → Errors:
     const [error, setError] = useState(null);
@@ -117,6 +144,29 @@ const Form = () => {
                 onChange={() => {}}
             />
 
+            {/* OBJECTS */}
+            <p className="text-sm">Objects</p>
+            <div className="flex flex-row space-x-1">
+                <button
+                    onClick={() => {
+                        if(!drawingModeOn) {
+                            dispatch(toggleDrawingMode());
+                        } else {
+                            setMaterialsModalOpen(true);
+                        }
+                    }}
+                >
+                    { drawingModeOn ? <IoCheckmark className="text-2xl" /> : <IoAddOutline className="text-2xl" /> }
+                </button>
+                
+                <input
+                    type="text"
+                    placeholder="Object"
+                    value=""
+                    onChange={() => {}}
+                />
+            </div>
+
             {/* Error: */}
             {
                 error && !errorModalOpen ? 
@@ -128,7 +178,7 @@ const Form = () => {
 
             {/* SENDING REQUEST */}
             <button
-                className="mt-0.5 mb-0"
+                className="mt-0.5 mb-0 bg-accent"
                 onClick={async () => {
 
                     // * → Creating data:
@@ -146,7 +196,7 @@ const Form = () => {
                         angleStep: parseFloat(angleStep),
                         sensor: s.id,
                         inputObject: {
-
+                            
                         }
                     }));
 
@@ -176,7 +226,10 @@ const Form = () => {
                     });
                 }}
             >
-                Calculate
+                <div className="flex flex-row items-center justify-center space-x-0.5">
+                    <IoCalculatorOutline className="text-xl" />
+                    <p>Calculate</p>
+                </div>
             </button>
 
             {/* Sensor's modal */}
@@ -211,6 +264,48 @@ const Form = () => {
                 }}
                 itemsType="error"
                 message={error}
+            />
+
+            {/* Materials modal */}
+            <Modal
+                title="Select material"
+                isOpen={materialsModalOpen} 
+                closeEvent={() => {
+                    setMaterialsModalOpen(false);
+                    dispatch(toggleDrawingMode());
+                    if (selectedMaterial) {
+                        dispatch(addObject({
+                            id: uuidv4() || null,
+                            geometry: geometry,
+                            material: selectedMaterial?.id || null
+                        }));
+                        dispatch(clearPoints());
+                        setSelectedMaterial(null);
+                    }
+                }}
+                multipleSelections={false}
+                itemsType="materials"
+                childrenArray={materials}
+                selection={null}
+                onSelect={(id, name) => {
+                    setSelectedMaterial({ id, name });
+                }}
+                onUnselect={() => {
+                    setSelectedMaterial(null);
+                }}
+                selection={selectedMaterial}
+            />
+
+            {/* Objects modal */}
+            <Modal
+                title="Objects"
+                isOpen={objectsModalOpen}
+                closeEvent={() => {
+                    setObjectsModalOpen(false);
+                }}
+                multipleSelections={false}
+                itemsType="error"
+                message="This feature is not implemented yet."
             />
         </>
     )
