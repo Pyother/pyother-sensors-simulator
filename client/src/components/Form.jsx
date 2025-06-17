@@ -12,7 +12,8 @@ import { removeLastPoint, clearPoints } from '../features/formFeatures/GeometryS
 import { 
     IoCalculatorOutline, 
     IoAddOutline, 
-    IoCheckmark 
+    IoCheckmark,
+    IoArrowUndoOutline 
 } from "react-icons/io5";
 
 // * Components:
@@ -158,7 +159,15 @@ const Form = () => {
                 >
                     { drawingModeOn ? <IoCheckmark className="text-2xl" /> : <IoAddOutline className="text-2xl" /> }
                 </button>
-                
+                {
+                    drawingModeOn ?
+                    <button
+                        onClick={() => {dispatch(removeLastPoint())}}
+                    >
+                        <IoArrowUndoOutline className="text-2xl" />
+                    </button>
+                    : null
+                }
                 <input
                     type="text"
                     placeholder="Object"
@@ -272,8 +281,8 @@ const Form = () => {
                 isOpen={materialsModalOpen} 
                 closeEvent={() => {
                     setMaterialsModalOpen(false);
-                    dispatch(toggleDrawingMode());
                     if (selectedMaterial) {
+                        dispatch(toggleDrawingMode());
                         dispatch(addObject({
                             id: uuidv4() || null,
                             geometry: geometry,
@@ -286,7 +295,6 @@ const Form = () => {
                 multipleSelections={false}
                 itemsType="materials"
                 childrenArray={materials}
-                selection={null}
                 onSelect={(id, name) => {
                     setSelectedMaterial({ id, name });
                 }}
@@ -294,6 +302,7 @@ const Form = () => {
                     setSelectedMaterial(null);
                 }}
                 selection={selectedMaterial}
+                confirmLocked={selectedMaterial === null}
             />
 
             {/* Objects modal */}

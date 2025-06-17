@@ -19,7 +19,8 @@ const Modal = ({
     selection,
     selectionsArray,
     onSelect, 
-    onUnselect
+    onUnselect,
+    confirmLocked
 }) => {
 
     return (
@@ -70,7 +71,11 @@ const Modal = ({
                     </p> : null
                 }
                 <div className="flex justify-end">
-                    <button onClick={closeEvent}>
+                    <button 
+                        onClick={closeEvent}
+                        disabled={confirmLocked}
+                        className={confirmLocked ? "opacity-50 cursor-not-allowed" : ""}
+                    >
                         { itemsType === 'materials' ? 'Confirm' : 'Close' }
                     </button>
                 </div>

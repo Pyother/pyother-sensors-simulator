@@ -15,8 +15,6 @@ const MaterialItem = ({ item, selection, onSelect, onUnselect }) => {
                         if (selection?.id === item.id) {
                             onUnselect(item.id);
                         } else {
-                            console.log("Selecting material:", item.id, item.name);
-                            console.log("Test", item.id, selection?.id, item.id === selection?.id);
                             onSelect(item.id, item.name);
                         }
                     }}
