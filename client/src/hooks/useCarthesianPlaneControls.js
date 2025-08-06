@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
+import { drawCarthesianPlane } from '../utils';
 
-export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render) => {
+export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points, drawingMode = false, handleCanvasClick = null, active = true) => {
+    
     const isDragging = useRef(false);
     const dragStart = useRef({ x: 0, y: 0 });
     const centerStart = useRef({ x: 0, y: 0 });
@@ -10,7 +12,19 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render
         const canvas = canvasRef.current;
         if (!canvas) return;
 
+        const render = () => {
+            if (canvas && canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
+                drawCarthesianPlane(canvas, zoomRef.current, centerRef.current.x, centerRef.current.y, points);
+            }
+        };
+
         render();
+
+        if (active) {
+            setTimeout(() => {
+                render();
+            }, 50);
+        }
 
         const handleWheel = (event) => {
             event.preventDefault();
@@ -22,13 +36,15 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render
         };
 
         const handleMouseDown = (event) => {
-            isDragging.current = true;
-            dragStart.current = { x: event.clientX, y: event.clientY };
-            centerStart.current = { ...centerRef.current };
+            if (!drawingMode) {
+                isDragging.current = true;
+                dragStart.current = { x: event.clientX, y: event.clientY };
+                centerStart.current = { ...centerRef.current };
+            }
         };
 
         const handleMouseMove = (event) => {
-            if (!isDragging.current) return;
+            if (!isDragging.current || drawingMode) return;
 
             const dx = event.clientX - dragStart.current.x;
             const dy = event.clientY - dragStart.current.y;
@@ -45,8 +61,14 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render
             render();
         };
 
-        const handleMouseUp = () => {
+        const handleMouseUp = (event) => {
             isDragging.current = false;
+        };
+
+        const handleClick = (event) => {
+            if (drawingMode && handleCanvasClick) {
+                handleCanvasClick(event);
+            }
         };
 
         const handleTouchStart = (event) => {
@@ -61,7 +83,7 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render
         };
 
         const handleTouchMove = (event) => {
-            if (!isDragging.current || event.touches.length !== 1) return;
+            if (!isDragging.current || event.touches.length !== 1 || drawingMode) return;
 
             const dx = event.touches[0].clientX - dragStart.current.x;
             const dy = event.touches[0].clientY - dragStart.current.y;
@@ -79,7 +101,17 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render
             render();
         };
 
-        const handleTouchEnd = () => {
+        const handleTouchEnd = (event) => {
+            if (drawingMode && handleCanvasClick && event.changedTouches.length === 1) {
+                // For touch devices, simulate a click event
+                const touch = event.changedTouches[0];
+                const rect = canvas.getBoundingClientRect();
+                const simulatedEvent = {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                };
+                handleCanvasClick(simulatedEvent);
+            }
             isDragging.current = false;
         };
 
@@ -88,17 +120,22 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render
         };
 
         canvas.addEventListener('wheel', handleWheel, { passive: false });
-        canvas.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mousemove', handleMouseMove);
+        if (!drawingMode) {
+            canvas.addEventListener('mousedown', handleMouseDown);
+            window.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
+        } else {
+            canvas.addEventListener('click', handleClick);
+            canvas.addEventListener('touchend', handleTouchEnd);
+        }
         window.addEventListener('mouseup', handleMouseUp);
-        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-        window.addEventListener('touchmove', handleTouchMove, { passive: false });
-        window.addEventListener('touchend', handleTouchEnd);
         window.addEventListener('resize', handleResize);
 
         return () => {
             canvas.removeEventListener('wheel', handleWheel);
             canvas.removeEventListener('mousedown', handleMouseDown);
+            canvas.removeEventListener('click', handleClick);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
             canvas.removeEventListener('touchstart', handleTouchStart);
@@ -106,5 +143,5 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, render
             window.removeEventListener('touchend', handleTouchEnd);
             window.removeEventListener('resize', handleResize);
         };
-    }, []);
+    }, [drawingMode, points, active]);
 };

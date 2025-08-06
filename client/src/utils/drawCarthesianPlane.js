@@ -1,4 +1,4 @@
-function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0) {
+function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0, points = []) {
     
     const dpr = window.devicePixelRatio || 1;
     const widthCSS = canvas.offsetWidth;
@@ -152,6 +152,54 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
     }
     
     ctx.restore();
+    
+    // Draw points after restoring context to ensure they're visible
+    if (points && points.length > 0) {
+        ctx.fillStyle = '#ff0000';
+        ctx.strokeStyle = '#ff0000';
+        ctx.lineWidth = 2;
+        
+        points.forEach((point, index) => {
+            const canvasX = (point.x - centerXValue) * scaleX + width / 2;
+            const canvasY = height / 2 - (point.y - centerYValue) * scaleY;
+            
+            // Draw point (removed visibility check to ensure all points are always drawn)
+            ctx.beginPath();
+            ctx.arc(canvasX, canvasY, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw point number
+            ctx.font = '12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillStyle = '#ff0000';
+            ctx.fillText((index + 1).toString(), canvasX, canvasY - 8);
+        });
+        
+        // Draw lines connecting points
+        if (points.length > 1) {
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            let pathStarted = false;
+            
+            for (let i = 0; i < points.length; i++) {
+                const point = points[i];
+                const canvasX = (point.x - centerXValue) * scaleX + width / 2;
+                const canvasY = height / 2 - (point.y - centerYValue) * scaleY;
+                
+                if (!pathStarted) {
+                    ctx.moveTo(canvasX, canvasY);
+                    pathStarted = true;
+                } else {
+                    ctx.lineTo(canvasX, canvasY);
+                }
+            }
+            
+            ctx.stroke();
+        }
+    }
 }
 
 export default drawCarthesianPlane;

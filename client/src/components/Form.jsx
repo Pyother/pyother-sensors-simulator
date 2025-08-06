@@ -169,6 +169,7 @@ const Form = () => {
                     : null
                 }
                 <input
+                    className="w-full"
                     type="text"
                     placeholder="Object"
                     value=""
