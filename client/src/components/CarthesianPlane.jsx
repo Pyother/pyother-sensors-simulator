@@ -18,10 +18,50 @@ const CarthesianPlane = ({ active = true }) => {
     const points = useSelector((state) => state.geometry.points);
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [hoveredPointIndex, setHoveredPointIndex] = useState(-1);
 
     const canvasRef = useRef(null);
     const zoomRef = useRef(1);
     const centerRef = useRef({ x: 0, y: 0 });
+
+    // Function to check if mouse is over a point
+    const getPointAtPosition = (mouseX, mouseY) => {
+        if (!drawingMode || points.length === 0) return -1;
+        
+        const canvas = canvasRef.current;
+        if (!canvas) return -1;
+        
+        const width = canvas.offsetWidth;
+        const height = canvas.offsetHeight;
+        const visibleRangeX = 2000 / zoomRef.current;
+        const visibleRangeY = 2000 / zoomRef.current;
+        const scaleX = width / visibleRangeX;
+        const scaleY = height / visibleRangeY;
+        
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
+            const canvasX = (point.x - centerRef.current.x) * scaleX + width / 2;
+            const canvasY = height / 2 - (point.y - centerRef.current.y) * scaleY;
+            
+            const distance = Math.sqrt(Math.pow(mouseX - canvasX, 2) + Math.pow(mouseY - canvasY, 2));
+            if (distance <= 10) { // 10px radius for hover detection
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    const handleMouseMove = (event) => {
+        if (!drawingMode) return;
+        
+        const canvas = canvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+        
+        const pointIndex = getPointAtPosition(mouseX, mouseY);
+        setHoveredPointIndex(pointIndex);
+    };
 
     const handleCanvasClick = (event) => {
         if (!drawingMode) return;
@@ -31,7 +71,14 @@ const CarthesianPlane = ({ active = true }) => {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         
-        // Convert canvas coordinates to world coordinates
+        const pointIndex = getPointAtPosition(x, y);
+        if (pointIndex !== -1) {
+            const existingPoint = points[pointIndex];
+            const point = { x: existingPoint.x, y: existingPoint.y };
+            dispatch(addPoint(point));
+            return;
+        }
+        
         const width = canvas.offsetWidth;
         const height = canvas.offsetHeight;
         const visibleRangeX = 2000 / zoomRef.current;
@@ -45,7 +92,7 @@ const CarthesianPlane = ({ active = true }) => {
         dispatch(addPoint(point));
     };
 
-    useCarthesianPlaneControls(canvasRef, zoomRef, centerRef, points, drawingMode, handleCanvasClick, active);
+    useCarthesianPlaneControls(canvasRef, zoomRef, centerRef, points, drawingMode, handleCanvasClick, active, hoveredPointIndex, handleMouseMove);
 
     return (
         <div className="flex flex-col space-y-1 w-full h-full">

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { drawCarthesianPlane } from '../utils';
 
-export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points, drawingMode = false, handleCanvasClick = null, active = true) => {
+export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points, drawingMode = false, handleCanvasClick = null, active = true, hoveredPointIndex = -1, onMouseMove = null) => {
     
     const isDragging = useRef(false);
     const dragStart = useRef({ x: 0, y: 0 });
@@ -14,7 +14,7 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points
 
         const render = () => {
             if (canvas && canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
-                drawCarthesianPlane(canvas, zoomRef.current, centerRef.current.x, centerRef.current.y, points);
+                drawCarthesianPlane(canvas, zoomRef.current, centerRef.current.x, centerRef.current.y, points, hoveredPointIndex);
             }
         };
 
@@ -44,6 +44,12 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points
         };
 
         const handleMouseMove = (event) => {
+            if (drawingMode && onMouseMove) {
+                // Handle hover detection in drawing mode
+                onMouseMove(event);
+                return;
+            }
+            
             if (!isDragging.current || drawingMode) return;
 
             const dx = event.clientX - dragStart.current.x;
@@ -128,6 +134,7 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points
         } else {
             canvas.addEventListener('click', handleClick);
             canvas.addEventListener('touchend', handleTouchEnd);
+            window.addEventListener('mousemove', handleMouseMove); // Add mousemove for hover detection
         }
         window.addEventListener('mouseup', handleMouseUp);
         window.addEventListener('resize', handleResize);
@@ -143,5 +150,5 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points
             window.removeEventListener('touchend', handleTouchEnd);
             window.removeEventListener('resize', handleResize);
         };
-    }, [drawingMode, points, active]);
+    }, [drawingMode, points, active, hoveredPointIndex]);
 };

@@ -1,4 +1,4 @@
-function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0, points = []) {
+function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0, points = [], hoveredPointIndex = -1) {
     
     const dpr = window.devicePixelRatio || 1;
     const widthCSS = canvas.offsetWidth;
@@ -163,17 +163,48 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
             const canvasX = (point.x - centerXValue) * scaleX + width / 2;
             const canvasY = height / 2 - (point.y - centerYValue) * scaleY;
             
-            // Draw point (removed visibility check to ensure all points are always drawn)
+            // Determine if this point is hovered
+            const isHovered = index === hoveredPointIndex;
+            
+            // Set colors based on hover state
+            if (isHovered) {
+                ctx.fillStyle = '#ffaa00'; // Orange for hover
+                ctx.strokeStyle = '#ffaa00';
+                ctx.lineWidth = 3;
+            } else {
+                ctx.fillStyle = '#ff0000'; // Red for normal
+                ctx.strokeStyle = '#ff0000';
+                ctx.lineWidth = 2;
+            }
+            
+            // Draw point with hover effect
             ctx.beginPath();
-            ctx.arc(canvasX, canvasY, 5, 0, 2 * Math.PI);
+            if (isHovered) {
+                ctx.arc(canvasX, canvasY, 7, 0, 2 * Math.PI); // Larger when hovered
+            } else {
+                ctx.arc(canvasX, canvasY, 5, 0, 2 * Math.PI);
+            }
             ctx.fill();
             
             // Draw point number
-            ctx.font = '12px sans-serif';
+            ctx.font = isHovered ? '14px sans-serif' : '12px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
-            ctx.fillStyle = '#ff0000';
-            ctx.fillText((index + 1).toString(), canvasX, canvasY - 8);
+            ctx.fillStyle = isHovered ? '#ffaa00' : '#ff0000';
+            
+            // Check if this point has duplicates (for closed shapes)
+            const duplicateIndices = points
+                .map((p, i) => ({ point: p, index: i }))
+                .filter(({ point: p }) => Math.abs(p.x - point.x) < 0.01 && Math.abs(p.y - point.y) < 0.01)
+                .map(({ index: i }) => i);
+            
+            if (duplicateIndices.length > 1) {
+                // Show all indices for this position
+                const numberText = duplicateIndices.map(i => i + 1).join(',');
+                ctx.fillText(numberText, canvasX, canvasY - (isHovered ? 10 : 8));
+            } else {
+                ctx.fillText((index + 1).toString(), canvasX, canvasY - (isHovered ? 10 : 8));
+            }
         });
         
         // Draw lines connecting points
