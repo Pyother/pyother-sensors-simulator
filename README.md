@@ -1,29 +1,29 @@
 # pyother-sensors-simulator
 
-## Instalation
+## Installation
 
-Clone the repository, navigate to `/client` directory and run this command:
+Clone the repository, navigate to the `/client` directory and run this command:
 
 ```
 npm install
 ```
 
-Repeat the same command in `/backend` directory. After packages installation, create `.env` file in the root folder of `/client` directory and paste this into the file:
+Repeat the same command in the `/backend` directory. After installing packages, create a `.env` file in the root folder of the `/client` directory and paste this into the file:
 
 ```
 VITE_APP_BASE_URL="http://localhost:3001"
 ```
 
-After all, navigate to client and run server: 
+After completing all steps, navigate to the client directory and run the development server: 
 
 ```
 npm run dev
 ```
 
-Navigate to the backend and do the same:
+Navigate to the backend directory and start the server:
 
 ```
 npm start
 ```
 
-App will be available at: localhost:5137.
+The app will be available at: localhost:5173.
