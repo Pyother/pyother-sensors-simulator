@@ -16,6 +16,7 @@ const CarthesianPlane = ({ active = true }) => {
     const dispatch = useDispatch();
     const drawingMode = useSelector((state) => state.drawingMode.on);
     const points = useSelector((state) => state.geometry.points);
+    const confirmedObjects = useSelector((state) => state.objects.selectedObjects);
 
     const [modalOpen, setModalOpen] = useState(false);
     const [hoveredPointIndex, setHoveredPointIndex] = useState(-1);
@@ -92,7 +93,7 @@ const CarthesianPlane = ({ active = true }) => {
         dispatch(addPoint(point));
     };
 
-    useCarthesianPlaneControls(canvasRef, zoomRef, centerRef, points, drawingMode, handleCanvasClick, active, hoveredPointIndex, handleMouseMove);
+    useCarthesianPlaneControls(canvasRef, zoomRef, centerRef, points, drawingMode, handleCanvasClick, active, hoveredPointIndex, handleMouseMove, confirmedObjects);
 
     return (
         <div className="flex flex-col space-y-1 w-full h-full">

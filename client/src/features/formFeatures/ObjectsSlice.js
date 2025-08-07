@@ -7,10 +7,12 @@ const objectsSlice = createSlice({
     }, 
     reducers: {
         addObject: (state, action) => {
-            const { id, geometry, material } = action.payload;
-            console.log('Adding object:', id, geometry, material);
+            const { id, name, color, geometry, material } = action.payload;
+            console.log('Adding object:', { id, name, color, geometry, material });
             state.selectedObjects.push({
                 id,
+                name,
+                color,
                 geometry,
                 material
             });

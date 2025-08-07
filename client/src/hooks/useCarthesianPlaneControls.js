@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { drawCarthesianPlane } from '../utils';
 
-export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points, drawingMode = false, handleCanvasClick = null, active = true, hoveredPointIndex = -1, onMouseMove = null) => {
+export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points, drawingMode = false, handleCanvasClick = null, active = true, hoveredPointIndex = -1, onMouseMove = null, confirmedObjects = []) => {
     
     const isDragging = useRef(false);
     const dragStart = useRef({ x: 0, y: 0 });
@@ -14,7 +14,7 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points
 
         const render = () => {
             if (canvas && canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
-                drawCarthesianPlane(canvas, zoomRef.current, centerRef.current.x, centerRef.current.y, points, hoveredPointIndex);
+                drawCarthesianPlane(canvas, zoomRef.current, centerRef.current.x, centerRef.current.y, points, hoveredPointIndex, confirmedObjects);
             }
         };
 
@@ -150,5 +150,5 @@ export const useCarthesianPlaneControls = (canvasRef, zoomRef, centerRef, points
             window.removeEventListener('touchend', handleTouchEnd);
             window.removeEventListener('resize', handleResize);
         };
-    }, [drawingMode, points, active, hoveredPointIndex]);
+    }, [drawingMode, points, active, hoveredPointIndex, confirmedObjects]);
 };

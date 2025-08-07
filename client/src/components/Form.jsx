@@ -41,6 +41,7 @@ const Form = () => {
     const [sensorsModalOpen, setSensorsModalOpen] = useState(false);
     const [materialsModalOpen, setMaterialsModalOpen] = useState(false);
     const [objectsModalOpen, setObjectsModalOpen] = useState(false);
+    const [objectNameModalOpen, setObjectNameModalOpen] = useState(false);
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     // * → Form data:
@@ -53,6 +54,8 @@ const Form = () => {
 
     // * → Objects creation:
     const [selectedMaterial, setSelectedMaterial] = useState(null);
+    const [objectName, setObjectName] = useState('');
+    const [objectColor, setObjectColor] = useState('#0066cc');
 
     // * → Errors:
     const [error, setError] = useState(null);
@@ -172,8 +175,15 @@ const Form = () => {
                     className="w-full"
                     type="text"
                     placeholder="Object"
-                    value=""
+                    value={
+                        objects.length > 0 
+                        ? objects.map(obj => obj.name || 'Unnamed').join(', ').length > 30
+                            ? objects.map(obj => obj.name || 'Unnamed').join(', ').substring(0, 27) + '...'
+                            : objects.map(obj => obj.name || 'Unnamed').join(', ')
+                        : ''
+                    }
                     onChange={() => {}}
+                    onClick={() => setObjectsModalOpen(true)}
                 />
             </div>
 
@@ -283,14 +293,8 @@ const Form = () => {
                 closeEvent={() => {
                     setMaterialsModalOpen(false);
                     if (selectedMaterial) {
-                        dispatch(toggleDrawingMode());
-                        dispatch(addObject({
-                            id: uuidv4() || null,
-                            geometry: geometry,
-                            material: selectedMaterial?.id || null
-                        }));
-                        dispatch(clearPoints());
-                        setSelectedMaterial(null);
+                        // Open name/color modal instead of immediately creating object
+                        setObjectNameModalOpen(true);
                     }
                 }}
                 multipleSelections={false}
@@ -306,6 +310,51 @@ const Form = () => {
                 confirmLocked={selectedMaterial === null}
             />
 
+            {/* Object Name and Color modal */}
+            <Modal
+                title="Object Details"
+                isOpen={objectNameModalOpen}
+                closeEvent={() => {
+                    setObjectNameModalOpen(false);
+                    if (selectedMaterial && objectName.trim()) {
+                        // Debug log
+                        console.log('Creating object with:', {
+                            name: objectName.trim(),
+                            color: objectColor,
+                            material: selectedMaterial?.id,
+                            geometry: geometry
+                        });
+                        
+                        // Create the object with name and color
+                        dispatch(toggleDrawingMode());
+                        dispatch(addObject({
+                            id: uuidv4() || null,
+                            name: objectName.trim(),
+                            color: objectColor,
+                            geometry: geometry,
+                            material: selectedMaterial?.id || null
+                        }));
+                        dispatch(clearPoints());
+                        setSelectedMaterial(null);
+                        setObjectName('');
+                        setObjectColor('#0066cc');
+                    } else {
+                        console.log('Object creation cancelled. ObjectName:', objectName, 'SelectedMaterial:', selectedMaterial);
+                        // Reset if no name provided
+                        setSelectedMaterial(null);
+                        setObjectName('');
+                        setObjectColor('#0066cc');
+                    }
+                }}
+                multipleSelections={false}
+                itemsType="objectDetails"
+                objectName={objectName}
+                objectColor={objectColor}
+                onNameChange={setObjectName}
+                onColorChange={setObjectColor}
+                confirmLocked={!objectName.trim()}
+            />
+
             {/* Objects modal */}
             <Modal
                 title="Objects"
@@ -314,8 +363,8 @@ const Form = () => {
                     setObjectsModalOpen(false);
                 }}
                 multipleSelections={false}
-                itemsType="error"
-                message="This feature is not implemented yet."
+                itemsType="objectsList"
+                childrenArray={objects}
             />
         </>
     )

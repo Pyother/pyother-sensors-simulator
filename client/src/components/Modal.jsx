@@ -20,7 +20,12 @@ const Modal = ({
     selectionsArray,
     onSelect, 
     onUnselect,
-    confirmLocked
+    confirmLocked,
+    // New props for object details
+    objectName,
+    objectColor,
+    onNameChange,
+    onColorChange
 }) => {
 
     return (
@@ -32,7 +37,7 @@ const Modal = ({
                         {itemsType === 'error' ? <IoAlertOutline className="text-red-500" /> : null}
                         {title}
                     </h2>
-                    {itemsType === 'materials' ? null : 
+                    {itemsType === 'materials' || itemsType === 'objectDetails' ? null : 
                         <button onClick={closeEvent} className="text-2xl">
                             <IoClose />
                         </button>
@@ -56,10 +61,66 @@ const Modal = ({
                             onUnselect={onUnselect}
                         />
                     ))}
-                    {itemsType === 'message' || itemsType === 'error' && <p>{message}</p>}
+                    {itemsType === 'objectDetails' && (
+                        <div className="flex flex-col space-y-1">
+                            <div className="flex flex-col space-y-0.5">
+                                <p className="text-sm font-semibold">Object Name</p>
+                                <input
+                                    type="text"
+                                    placeholder="Enter object name"
+                                    value={objectName || ''}
+                                    onChange={(e) => onNameChange && onNameChange(e.target.value)}
+                                    className="w-full"
+                                />
+                            </div>
+                            <div className="flex flex-col space-y-0.5">
+                                <p className="text-sm font-semibold">Object Color</p>
+                                <div className="flex flex-row space-x-1 items-center">
+                                    <input
+                                        type="color"
+                                        value={objectColor || '#0066cc'}
+                                        onChange={(e) => onColorChange && onColorChange(e.target.value)}
+                                        className="w-12 h-8"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={objectColor || '#0066cc'}
+                                        onChange={(e) => onColorChange && onColorChange(e.target.value)}
+                                        className="flex-1"
+                                        placeholder="#0066cc"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {itemsType === 'objectsList' && childrenArray && childrenArray.length > 0 && (
+                        <div className="flex flex-col space-y-1">
+                            {childrenArray.map((obj, index) => (
+                                <div key={obj.id || index} className="item flex flex-row items-center space-x-2">
+                                    <div 
+                                        className="w-4 h-4 rounded-full border" 
+                                        style={{ backgroundColor: obj.color || '#0066cc' }}
+                                    ></div>
+                                    <div className="flex flex-col flex-1">
+                                        <p className="font-semibold">{obj.name || 'Unnamed Object'}</p>
+                                        <p className="text-sm text-secondary">
+                                            Material ID: {obj.material || 'Unknown'}
+                                        </p>
+                                        <p className="text-sm text-secondary">
+                                            Points: {obj.geometry ? obj.geometry.length : 0}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {itemsType === 'objectsList' && (!childrenArray || childrenArray.length === 0) && (
+                        <p className="text-center text-secondary">No objects created yet.</p>
+                    )}
+                    {(itemsType === 'message' || itemsType === 'error') && <p>{message}</p>}
                 </div>
                 {
-                    itemsType !== 'message' && itemsType !== 'error' ? 
+                    itemsType !== 'message' && itemsType !== 'error' && itemsType !== 'objectsList' && itemsType !== 'objectDetails' ? 
                     <p>
                         {
                             selection || selectionsArray?.length > 0 ?
@@ -76,7 +137,11 @@ const Modal = ({
                         disabled={confirmLocked}
                         className={confirmLocked ? "opacity-50 cursor-not-allowed" : ""}
                     >
-                        { itemsType === 'materials' ? 'Confirm' : 'Close' }
+                        { 
+                            itemsType === 'materials' ? 'Confirm' : 
+                            itemsType === 'objectDetails' ? 'Create Object' :
+                            'Close' 
+                        }
                     </button>
                 </div>
             </div>

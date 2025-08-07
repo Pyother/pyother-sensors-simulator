@@ -1,4 +1,4 @@
-function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0, points = [], hoveredPointIndex = -1) {
+function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0, points = [], hoveredPointIndex = -1, confirmedObjects = []) {
     
     const dpr = window.devicePixelRatio || 1;
     const widthCSS = canvas.offsetWidth;
@@ -152,6 +152,52 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
     }
     
     ctx.restore();
+    
+    // Draw confirmed objects (permanently visible)
+    if (confirmedObjects && confirmedObjects.length > 0) {
+        confirmedObjects.forEach((obj) => {
+            const objPoints = obj.geometry || [];
+            if (objPoints.length > 0) {
+                // Set style for confirmed objects - use object's color or default blue
+                const objectColor = obj.color || '#0066cc';
+                ctx.fillStyle = objectColor;
+                ctx.strokeStyle = objectColor;
+                ctx.lineWidth = 3;
+                
+                // Draw points for confirmed object
+                objPoints.forEach((point, index) => {
+                    const canvasX = (point.x - centerXValue) * scaleX + width / 2;
+                    const canvasY = height / 2 - (point.y - centerYValue) * scaleY;
+                    
+                    // Draw point
+                    ctx.beginPath();
+                    ctx.arc(canvasX, canvasY, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+                
+                // Draw lines connecting points for confirmed object
+                if (objPoints.length > 1) {
+                    ctx.beginPath();
+                    let pathStarted = false;
+                    
+                    for (let i = 0; i < objPoints.length; i++) {
+                        const point = objPoints[i];
+                        const canvasX = (point.x - centerXValue) * scaleX + width / 2;
+                        const canvasY = height / 2 - (point.y - centerYValue) * scaleY;
+                        
+                        if (!pathStarted) {
+                            ctx.moveTo(canvasX, canvasY);
+                            pathStarted = true;
+                        } else {
+                            ctx.lineTo(canvasX, canvasY);
+                        }
+                    }
+                    
+                    ctx.stroke();
+                }
+            }
+        });
+    }
     
     // Draw points after restoring context to ensure they're visible
     if (points && points.length > 0) {
