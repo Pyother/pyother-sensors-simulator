@@ -10,13 +10,13 @@ import { Modal } from './index.js';
 import { drawCarthesianPlane } from '../utils';
 import { useCarthesianPlaneControls } from '../hooks/useCarthesianPlaneControls';
 
-
 const CarthesianPlane = ({ active = true }) => {
 
     const dispatch = useDispatch();
     const drawingMode = useSelector((state) => state.drawingMode.on);
     const points = useSelector((state) => state.geometry.points);
     const confirmedObjects = useSelector((state) => state.objects.selectedObjects);
+    const sensorPosition = useSelector((state) => state.sensorPosition);
 
     const [modalOpen, setModalOpen] = useState(false);
     const [hoveredPointIndex, setHoveredPointIndex] = useState(-1);
@@ -25,7 +25,6 @@ const CarthesianPlane = ({ active = true }) => {
     const zoomRef = useRef(1);
     const centerRef = useRef({ x: 0, y: 0 });
 
-    // Function to check if mouse is over a point
     const getPointAtPosition = (mouseX, mouseY) => {
         if (!drawingMode || points.length === 0) return -1;
         
@@ -45,7 +44,7 @@ const CarthesianPlane = ({ active = true }) => {
             const canvasY = height / 2 - (point.y - centerRef.current.y) * scaleY;
             
             const distance = Math.sqrt(Math.pow(mouseX - canvasX, 2) + Math.pow(mouseY - canvasY, 2));
-            if (distance <= 10) { // 10px radius for hover detection
+            if (distance <= 10) {
                 return i;
             }
         }
@@ -93,7 +92,7 @@ const CarthesianPlane = ({ active = true }) => {
         dispatch(addPoint(point));
     };
 
-    useCarthesianPlaneControls(canvasRef, zoomRef, centerRef, points, drawingMode, handleCanvasClick, active, hoveredPointIndex, handleMouseMove, confirmedObjects);
+    useCarthesianPlaneControls(canvasRef, zoomRef, centerRef, points, drawingMode, handleCanvasClick, active, hoveredPointIndex, handleMouseMove, confirmedObjects, sensorPosition);
 
     return (
         <div className="flex flex-col space-y-1 w-full h-full">

@@ -43,11 +43,9 @@ const Home = () => {
                                     <CarthesianPlane active={isAccordionOpen} />
                                 </div>
                             </div>
-                            {!isAccordionOpen && (
-                                <div id="b2" className="flex flex-col space-y-1">
-                                    <Form />
-                                </div>
-                            )}
+                            <div id="b2" className="flex flex-col space-y-1">
+                                <Form />
+                            </div>
                         </div>
                     </> 
                 }

@@ -7,11 +7,12 @@ import { setMaterials } from '../features/MaterialsSlice';
 import { toggleDrawingMode } from '../features/DrawingModeSlice';
 import { addObject } from '../features/formFeatures/ObjectsSlice';
 import { removeLastPoint, clearPoints } from '../features/formFeatures/GeometrySlice';
+import { setSensorX, setSensorY, setSensorDirection } from '../features/SensorPositionSlice';
 
 // * UI:
 import { 
-    IoCalculatorOutline, 
-    IoAddOutline, 
+    IoCalculatorOutline,
+    IoAddOutline,
     IoCheckmark,
     IoArrowUndoOutline 
 } from "react-icons/io5";
@@ -36,6 +37,9 @@ const Form = () => {
     const materials = useSelector((state) => state.materials.materials);
     const objects = useSelector((state) => state.objects.selectedObjects);
     const geometry = useSelector((state) => state.geometry.points);
+    const positionX = useSelector((state) => state.sensorPosition.x);
+    const positionY = useSelector((state) => state.sensorPosition.y);
+    const direction = useSelector((state) => state.sensorPosition.direction);
 
     // * → Modals controllers:
     const [sensorsModalOpen, setSensorsModalOpen] = useState(false);
@@ -45,9 +49,6 @@ const Form = () => {
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     // * → Form data:
-    const [positionX, setPositionX] = useState(0);
-    const [positionY, setPositionY] = useState(0);
-    const [direction, setDirection] = useState(0);
     const [angleStep, setAngleStep] = useState(1);
     const [sensorsArray, setSensorsArray] = useState([]);
     const [objectsArray, setObjectsArray] = useState([]);
@@ -59,6 +60,7 @@ const Form = () => {
 
     // * → Errors:
     const [error, setError] = useState(null);
+    const [showValidationMessages, setShowValidationMessages] = useState(false);
 
     const handleError = (error) => {
         setError(error);
@@ -66,6 +68,35 @@ const Form = () => {
             setError(null);
         }, 5000);
     }
+
+    const showValidationErrors = () => {
+        setShowValidationMessages(true);
+        setTimeout(() => {
+            setShowValidationMessages(false);
+        }, 5000);
+    };
+
+    const validateCalculateInputs = () => {
+        if (sensorsArray.length === 0) {
+            return { valid: false, message: 'At least one sensor must be selected' };
+        }
+
+        if (objects.length === 0) {
+            return { valid: false, message: 'At least one object must be created' };
+        }
+
+        const directionValue = parseFloat(direction);
+        if (isNaN(directionValue) || directionValue < -180 || directionValue > 180) {
+            return { valid: false, message: 'Direction must be between -180 and 180 degrees' };
+        }
+
+        return { valid: true };
+    };
+
+    const isCalculateDisabled = () => {
+        const validation = validateCalculateInputs();
+        return !validation.valid;
+    };
 
     useEffect(() => {
         // * → Fetching config and materials:
@@ -93,7 +124,7 @@ const Form = () => {
     return (
         <>
             {/* POSITION */}
-            <div className="flex flex-row space-x-1 justify-center">
+                        <div className="flex flex-row space-x-1 justify-center">
                 <div className="flex flex-col space-y-0.5">
                     <p className="text-sm">Position x</p>
                     <input
@@ -101,7 +132,7 @@ const Form = () => {
                         type="number"
                         placeholder="X"
                         value={positionX}
-                        onChange={(e) => setPositionX(e.target.value)}
+                        onChange={(e) => dispatch(setSensorX(parseFloat(e.target.value) || 0))}
                     />  
                 </div>
                 <div className="flex flex-col space-y-0.5">
@@ -111,7 +142,7 @@ const Form = () => {
                         type="number"
                         placeholder="Y"
                         value={positionY}
-                        onChange={(e) => setPositionY(e.target.value)}
+                        onChange={(e) => dispatch(setSensorY(parseFloat(e.target.value) || 0))}
                     />
                 </div>
             </div>
@@ -122,8 +153,25 @@ const Form = () => {
                 type="number"
                 placeholder="Direction (degrees)"
                 value={direction}
-                onChange={(e) => setDirection(e.target.value)}
+                onChange={(e) => dispatch(setSensorDirection(parseFloat(e.target.value) || 0))}
+                min="-180"
+                max="180"
+                className={
+                    direction && (parseFloat(direction) < -180 || parseFloat(direction) > 180) 
+                    ? 'border-red-500' 
+                    : ''
+                }
             />
+            {showValidationMessages && direction && (parseFloat(direction) < -180 || parseFloat(direction) > 180) && (
+                <p className="text-red-500 text-sm mb-1">
+                    Direction must be between -180 and 180 degrees
+                </p>
+            )}
+            {showValidationMessages && (direction !== '' && parseFloat(direction) >= -180 && parseFloat(direction) <= 180) && (
+                <p className="text-green-500 text-sm mb-1">
+                    ✓ Direction is valid.
+                </p>
+            )}
 
             {/* ANGLE STEP */}
             <p className="text-sm">Angle step</p>
@@ -136,6 +184,16 @@ const Form = () => {
 
             {/* SENSORS */}
             <p className="text-sm">Sensors</p>
+            {showValidationMessages && sensorsArray.length === 0 && (
+                <p className="text-red-500 text-sm mb-1">
+                    Select at least one sensor.
+                </p>
+            )}
+            {showValidationMessages && (sensorsArray.length > 0) && (
+                <p className="text-green-500 text-sm mb-1">
+                    ✓ Sensors selected.
+                </p>
+            )}
             <input
                 type="text"
                 placeholder="Sensor"
@@ -150,6 +208,16 @@ const Form = () => {
 
             {/* OBJECTS */}
             <p className="text-sm">Objects</p>
+            {showValidationMessages && objects.length === 0 && (
+                <p className="text-red-500 text-sm mb-1">
+                    Create at least one object.
+                </p>
+            )}
+            {showValidationMessages && (objects.length > 0) && (
+                <p className="text-green-500 text-sm mb-1">
+                    ✓ Objects created.
+                </p>
+            )}
             <div className="flex flex-row space-x-1">
                 <button
                     onClick={() => {
@@ -198,15 +266,19 @@ const Form = () => {
 
             {/* SENDING REQUEST */}
             <button
-                className="mt-0.5 mb-0 bg-accent"
+                className={`mt-0.5 mb-0 ${isCalculateDisabled() ? 'opacity-50 cursor-not-allowed bg-gray-300' : 'bg-accent'}`}
+                disabled={isCalculateDisabled()}
                 onClick={async () => {
 
-                    // * → Creating data:
-                    if (sensorsArray.length === 0) {
-                        handleError('No sensors selected');
+                    // * → Validation check
+                    const validation = validateCalculateInputs();
+                    if (!validation.valid) {
+                        handleError(validation.message);
+                        showValidationErrors();
                         return;
                     }
-                    
+
+                    // * → Creating data:
                     const datapack = sensorsArray.map((s) => ({
                         position: {
                             x: parseFloat(positionX),
@@ -293,7 +365,6 @@ const Form = () => {
                 closeEvent={() => {
                     setMaterialsModalOpen(false);
                     if (selectedMaterial) {
-                        // Open name/color modal instead of immediately creating object
                         setObjectNameModalOpen(true);
                     }
                 }}
@@ -317,7 +388,6 @@ const Form = () => {
                 closeEvent={() => {
                     setObjectNameModalOpen(false);
                     if (selectedMaterial && objectName.trim()) {
-                        // Debug log
                         console.log('Creating object with:', {
                             name: objectName.trim(),
                             color: objectColor,
@@ -325,7 +395,6 @@ const Form = () => {
                             geometry: geometry
                         });
                         
-                        // Create the object with name and color
                         dispatch(toggleDrawingMode());
                         dispatch(addObject({
                             id: uuidv4() || null,
@@ -340,7 +409,6 @@ const Form = () => {
                         setObjectColor('#0066cc');
                     } else {
                         console.log('Object creation cancelled. ObjectName:', objectName, 'SelectedMaterial:', selectedMaterial);
-                        // Reset if no name provided
                         setSelectedMaterial(null);
                         setObjectName('');
                         setObjectColor('#0066cc');

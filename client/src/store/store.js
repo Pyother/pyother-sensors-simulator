@@ -7,6 +7,7 @@ import MaterialsReducer from '../features/MaterialsSlice';
 import DrawingModeReducer from '../features/DrawingModeSlice';
 import ObjectsReducer from '../features/formFeatures/ObjectsSlice';
 import GeometryReducer from '../features/formFeatures/GeometrySlice';
+import SensorPositionReducer from '../features/SensorPositionSlice';
 
 const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
         materials: MaterialsReducer,
         drawingMode: DrawingModeReducer,
         objects: ObjectsReducer,
-        geometry: GeometryReducer
+        geometry: GeometryReducer,
+        sensorPosition: SensorPositionReducer
     }
 });
 
