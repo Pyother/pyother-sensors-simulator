@@ -21,7 +21,6 @@ const Modal = ({
     onSelect, 
     onUnselect,
     confirmLocked,
-    // New props for object details
     objectName,
     objectColor,
     onNameChange,

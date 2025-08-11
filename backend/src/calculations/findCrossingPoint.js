@@ -6,7 +6,7 @@ const findCrossingPoint = ({ position, direction, objectBoundaries }) => {
         start: { x: position.x, y: position.y },
         line: { 
             a: Math.tan(directionInRadians),
-            b: position.y - Math.tan(direction) * position.x,
+            b: position.y - Math.tan(directionInRadians) * position.x,
             horizontal: (direction === 0 || direction === 180 || direction === -180) ?
                 { y: position.y } : false,
             vertical: (direction === 90 || direction === -90) ?

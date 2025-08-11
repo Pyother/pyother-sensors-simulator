@@ -276,11 +276,11 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
         ctx.fill();
         
         if (sensorPosition.direction !== undefined) {
-            const directionRad = (sensorPosition.direction - 90) * Math.PI / 180;
+            const directionRad = sensorPosition.direction * Math.PI / 180;
             
             const lineLength = Math.max(width, height) * 2;
             const endX = sensorCanvasX + Math.cos(directionRad) * lineLength;
-            const endY = sensorCanvasY + Math.sin(directionRad) * lineLength;
+            const endY = sensorCanvasY - Math.sin(directionRad) * lineLength;
             
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 2;

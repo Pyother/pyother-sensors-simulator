@@ -5,7 +5,7 @@ const sensorPositionSlice = createSlice({
     initialState: {
         x: 0,
         y: 0,
-        direction: 45
+        direction: 30
     },
     reducers: {
         setSensorPosition: (state, action) => {

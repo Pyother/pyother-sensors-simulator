@@ -11,27 +11,12 @@ const sendRequest = async ({ data, setResponse, setError }) => {
         direction: data?.direction,
         angleStep: data?.angleStep,
         sensor: data?.sensor,
-        inputObjects: [
-            {
-                inputObject: [
-                    { x: 0, y: 100 },
-                    { x: 40, y: 60 }
-                ]
-            },
-            {
-                inputObject: [
-                    { x: 40, y: 60 },
-                    { x: 60, y: 40 }
-                ]
-            },
-            {
-                inputObject: [
-                    { x: 60, y: 40 },
-                    { x: 100, y: 0 }
-                ]
-            }
-        ]
+        inputObjects: (data?.inputObjects || []).map(obj => ({
+            inputObject: obj.geometry || []
+        }))
     }
+
+    console.log('Sending request with body:', JSON.stringify(body, null, 2));
 
     axios.post(url, body)
         .then((response) => {

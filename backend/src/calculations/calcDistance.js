@@ -10,6 +10,10 @@ const CROSSING_POINTS = [];
 
 const calcDistance = ({ position, direction, sensor, inputObjects = [] }) => {
 
+    // * Clear global arrays for each new calculation
+    BOUNDARIES.length = 0;
+    CROSSING_POINTS.length = 0;
+
     // * ↓ 1. Boundaries:
     // Calculating boundaries for each object.
     inputObjects.forEach((object) => {

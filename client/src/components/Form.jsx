@@ -287,9 +287,12 @@ const Form = () => {
                         direction: parseFloat(direction),
                         angleStep: parseFloat(angleStep),
                         sensor: s.id,
-                        inputObject: {
-                            
-                        }
+                        inputObjects: objects.map(obj => ({
+                            id: obj.id,
+                            name: obj.name,
+                            material: obj.material,
+                            geometry: obj.geometry
+                        }))
                     }));
 
                     // * → Data verification:
