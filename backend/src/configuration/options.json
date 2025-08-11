@@ -1,56 +1,92 @@
 {
     "availableSensors": [
         {
-            "id": 1,
             "name": "HCSR04",
-            "producer": "Cytron Technologies",
             "measurementType": "distance",
-            "link": "https://web.eece.maine.edu/~zhu/book/lab/HC-SR04%20User%20Manual.pdf",
-            "sensorType": "ultrasonic",
-            "resolution": null,
-            "frequency": 40,
-            "fieldOfView": 30,
-            "minRange": 20,
-            "maxRange": 4000
-        },
-        {
-            "id": 2,
-            "name": "Grove - Ultrasonic Ranger",
-            "producer": null,
-            "measurementType": "distance",
-            "link": "https://www.example.com",
-            "sensorType": "ultrasonic",
-            "resolution": 10,
+            "precision": 0.003,
             "frequency": 40,
             "fieldOfView": 15,
-            "minRange": 20,
-            "maxRange": 3500
+            "range": 4
         },
         {
-            "id": 3,
-            "name": "WPSE306N",
-            "producer": "Velleman",
+            "name": "VL53L0X",
             "measurementType": "distance",
-            "link": "https://www.example.com",
-            "sensorType": "ultrasonic",
-            "resolution": 3,
-            "frequency": 40,
-            "fieldOfView": 15,
-            "minRange": 30,
-            "maxRange": 5500
-        },
-        {
-            "id": 4,
-            "name": "Gravity URM09",
-            "producer": "DFRobot",
-            "measurementType": "distance",
-            "link": "https://www.example.com",
-            "sensorType": "ultrasonic",
-            "resolution": 10,
+            "precision": 0.001,
             "frequency": 50,
-            "fieldOfView": null,
-            "minRange": 20,
-            "maxRange": 5000
+            "fieldOfView": 25,
+            "range": 2
+        },
+        {
+            "name": "LIDAR-Lite v3",
+            "measurementType": "distance",
+            "precision": 0.025,
+            "frequency": 500,
+            "fieldOfView": 0.5,
+            "range": 40
         }
+    ],
+    "availableMeasurementTypes": [
+        {
+            "name": "distance",
+            "unit": "m"
+        },
+        {
+            "name": "encoders",
+            "unit": "m"
+        }
+    ],
+    "availableTasks": [
+        {
+            "name": "distance measurement",
+            "description": "Measures the distance between the robot and an object in front of it.",
+            "sensorTypesRequired": [
+                "distance"
+            ],
+            "sensorTypesOptional": [
+                
+            ],
+            "inputObjectRequired": true,
+            "movementRequired": true,
+            "multipleSensorSlots": false,
+            "sensorAngleRegulationRequired": true
+        },
+        {
+            "name": "location measurement",
+            "description": "Measures the location of the robot in the environment.",
+            "sensorTypesRequired": [
+                "encoders"
+            ],
+            "sensorTypesOptional": [
+                "distance"
+            ],
+            "inputObjectRequired": false,
+            "movementRequired": true,
+            "multipleSensorSlots": false,
+            "sensorAngleRegulationRequired": false
+        },
+        {
+            "name": "360 distance measurement",
+            "description": "Measures the rotation of the lidar sensor.",
+            "sensorTypesRequired": ["lidar"],
+            "sensorTypesOptional": [],
+            "inputObjectRequired": true,
+            "movementRequired": true,
+            "multipleSensorSlots": false,
+            "sensorAngleRegulationRequired": false
+        },
+        {
+            "name": "locatization and mapping",
+            "description": "Basing on the distance measurements, the robot creates a map of the environment and localizes itself in it.",
+            "sensorTypesRequired": ["distance"],
+            "sensorTypesOptional": [],
+            "inputObjectRequired": true,
+            "movementRequired": true,
+            "multipleSensorSlots": {
+                "sensorTypes": ["distance"],
+                "max": 8
+            },
+            "sensorAngleRegulationRequired": true
+        }
+
     ]
 }

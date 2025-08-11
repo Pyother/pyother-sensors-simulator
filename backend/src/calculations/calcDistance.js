@@ -3,21 +3,23 @@ const calcObjectBoundaries = require('./calcObjectBoundaries');
 const findCrossingPoint = require('./findCrossingPoint');
 const { v4: uuidv4 } = require('uuid');
 
-const calcAccurateDistance = ({ position, direction, sensor, inputObjects = [] }) => {
+// * ↓ Global variables:
+// Equational factors.
+const BOUNDARIES = []; 
+const CROSSING_POINTS = [];
 
-    // * ↓ Variables:
-    // Equational factors.
-    const BOUNDARIES = []; 
-    const CROSSING_POINTS = [];
+const calcDistance = ({ position, direction, sensor, inputObjects = [] }) => {
 
     // * ↓ 1. Boundaries:
     // Calculating boundaries for each object.
     inputObjects.forEach((object) => {
+        const objectId = uuidv4(); 
         const inputObject = object?.inputObject || {};
         const objectBoundaries = calcObjectBoundaries({ inputObject });
 
+        inputObject.id = objectId; 
         BOUNDARIES.push({
-            objectId: object.id,
+            objectId: objectId,
             objectBoundaries: objectBoundaries
         });
     });
@@ -31,15 +33,8 @@ const calcAccurateDistance = ({ position, direction, sensor, inputObjects = [] }
             objectBoundaries: boundary.objectBoundaries 
         });
         if (crossingPoint) {
-
-            const distance = Math.sqrt(
-                Math.pow(crossingPoint.x - position.x, 2) +
-                Math.pow(crossingPoint.y - position.y, 2)
-            );
-
             CROSSING_POINTS.push({
                 objectId: boundary.objectId,
-                distance: distance,
                 crossingPoint: crossingPoint
             });
         }
@@ -59,10 +54,21 @@ const calcAccurateDistance = ({ position, direction, sensor, inputObjects = [] }
     }
 
     // 3.3. Multiple crossing points:
-    CROSSING_POINTS.sort((a, b) => a.distance - b.distance);
-    
+    CROSSING_POINTS.sort((a, b) => {
+        const distanceA = Math.sqrt(
+            Math.pow(a.crossingPoint.x - position.x, 2) +
+            Math.pow(a.crossingPoint.y - position.y, 2)
+        );
+        const distanceB = Math.sqrt(
+            Math.pow(b.crossingPoint.x - position.x, 2) +
+            Math.pow(b.crossingPoint.y - position.y, 2)
+        );
+        return distanceA - distanceB;
+    });
+    console.log('Output:', CROSSING_POINTS[0]);
     return CROSSING_POINTS[0];
+
 
 }
 
-module.exports = calcAccurateDistance;
+module.exports = calcDistance;

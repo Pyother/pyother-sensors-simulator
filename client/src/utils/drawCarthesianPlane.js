@@ -1,4 +1,4 @@
-function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0, points = [], hoveredPointIndex = -1, confirmedObjects = [], sensorPosition = { x: 0, y: 0 }) {
+function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 0, points = [], hoveredPointIndex = -1, confirmedObjects = [], sensorPosition = { x: 0, y: 0 }, calcs = []) {
     
     const dpr = window.devicePixelRatio || 1;
     const widthCSS = canvas.offsetWidth;
@@ -293,6 +293,24 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
             
             ctx.setLineDash([]);
         }
+    }
+
+    if (calcs && calcs.length > 0) {
+        calcs.forEach((calc) => {
+            if (calc.crossingPoint) {
+                const crossingCanvasX = (calc.crossingPoint.x - centerXValue) * scaleX + width / 2;
+                const crossingCanvasY = height / 2 - (calc.crossingPoint.y - centerYValue) * scaleY;
+                
+                ctx.fillStyle = '#ff6600';
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                
+                ctx.beginPath();
+                ctx.arc(crossingCanvasX, crossingCanvasY, 8, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
+        });
     }
 }
 

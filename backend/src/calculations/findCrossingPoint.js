@@ -14,7 +14,7 @@ const findCrossingPoint = ({ position, direction, objectBoundaries }) => {
         }
     };
 
-    //console.log('Sensor path:', sensorPath);
+    console.log('Sensor path:', sensorPath);
 
     const distances = [];
 

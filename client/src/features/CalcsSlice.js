@@ -8,7 +8,6 @@ const calcsSlice = createSlice({
     reducers: {
         addCalc: (state, action) => {
             state.calcs.push(action.payload);
-            console.log('New calc added:', action.payload);
         }
     }
 });
