@@ -292,6 +292,73 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
             ctx.stroke();
             
             ctx.setLineDash([]);
+            
+            // Draw field of view boundaries and angle step lines
+            if (sensorPosition.fieldOfView !== undefined && sensorPosition.fieldOfView > 0) {
+                const fieldOfViewRad = sensorPosition.fieldOfView * Math.PI / 180;
+                const leftBoundaryRad = directionRad - fieldOfViewRad / 2;
+                const rightBoundaryRad = directionRad + fieldOfViewRad / 2;
+                
+                // Draw field of view boundaries
+                const leftEndX = sensorCanvasX + Math.cos(leftBoundaryRad) * lineLength;
+                const leftEndY = sensorCanvasY - Math.sin(leftBoundaryRad) * lineLength;
+                const rightEndX = sensorCanvasX + Math.cos(rightBoundaryRad) * lineLength;
+                const rightEndY = sensorCanvasY - Math.sin(rightBoundaryRad) * lineLength;
+                
+                ctx.strokeStyle = 'rgba(0, 100, 255, 0.7)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                
+                // Draw left boundary
+                ctx.beginPath();
+                ctx.moveTo(sensorCanvasX, sensorCanvasY);
+                ctx.lineTo(leftEndX, leftEndY);
+                ctx.stroke();
+                
+                // Draw right boundary
+                ctx.beginPath();
+                ctx.moveTo(sensorCanvasX, sensorCanvasY);
+                ctx.lineTo(rightEndX, rightEndY);
+                ctx.stroke();
+                
+                // Draw angle step lines inside field of view
+                if (sensorPosition.angleStep !== undefined && sensorPosition.angleStep > 0) {
+                    const angleStepRad = sensorPosition.angleStep * Math.PI / 180;
+                    
+                    ctx.strokeStyle = 'rgba(0, 150, 255, 0.5)';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([3, 2]);
+                    
+                    // Calculate how many lines we need on each side
+                    const halfFieldOfView = fieldOfViewRad / 2;
+                    const numSteps = Math.floor(halfFieldOfView / angleStepRad);
+                    
+                    // Draw lines on both sides of the main direction
+                    for (let i = 1; i <= numSteps; i++) {
+                        // Left side lines
+                        const leftStepRad = directionRad - (i * angleStepRad);
+                        const leftStepEndX = sensorCanvasX + Math.cos(leftStepRad) * lineLength;
+                        const leftStepEndY = sensorCanvasY - Math.sin(leftStepRad) * lineLength;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(sensorCanvasX, sensorCanvasY);
+                        ctx.lineTo(leftStepEndX, leftStepEndY);
+                        ctx.stroke();
+                        
+                        // Right side lines
+                        const rightStepRad = directionRad + (i * angleStepRad);
+                        const rightStepEndX = sensorCanvasX + Math.cos(rightStepRad) * lineLength;
+                        const rightStepEndY = sensorCanvasY - Math.sin(rightStepRad) * lineLength;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(sensorCanvasX, sensorCanvasY);
+                        ctx.lineTo(rightStepEndX, rightStepEndY);
+                        ctx.stroke();
+                    }
+                }
+                
+                ctx.setLineDash([]);
+            }
         }
     }
 

@@ -7,7 +7,7 @@ import { setMaterials } from '../features/MaterialsSlice';
 import { toggleDrawingMode } from '../features/DrawingModeSlice';
 import { addObject } from '../features/formFeatures/ObjectsSlice';
 import { removeLastPoint, clearPoints } from '../features/formFeatures/GeometrySlice';
-import { setSensorX, setSensorY, setSensorDirection } from '../features/SensorPositionSlice';
+import { setSensorX, setSensorY, setSensorDirection, setSensorAngleStep, setSensorFieldOfView } from '../features/SensorPositionSlice';
 
 // * UI:
 import { 
@@ -40,6 +40,7 @@ const Form = () => {
     const positionX = useSelector((state) => state.sensorPosition.x);
     const positionY = useSelector((state) => state.sensorPosition.y);
     const direction = useSelector((state) => state.sensorPosition.direction);
+    const angleStep = useSelector((state) => state.sensorPosition.angleStep);
 
     // * → Modals controllers:
     const [sensorsModalOpen, setSensorsModalOpen] = useState(false);
@@ -49,7 +50,6 @@ const Form = () => {
     const [errorModalOpen, setErrorModalOpen] = useState(false);
 
     // * → Form data:
-    const [angleStep, setAngleStep] = useState(1);
     const [sensorsArray, setSensorsArray] = useState([]);
     const [objectsArray, setObjectsArray] = useState([]);
 
@@ -173,15 +173,6 @@ const Form = () => {
                 </p>
             )}
 
-            {/* ANGLE STEP */}
-            <p className="text-sm">Angle step</p>
-            <input
-                type="number"
-                placeholder="Angle step (degrees)"
-                value={angleStep}
-                onChange={(e) => setAngleStep(e.target.value)}
-            />
-
             {/* SENSORS */}
             <p className="text-sm">Sensors</p>
             {showValidationMessages && sensorsArray.length === 0 && (
@@ -204,6 +195,22 @@ const Form = () => {
                     : ''
                 }
                 onChange={() => {}}
+            />
+
+            {/* ANGLE STEP */}
+            <p className="text-sm">Angle step</p>
+            <input
+                type="number"
+                placeholder="Angle step (degrees)"
+                value={angleStep}
+                min="0.1"
+                max="5"
+                step="0.1"
+                onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 1;
+                    const clampedValue = Math.min(Math.max(value, 0.1), 5);
+                    dispatch(setSensorAngleStep(clampedValue));
+                }}
             />
 
             {/* OBJECTS */}
@@ -341,11 +348,35 @@ const Form = () => {
                         if (prev.some(s => s.id === id)) {
                             return prev; 
                         }
+                        
+                        // Find the selected sensor and set its fieldOfView
+                        const selectedSensor = availableSensors.find(sensor => sensor.name === name);
+                        if (selectedSensor && selectedSensor.fieldOfView) {
+                            dispatch(setSensorFieldOfView(selectedSensor.fieldOfView));
+                        }
+                        
                         return [...prev, { id, name }];
                     });
                 }}
                 onUnselect={(id) => {
-                    setSensorsArray(prev => prev.filter(s => s.id !== id));
+                    setSensorsArray(prev => {
+                        const newArray = prev.filter(s => s.id !== id);
+                        
+                        // If no sensors selected, reset fieldOfView to 0 (no drawing)
+                        if (newArray.length === 0) {
+                            dispatch(setSensorFieldOfView(0));
+                        } else {
+                            // Set fieldOfView from the first remaining sensor
+                            const remainingSensor = availableSensors.find(sensor => 
+                                sensor.name === newArray[0].name
+                            );
+                            if (remainingSensor && remainingSensor.fieldOfView) {
+                                dispatch(setSensorFieldOfView(remainingSensor.fieldOfView));
+                            }
+                        }
+                        
+                        return newArray;
+                    });
                 }}
             />
 

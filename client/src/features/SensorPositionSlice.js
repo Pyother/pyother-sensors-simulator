@@ -5,7 +5,9 @@ const sensorPositionSlice = createSlice({
     initialState: {
         x: 0,
         y: 0,
-        direction: 30
+        direction: 30,
+        angleStep: 3,
+        fieldOfView: 0
     },
     reducers: {
         setSensorPosition: (state, action) => {
@@ -20,9 +22,15 @@ const sensorPositionSlice = createSlice({
         },
         setSensorDirection: (state, action) => {
             state.direction = action.payload;
+        },
+        setSensorAngleStep: (state, action) => {
+            state.angleStep = action.payload;
+        },
+        setSensorFieldOfView: (state, action) => {
+            state.fieldOfView = action.payload;
         }
     }
 });
 
-export const { setSensorPosition, setSensorX, setSensorY, setSensorDirection } = sensorPositionSlice.actions;
+export const { setSensorPosition, setSensorX, setSensorY, setSensorDirection, setSensorAngleStep, setSensorFieldOfView } = sensorPositionSlice.actions;
 export default sensorPositionSlice.reducer;
