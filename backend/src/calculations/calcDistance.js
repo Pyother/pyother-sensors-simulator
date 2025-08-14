@@ -42,7 +42,11 @@ const calcDistance = ({ position, direction, angleStep, sensor, inputObjects = [
             CROSSING_POINTS.push({
                 objectId: boundary.objectId,
                 crossingPoint: crossingPoint,
-                crossingPointMaterial: boundary.material
+                crossingPointMaterial: boundary.material,
+                distance: Math.sqrt(
+                    Math.pow(crossingPoint.x - position.x, 2) +
+                    Math.pow(crossingPoint.y - position.y, 2)
+                )
             });
         }
     })
@@ -72,9 +76,9 @@ const calcDistance = ({ position, direction, angleStep, sensor, inputObjects = [
         );
         return distanceA - distanceB;
     });
+
     //console.log('Output:', CROSSING_POINTS[0]);
     return CROSSING_POINTS[0];
-
 
 }
 

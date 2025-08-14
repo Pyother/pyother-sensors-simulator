@@ -61,10 +61,10 @@ const verifyRequestData = (data) => {
             error: true, 
             errorMessage: 'No sensor.'
         }
-    } else if (typeof data.sensor !== 'number') {
+    } else if (typeof data.sensor !== 'string') {
         return {
             error: true, 
-            errorMessage: 'Sensor should be a number.'
+            errorMessage: 'Sensor should be a string.'
         }
     } else if (data.sensor < 1) {
         return {

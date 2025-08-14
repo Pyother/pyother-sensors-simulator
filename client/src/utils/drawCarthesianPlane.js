@@ -370,7 +370,6 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
             if (calcResult.accurate && calcResult.accurate.crossingPoint) {
                 const crossingCanvasX = (calcResult.accurate.crossingPoint.x - centerXValue) * scaleX + width / 2;
                 const crossingCanvasY = height / 2 - (calcResult.accurate.crossingPoint.y - centerYValue) * scaleY;
-            
                 
                 ctx.fillStyle = '#ff6600';  
                 ctx.strokeStyle = '#ffffff';
@@ -383,16 +382,13 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
             }
         });
 
-        // * ↓ 2. Draw simulation data:
+        // * ↓ 2. Draw accurate including range data:
         calcs.forEach((calcResult, index) => {
-            if (calcResult.simulation && calcResult.simulation.crossingPoint) {
-                console.log('DEBUG Drawing simulation crossing point at:', calcResult.simulation.crossingPoint);
-                const crossingCanvasX = (calcResult.simulation.crossingPoint.x - centerXValue) * scaleX + width / 2;
-                const crossingCanvasY = height / 2 - (calcResult.simulation.crossingPoint.y - centerYValue) * scaleY;
-                
-                console.log('DEBUG Simulation canvas coordinates:', { crossingCanvasX, crossingCanvasY });
-                
-                ctx.fillStyle = '#00ff66';  
+            if (calcResult.accurate_including_range && calcResult.accurate_including_range.point.crossingPoint) {
+                const crossingCanvasX = (calcResult.accurate_including_range.point.crossingPoint.x - centerXValue) * scaleX + width / 2;
+                const crossingCanvasY = height / 2 - (calcResult.accurate_including_range.point.crossingPoint.y - centerYValue) * scaleY;
+
+                ctx.fillStyle = '#00ff66';
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 2;
                 

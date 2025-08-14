@@ -93,7 +93,8 @@ const calculate = ({
         // * ↓ 4. RETURN:
         return {
             accurate: ACCURATE_DISTANCE,
-            simulation: {},
+            accurate_including_range: MEASUREMENT.accurate_including_range,
+            simulation: MEASUREMENT.simulation,
             error: null
         };
     }
