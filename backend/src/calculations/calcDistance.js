@@ -20,11 +20,13 @@ const calcDistance = ({ position, direction, angleStep, sensor, inputObjects = [
         const objectId = uuidv4(); 
         const inputObject = object?.inputObject || {};
         const objectBoundaries = calcObjectBoundaries({ inputObject });
+        const material = object?.material || null;
 
         inputObject.id = objectId; 
         BOUNDARIES.push({
             objectId: objectId,
-            objectBoundaries: objectBoundaries
+            objectBoundaries: objectBoundaries,
+            material: material
         });
     });
 
@@ -34,12 +36,13 @@ const calcDistance = ({ position, direction, angleStep, sensor, inputObjects = [
         const crossingPoint = findCrossingPoint({ 
             position, 
             direction, 
-            objectBoundaries: boundary.objectBoundaries 
+            objectBoundaries: boundary.objectBoundaries,
         });
         if (crossingPoint) {
             CROSSING_POINTS.push({
                 objectId: boundary.objectId,
-                crossingPoint: crossingPoint
+                crossingPoint: crossingPoint,
+                crossingPointMaterial: boundary.material
             });
         }
     })

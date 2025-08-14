@@ -31,27 +31,15 @@ const CalculateButton = ({
             return;
         }
 
-        console.log("1: ", validation.valid);
-
         // * → Creating data:
-        console.log('DEBUG selectedSensor:', selectedSensor);
-        console.log('DEBUG selectedSensor.id:', selectedSensor?.id);
-        console.log('DEBUG selectedSensor.name:', selectedSensor?.name);
         const datapack = prepareDatapack(selectedSensor, positionX, positionY, direction, angleStep, objects);
-
-        console.log('Datapack (1):', datapack);
-        console.log('Datapack.sensor:', datapack.sensor);
-        console.log('Datapack.sensor type:', typeof datapack.sensor);
 
         // * → Data verification:
         const result = verifyRequestData(datapack);
-        console.log('Verification result:', result);
         if (result?.error) {
             onValidationError(result.errorMessage);
             return;
         }
-
-        console.log('Datapack:', datapack);
 
         // * → Sending requests:
         try {

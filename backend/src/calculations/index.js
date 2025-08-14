@@ -1,14 +1,12 @@
 // * Imports: 
 const calcDistance = require('./calcDistance');
 const { setSensor } = require('./sensorModel');
-const { setEnvironment } = require('./environmentModel');
 const { setMeasurement } = require('./measurementModel');
 
 // * ↓ Global variables:
 // Equational factors. 
 let ACCURATE_DISTANCE = {};
 let SENSOR = {};
-let ENVIRONMENT = {};
 let MEASUREMENT = {};
 
 // * ↓ Main function
@@ -62,10 +60,9 @@ const calculate = ({
             inputObjects: environment
         });
 
-        // * ↓ 2. SENSORS AND ENVIRONMENT: 
-        // Initializing the sensors and environment objects.
+        // * ↓ 2. SENSOR: 
+        // Initializing the sensor object.
         SENSOR = setSensor(sensor);
-        ENVIRONMENT = setEnvironment(environment);
 
         // ↓ 2.1. Check if sensor exists:
         if (!SENSOR) {
@@ -76,22 +73,22 @@ const calculate = ({
             };
         }
 
-        // ↓ 2.2. Check if environment is valid:
-        if (!ENVIRONMENT || ENVIRONMENT.length === 0) {
-            return {
-                accurate: ACCURATE_DISTANCE,
-                simulation: null,
-                error: 'Could not match data with any material'
-            };
-        }
-
         // * ↓ 3. SIMULATED DISTANCE CALCULATION:
         // 
         MEASUREMENT = setMeasurement(
             coords, 
             SENSOR, 
-            ENVIRONMENT
+            environment
         );
+
+        // ↓ 3.1. Check if measurement has an error:
+        if (MEASUREMENT.error) {
+            return {
+                accurate: ACCURATE_DISTANCE,
+                simulation: null,
+                error: MEASUREMENT.error
+            };
+        }
 
         // * ↓ 4. RETURN:
         return {

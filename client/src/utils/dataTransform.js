@@ -26,7 +26,8 @@ const prepareApiRequestBody = (data) => {
         angleStep: data?.angleStep,
         sensor: data?.sensor,
         inputObjects: (data?.inputObjects || []).map(obj => ({
-            inputObject: obj.geometry || []
+            inputObject: obj.geometry || [],
+            material: obj.material || null,
         }))
     };
 };

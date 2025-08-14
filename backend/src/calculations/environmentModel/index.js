@@ -1,21 +1,15 @@
 const materials = require('../../configuration/materials.json');
 
-const setEnvironment = (environment) => {
+const setEnvironment = (object) => {
 
-    environment.forEach((object) => {
+    const material = materials.surfacesParams.find(m => m.id === object.crossingPointMaterial);
+    
+    // * ↓ 1. Material not found:
+    if (!material) {
+        return null;
+    }
 
-        const material = materials.surfacesParams.find(m => m.id === object.material);
-        
-        // * ↓ Material not found:
-        if (!material) {
-            return null;
-        }
-
-        // * ↓ Material found:
-        object.material = material;
-    })
-
-    return environment;
+    return material;
 }
 
 module.exports = { setEnvironment };

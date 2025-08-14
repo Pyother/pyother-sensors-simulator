@@ -1,4 +1,6 @@
+// * ↓ Imports:
 const calcDistance = require('../calcDistance');
+const { setEnvironment } = require('../environmentModel');
 
 // * ↓ Global variables:
 let ACCURATE_POINTS = [];
@@ -19,7 +21,30 @@ const setMeasurement = (coords, sensor, environment) => {
         DIRECTIONS.push(Math.round(i * 1000) / 1000);
     }
 
-    console.log('DIRECTIONS:', JSON.stringify(DIRECTIONS, null, 2)); 
+    // * ↓ 1.2. Calculate accurate points for each direction:
+    DIRECTIONS.forEach((direction) => {
+        const point = calcDistance({
+            position: POSITION,
+            direction: direction,
+            angleStep: ANGLE_STEP,
+            sensor: sensor,
+            inputObjects: environment
+        });
+        if (point) {
+            ACCURATE_POINTS.push({
+                direction: direction,
+                point: point
+            });
+        }  
+    });
+
+    // * ↓ 2. SET ENVIRONMENT FOR EACH POINT:
+    ACCURATE_POINTS.forEach((accuratePoint) => {
+        accuratePoint.point.material = setEnvironment(accuratePoint.point);
+        delete accuratePoint.point.crossingPointMaterial;
+    });
+
+    console.log('DEBUG ACCURATE_POINTS:', JSON.stringify(ACCURATE_POINTS, null, 2)); 
 
     return {
         coords,
