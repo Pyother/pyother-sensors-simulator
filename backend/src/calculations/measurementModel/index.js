@@ -12,13 +12,12 @@ const setMeasurement = (coords, sensor, environment) => {
     // * ↓ 1. CALCULATE POSSIBLE ACCURATE POINTS:
 
     // * ↓ 1.1. Set new directions based on angle step:
-    for (let i = ORIGINAL_DIRECTION; i < ORIGINAL_DIRECTION + (sensor.fieldOfView / 2); i += ANGLE_STEP) {
+    for (let i = ORIGINAL_DIRECTION; i <= ORIGINAL_DIRECTION + (sensor.fieldOfView / 2); i += ANGLE_STEP) {
         if(i !== ORIGINAL_DIRECTION) DIRECTIONS.push(Math.round(i * 1000) / 1000);
     }
-    for (let i = ORIGINAL_DIRECTION; i > ORIGINAL_DIRECTION - (sensor.fieldOfView / 2); i -= ANGLE_STEP) {
+    for (let i = ORIGINAL_DIRECTION; i >= ORIGINAL_DIRECTION - (sensor.fieldOfView / 2); i -= ANGLE_STEP) {
         DIRECTIONS.push(Math.round(i * 1000) / 1000);
     }
-    DIRECTIONS.sort((a, b) => a - b);
 
     console.log('DIRECTIONS:', JSON.stringify(DIRECTIONS, null, 2)); 
 
