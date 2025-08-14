@@ -8,11 +8,13 @@ const { v4: uuidv4 } = require('uuid');
 const BOUNDARIES = []; 
 const CROSSING_POINTS = [];
 
-const calcDistance = ({ position, direction, sensor, inputObjects = [] }) => {
+const calcDistance = ({ position, direction, angleStep, sensor, inputObjects = [] }) => {
 
     // * Clear global arrays for each new calculation
     BOUNDARIES.length = 0;
     CROSSING_POINTS.length = 0;
+
+    console.log('angleStep received:', angleStep); // Logowanie dla potwierdzenia
 
     // * ↓ 1. Boundaries:
     // Calculating boundaries for each object.
@@ -69,7 +71,7 @@ const calcDistance = ({ position, direction, sensor, inputObjects = [] }) => {
         );
         return distanceA - distanceB;
     });
-    console.log('Output:', CROSSING_POINTS[0]);
+    //console.log('Output:', CROSSING_POINTS[0]);
     return CROSSING_POINTS[0];
 
 

@@ -3,7 +3,7 @@ const calcDistance = require('./calcDistance');
 
 // * ↓ Global variables:
 // Equational factors. 
-const ACCURATE_DISTANCE = {};
+let ACCURATE_DISTANCE = {};
 
 // * ↓ Main function
 // Entry point for the calculations module.
@@ -45,18 +45,32 @@ const calculate = ({
     enviroment           
 }) => {
 
-    // * ↓ 1. Real (accurate) distance calculation:
-    // 
-    ACCURATE_DISTANCE = calcDistance({
-        
-    });
+    if (calculationType === 'distance') {
 
-    // * ↓ 2. Sensors and Environment: 
-    // Initializing the sensors and environment objects.
+        // * ↓ 1. Real (accurate) distance calculation:
+        ACCURATE_DISTANCE = calcDistance({
+            position: coords?.position,
+            direction: coords?.direction,
+            angleStep: coords?.angleStep,
+            sensor: sensor,
+            inputObjects: enviroment
+        });
 
+        // * ↓ 2. Sensors and Environment: 
+        // Initializing the sensors and environment objects.
 
-    // * ↓ 3. 
+        // * ↓ 3. Simulated distance calculation:
+        // 
 
+        // * ↓ 4. Return:
+        return {
+            accurate: ACCURATE_DISTANCE,
+            simulation: {}
+        };
+    }
+
+    // Default fallback
+    throw new Error(`Unsupported calculation type: ${calculationType}`);
 };
 
 module.exports = calculate;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSensorDirection } from '../../features/SensorPositionSlice';
+import { setSensorDirection } from '../../features/FormSlice';
 import FormSection from './FormSection';
 import ValidationMessage from './ValidationMessage';
 
 const DirectionInput = ({ showValidationMessages }) => {
     const dispatch = useDispatch();
-    const direction = useSelector((state) => state.sensorPosition.direction);
+    const direction = useSelector((state) => state.form.sensorPosition.direction);
 
     const isDirectionInvalid = direction && (parseFloat(direction) < -180 || parseFloat(direction) > 180);
     const isDirectionValid = direction !== '' && parseFloat(direction) >= -180 && parseFloat(direction) <= 180;

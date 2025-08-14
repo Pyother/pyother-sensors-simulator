@@ -1,73 +1,48 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setSensorFieldOfView } from '../../features/SensorPositionSlice';
+import { setSensorFieldOfView } from '../../features/FormSlice';
 import FormSection from './FormSection';
 import ValidationMessage from './ValidationMessage';
 import Modal from '../Modal';
 
-const SensorSelector = ({ availableSensors, showValidationMessages, sensorsArray, setSensorsArray }) => {
+const SensorSelector = ({ availableSensors, showValidationMessages, selectedSensor, setSelectedSensor }) => {
     const dispatch = useDispatch();
     const [sensorsModalOpen, setSensorsModalOpen] = useState(false);
 
     const handleSensorSelect = (id, name) => {
-        setSensorsArray(prev => {
-            if (prev.some(s => s.id === id)) {
-                return prev; 
-            }
-            
-            // Find the selected sensor and set its fieldOfView
-            const selectedSensor = availableSensors.find(sensor => sensor.name === name);
-            if (selectedSensor && selectedSensor.fieldOfView) {
-                dispatch(setSensorFieldOfView(selectedSensor.fieldOfView));
-            }
-            
-            return [...prev, { id, name }];
-        });
+        // Find the selected sensor and set its fieldOfView
+        const selectedSensorData = availableSensors.find(sensor => sensor.id === id);
+        if (selectedSensorData) {
+            setSelectedSensor({ id, name });
+            dispatch(setSensorFieldOfView(selectedSensorData.fieldOfView));
+        }
     };
 
     const handleSensorUnselect = (id) => {
-        setSensorsArray(prev => {
-            const newArray = prev.filter(s => s.id !== id);
-            
-            // If no sensors selected, reset fieldOfView to 0 (no drawing)
-            if (newArray.length === 0) {
-                dispatch(setSensorFieldOfView(0));
-            } else {
-                // Set fieldOfView from the first remaining sensor
-                const remainingSensor = availableSensors.find(sensor => 
-                    sensor.name === newArray[0].name
-                );
-                if (remainingSensor && remainingSensor.fieldOfView) {
-                    dispatch(setSensorFieldOfView(remainingSensor.fieldOfView));
-                }
-            }
-            
-            return newArray;
-        });
+        if (selectedSensor && selectedSensor.id === id) {
+            setSelectedSensor(null);
+            dispatch(setSensorFieldOfView(0));
+        }
     };
 
     return (
         <>
             <FormSection title="Sensors">
                 <ValidationMessage
-                    show={showValidationMessages && sensorsArray.length === 0}
+                    show={showValidationMessages && !selectedSensor}
                     isValid={false}
-                    errorMessage="Select at least one sensor."
+                    errorMessage="Select a sensor."
                 />
                 <ValidationMessage
-                    show={showValidationMessages && sensorsArray.length > 0}
+                    show={showValidationMessages && selectedSensor}
                     isValid={true}
-                    validMessage="Sensors selected."
+                    validMessage="Sensor selected."
                 />
                 <input
                     type="text"
                     placeholder="Sensor"
                     onClick={() => setSensorsModalOpen(true)}
-                    value={
-                        sensorsArray.length > 0 
-                        ? sensorsArray.map(s => s.name).join(', ') 
-                        : ''
-                    }
+                    value={selectedSensor ? selectedSensor.name : ''}
                     onChange={() => {}}
                 />
             </FormSection>
@@ -77,10 +52,10 @@ const SensorSelector = ({ availableSensors, showValidationMessages, sensorsArray
                 title="Available Sensors"
                 isOpen={sensorsModalOpen}
                 closeEvent={() => setSensorsModalOpen(false)}
-                multipleSelections={true}
+                multipleSelections={false}
                 itemsType="sensors"
                 childrenArray={availableSensors}
-                selectionsArray={sensorsArray}
+                selection={selectedSensor}
                 onSelect={handleSensorSelect}
                 onUnselect={handleSensorUnselect}
             />

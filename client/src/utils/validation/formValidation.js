@@ -79,9 +79,9 @@ const verifyRequestData = (data) => {
 }
 
 // Walidacja formularza UI
-const validateFormInputs = (sensorsArray, objects, direction) => {
-    if (sensorsArray.length === 0) {
-        return { valid: false, message: 'At least one sensor must be selected' };
+const validateFormInputs = (selectedSensor, objects, direction) => {
+    if (!selectedSensor) {
+        return { valid: false, message: 'A sensor must be selected' };
     }
 
     if (objects.length === 0) {

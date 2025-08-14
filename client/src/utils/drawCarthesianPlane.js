@@ -363,12 +363,22 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
     }
 
     if (calcs && calcs.length > 0) {
-        calcs.forEach((calc) => {
-            if (calc.crossingPoint) {
-                const crossingCanvasX = (calc.crossingPoint.x - centerXValue) * scaleX + width / 2;
-                const crossingCanvasY = height / 2 - (calc.crossingPoint.y - centerYValue) * scaleY;
+        console.log('DEBUG calcs in drawCarthesianPlane:', calcs);
+        console.log('DEBUG calcs.length:', calcs.length);
+
+        // * ↓ 1. Draw accurate data:
+        calcs.forEach((calcResult, index) => {
+            console.log(`DEBUG calcResult[${index}]:`, calcResult);
+            console.log(`DEBUG calcResult[${index}].accurate:`, calcResult.accurate);
+            
+            if (calcResult.accurate && calcResult.accurate.crossingPoint) {
+                console.log('DEBUG Drawing accurate crossing point at:', calcResult.accurate.crossingPoint);
+                const crossingCanvasX = (calcResult.accurate.crossingPoint.x - centerXValue) * scaleX + width / 2;
+                const crossingCanvasY = height / 2 - (calcResult.accurate.crossingPoint.y - centerYValue) * scaleY;
                 
-                ctx.fillStyle = '#ff6600';
+                console.log('DEBUG Accurate canvas coordinates:', { crossingCanvasX, crossingCanvasY });
+                
+                ctx.fillStyle = '#ff6600';  
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 2;
                 
@@ -378,6 +388,28 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
                 ctx.stroke();
             }
         });
+
+        // * ↓ 2. Draw simulation data:
+        calcs.forEach((calcResult, index) => {
+            if (calcResult.simulation && calcResult.simulation.crossingPoint) {
+                console.log('DEBUG Drawing simulation crossing point at:', calcResult.simulation.crossingPoint);
+                const crossingCanvasX = (calcResult.simulation.crossingPoint.x - centerXValue) * scaleX + width / 2;
+                const crossingCanvasY = height / 2 - (calcResult.simulation.crossingPoint.y - centerYValue) * scaleY;
+                
+                console.log('DEBUG Simulation canvas coordinates:', { crossingCanvasX, crossingCanvasY });
+                
+                ctx.fillStyle = '#00ff66';  
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                
+                ctx.beginPath();
+                ctx.arc(crossingCanvasX, crossingCanvasY, 6, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
+        });
+
+
     }
 }
 

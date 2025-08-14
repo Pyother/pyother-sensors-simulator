@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSensorAngleStep } from '../../features/SensorPositionSlice';
+import { setSensorAngleStep } from '../../features/FormSlice';
 import FormSection from './FormSection';
 
 const AngleStepInput = () => {
     const dispatch = useDispatch();
-    const angleStep = useSelector((state) => state.sensorPosition.angleStep);
+    const angleStep = useSelector((state) => state.form.sensorPosition.angleStep);
 
     return (
         <FormSection title="Angle step">

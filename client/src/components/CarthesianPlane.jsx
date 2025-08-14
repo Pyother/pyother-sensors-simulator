@@ -1,7 +1,7 @@
 // * React and Redux:
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPoint } from '../features/formFeatures/GeometrySlice';
+import { addPoint } from '../features/FormSlice';
 
 // * Components:
 import { Modal } from './index.js';
@@ -14,9 +14,9 @@ const CarthesianPlane = ({ active = true }) => {
 
     const dispatch = useDispatch();
     const drawingMode = useSelector((state) => state.drawingMode.on);
-    const points = useSelector((state) => state.geometry.points);
-    const confirmedObjects = useSelector((state) => state.objects.selectedObjects);
-    const sensorPosition = useSelector((state) => state.sensorPosition);
+    const points = useSelector((state) => state.form.currentGeometry.points);
+    const confirmedObjects = useSelector((state) => state.form.objects.selectedObjects);
+    const sensorPosition = useSelector((state) => state.form.sensorPosition);
     const calcs = useSelector((state) => state.calcs.calcs);
 
     const [modalOpen, setModalOpen] = useState(false);

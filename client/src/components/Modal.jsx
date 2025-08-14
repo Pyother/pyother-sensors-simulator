@@ -48,7 +48,8 @@ const Modal = ({
                             key={item.id} 
                             item={item} 
                             onSelect={onSelect} 
-                            onUnselect={onUnselect} 
+                            onUnselect={onUnselect}
+                            selectedSensor={selection}
                         />
                     ))}
                     {itemsType === 'materials' && childrenArray.map(item => (

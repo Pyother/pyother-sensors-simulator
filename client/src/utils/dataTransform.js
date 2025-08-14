@@ -1,19 +1,19 @@
-const prepareDatapack = (sensorsArray, positionX, positionY, direction, angleStep, objects) => {
-    return sensorsArray.map((s) => ({
+const prepareDatapack = (selectedSensor, positionX, positionY, direction, angleStep, objects) => {
+    return {
         position: {
             x: parseFloat(positionX),
             y: parseFloat(positionY)
         },
         direction: parseFloat(direction),
         angleStep: parseFloat(angleStep),
-        sensor: s.id,
+        sensor: selectedSensor.id,
         inputObjects: objects.map(obj => ({
             id: obj.id,
             name: obj.name,
             material: obj.material,
             geometry: obj.geometry
         }))
-    }));
+    };
 };
 
 const prepareApiRequestBody = (data) => {

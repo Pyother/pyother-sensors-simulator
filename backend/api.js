@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const config = require('./src/configuration/options.json');
 const materials = require('./src/configuration/materials.json');
-const calcDistance = require('./src/calculations/calcDistance');
+const calculate = require('./src/calculations');
 
 const router = express.Router();
 
@@ -24,9 +24,21 @@ router.get('/materials', (req, res) => {
 
 // * Distance calculation
 router.post('/calc/distance', (req, res) => {
-   const { position, direction, sensor, inputObjects } = req.body;
-   console.log('Calculating distance with data:', JSON.stringify({ position, direction, sensor, inputObjects }, null, 2));
-   res.json(calcDistance({ position, direction, sensor, inputObjects }));
+   const { position, direction, angleStep, sensor, inputObjects } = req.body;
+   console.log('Calculating distance with data:', JSON.stringify({ position, direction, angleStep, sensor, inputObjects }, null, 2));
+   
+   const result = calculate({
+      calculationType: 'distance',
+      sensor: sensor,
+      coords: {
+         position: position,
+         direction: direction,
+         angleStep: angleStep
+      },
+      enviroment: inputObjects
+   });
+   
+   res.json(result);
 });
 
 module.exports = router;

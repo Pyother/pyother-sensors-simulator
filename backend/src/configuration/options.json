@@ -1,6 +1,7 @@
 {
     "availableSensors": [
         {
+            "id": 1,
             "name": "HCSR04",
             "measurementType": "distance",
             "precision": 0.003,
@@ -9,6 +10,7 @@
             "range": 4
         },
         {
+            "id": 2,
             "name": "VL53L0X",
             "measurementType": "distance",
             "precision": 0.001,
@@ -17,6 +19,7 @@
             "range": 2
         },
         {
+            "id": 3,
             "name": "LIDAR-Lite v3",
             "measurementType": "distance",
             "precision": 0.025,

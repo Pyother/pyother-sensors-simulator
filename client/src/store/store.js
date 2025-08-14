@@ -5,9 +5,7 @@ import CalcsReducer from '../features/CalcsSlice';
 import ConfigReducer from '../features/ConfigSlice';
 import MaterialsReducer from '../features/MaterialsSlice';
 import DrawingModeReducer from '../features/DrawingModeSlice';
-import ObjectsReducer from '../features/formFeatures/ObjectsSlice';
-import GeometryReducer from '../features/formFeatures/GeometrySlice';
-import SensorPositionReducer from '../features/SensorPositionSlice';
+import FormReducer from '../features/FormSlice';
 
 const store = configureStore({
     reducer: {
@@ -15,9 +13,7 @@ const store = configureStore({
         config: ConfigReducer,
         materials: MaterialsReducer,
         drawingMode: DrawingModeReducer,
-        objects: ObjectsReducer,
-        geometry: GeometryReducer,
-        sensorPosition: SensorPositionReducer
+        form: FormReducer
     }
 });
 

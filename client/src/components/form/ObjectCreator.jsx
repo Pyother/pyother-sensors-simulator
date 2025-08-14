@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleDrawingMode } from '../../features/DrawingModeSlice';
-import { addObject } from '../../features/formFeatures/ObjectsSlice';
-import { removeLastPoint, clearPoints } from '../../features/formFeatures/GeometrySlice';
+import { addObject } from '../../features/FormSlice';
+import { removeLastPoint, clearPoints } from '../../features/FormSlice';
 import { 
     IoAddOutline,
     IoCheckmark,
@@ -18,8 +18,8 @@ const ObjectCreator = ({ materials, showValidationMessages }) => {
     
     // Redux selectors
     const drawingModeOn = useSelector((state) => state.drawingMode.on);
-    const objects = useSelector((state) => state.objects.selectedObjects);
-    const geometry = useSelector((state) => state.geometry.points);
+    const objects = useSelector((state) => state.form.objects.selectedObjects);
+    const geometry = useSelector((state) => state.form.currentGeometry.points);
 
     // Local state for modals and object creation
     const [materialsModalOpen, setMaterialsModalOpen] = useState(false);
@@ -47,12 +47,12 @@ const ObjectCreator = ({ materials, showValidationMessages }) => {
     const handleObjectDetailsModalClose = () => {
         setObjectNameModalOpen(false);
         if (selectedMaterial && objectName.trim()) {
-            console.log('Creating object with:', {
+            /*console.log('Creating object with:', {
                 name: objectName.trim(),
                 color: objectColor,
                 material: selectedMaterial?.id,
                 geometry: geometry
-            });
+            });*/
             
             dispatch(toggleDrawingMode());
             dispatch(addObject({

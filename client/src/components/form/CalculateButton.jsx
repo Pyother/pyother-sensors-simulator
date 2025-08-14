@@ -7,7 +7,7 @@ import { verifyRequestData } from '../../utils/validation/formValidation';
 import { prepareDatapack, prepareApiRequestBody } from '../../utils/dataTransform';
 
 const CalculateButton = ({ 
-    sensorsArray, 
+    selectedSensor, 
     onValidationError, 
     validateInputs,
     showValidationErrors 
@@ -16,57 +16,66 @@ const CalculateButton = ({
     const { postData, loading } = usePostRequest();
     
     // Redux selectors
-    const objects = useSelector((state) => state.objects.selectedObjects);
-    const positionX = useSelector((state) => state.sensorPosition.x);
-    const positionY = useSelector((state) => state.sensorPosition.y);
-    const direction = useSelector((state) => state.sensorPosition.direction);
-    const angleStep = useSelector((state) => state.sensorPosition.angleStep);
+    const objects = useSelector((state) => state.form.objects.selectedObjects);
+    const positionX = useSelector((state) => state.form.sensorPosition.x);
+    const positionY = useSelector((state) => state.form.sensorPosition.y);
+    const direction = useSelector((state) => state.form.sensorPosition.direction);
+    const angleStep = useSelector((state) => state.form.sensorPosition.angleStep);
 
     const handleCalculate = async () => {
         // * → Validation check
-        const validation = validateInputs(sensorsArray, objects, direction);
+        const validation = validateInputs(selectedSensor, objects, direction);
         if (!validation.valid) {
             onValidationError(validation.message);
             showValidationErrors();
             return;
         }
 
+        console.log("1: ", validation.valid);
+
         // * → Creating data:
-        const datapack = prepareDatapack(sensorsArray, positionX, positionY, direction, angleStep, objects);
+        console.log('DEBUG selectedSensor:', selectedSensor);
+        console.log('DEBUG selectedSensor.id:', selectedSensor?.id);
+        console.log('DEBUG selectedSensor.name:', selectedSensor?.name);
+        const datapack = prepareDatapack(selectedSensor, positionX, positionY, direction, angleStep, objects);
+
+        console.log('Datapack (1):', datapack);
+        console.log('Datapack.sensor:', datapack.sensor);
+        console.log('Datapack.sensor type:', typeof datapack.sensor);
 
         // * → Data verification:
-        for (const data of datapack) {
-            const result = verifyRequestData(data);
-            if (result?.error) {
-                onValidationError(result.errorMessage);
-                return;
-            }
+        const result = verifyRequestData(datapack);
+        console.log('Verification result:', result);
+        if (result?.error) {
+            onValidationError(result.errorMessage);
+            return;
         }
 
         console.log('Datapack:', datapack);
 
         // * → Sending requests:
         try {
-            for (const dataItem of datapack) {
-                const requestBody = prepareApiRequestBody(dataItem);
-                const response = await postData('/api/calc/distance', requestBody, {
-                    onSuccess: (response) => {
-                        console.log('Response:', response);
+            const requestBody = prepareApiRequestBody(datapack);
+            const response = await postData('/api/calc/distance', requestBody, {
+                onSuccess: (response) => {
+                    console.log('Response:', response);
+                    if (response) {
+                        console.log('Adding calc:', response);
                         dispatch(addCalc(response));
-                    },
-                    onError: (err) => {
-                        console.log('Error:', err);
-                        onValidationError(err);
                     }
-                });
-            }
+                },
+                onError: (err) => {
+                    console.log('Error:', err);
+                    onValidationError(err);
+                }
+            });
         } catch (error) {
             console.error('Calculate error:', error);
         }
     };
 
     const isCalculateDisabled = () => {
-        const validation = validateInputs(sensorsArray, objects, direction);
+        const validation = validateInputs(selectedSensor, objects, direction);
         return !validation.valid || loading;
     };
 

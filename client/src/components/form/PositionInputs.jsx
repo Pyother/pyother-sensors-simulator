@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSensorX, setSensorY } from '../../features/SensorPositionSlice';
+import { setSensorX, setSensorY } from '../../features/FormSlice';
 import FormSection from './FormSection';
 
 const PositionInputs = () => {
     const dispatch = useDispatch();
-    const positionX = useSelector((state) => state.sensorPosition.x);
-    const positionY = useSelector((state) => state.sensorPosition.y);
+    const positionX = useSelector((state) => state.form.sensorPosition.x);
+    const positionY = useSelector((state) => state.form.sensorPosition.y);
 
     return (
         <FormSection title="Position">

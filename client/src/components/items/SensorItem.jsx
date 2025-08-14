@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 // * UI:
 import { IoClose, IoAddSharp, IoOpenOutline, IoRemoveOutline } from "react-icons/io5";
 
-const SensorItem = ({ item, onSelect, onUnselect }) => {
+const SensorItem = ({ item, onSelect, onUnselect, selectedSensor }) => {
 
-    const [isSelected, setIsSelected] = useState(false);
+    const isSelected = selectedSensor && selectedSensor.id === item.id;
 
     return (
         <div className="item w-full flex flex-row space-x-1">
@@ -31,7 +31,6 @@ const SensorItem = ({ item, onSelect, onUnselect }) => {
                         } else {
                             onSelect(item.id, item.name);
                         }
-                        setIsSelected(!isSelected);
                     }}           
                 >
                     {isSelected ? <IoRemoveOutline /> : <IoAddSharp />}
