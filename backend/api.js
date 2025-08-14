@@ -25,7 +25,6 @@ router.get('/materials', (req, res) => {
 // * Distance calculation
 router.post('/calc/distance', (req, res) => {
    const { position, direction, angleStep, sensor, inputObjects } = req.body;
-   console.log('Calculating distance with data:', JSON.stringify({ position, direction, angleStep, sensor, inputObjects }, null, 2));
    
    const result = calculate({
       calculationType: 'distance',
@@ -35,7 +34,7 @@ router.post('/calc/distance', (req, res) => {
          direction: direction,
          angleStep: angleStep
       },
-      enviroment: inputObjects
+      environment: inputObjects
    });
    
    res.json(result);

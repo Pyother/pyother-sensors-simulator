@@ -14,8 +14,6 @@ const calcDistance = ({ position, direction, angleStep, sensor, inputObjects = [
     BOUNDARIES.length = 0;
     CROSSING_POINTS.length = 0;
 
-    console.log('angleStep received:', angleStep); // Logowanie dla potwierdzenia
-
     // * ↓ 1. Boundaries:
     // Calculating boundaries for each object.
     inputObjects.forEach((object) => {

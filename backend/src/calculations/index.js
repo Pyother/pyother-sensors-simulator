@@ -1,9 +1,15 @@
 // * Imports: 
 const calcDistance = require('./calcDistance');
+const { setSensor } = require('./sensorModel');
+const { setEnvironment } = require('./environmentModel');
+const { setMeasurement } = require('./measurementModel');
 
 // * ↓ Global variables:
 // Equational factors. 
 let ACCURATE_DISTANCE = {};
+let SENSOR = {};
+let ENVIRONMENT = {};
+let MEASUREMENT = {};
 
 // * ↓ Main function
 // Entry point for the calculations module.
@@ -42,30 +48,56 @@ const calculate = ({
     calculationType,    
     sensor,              
     coords,             
-    enviroment           
+    environment           
 }) => {
 
     if (calculationType === 'distance') {
 
-        // * ↓ 1. Real (accurate) distance calculation:
+        // * ↓ 1. REAL (ACCURATE) DISTANCE CALCULATION:
         ACCURATE_DISTANCE = calcDistance({
             position: coords?.position,
             direction: coords?.direction,
             angleStep: coords?.angleStep,
             sensor: sensor,
-            inputObjects: enviroment
+            inputObjects: environment
         });
 
-        // * ↓ 2. Sensors and Environment: 
+        // * ↓ 2. SENSORS AND ENVIRONMENT: 
         // Initializing the sensors and environment objects.
+        SENSOR = setSensor(sensor);
+        ENVIRONMENT = setEnvironment(environment);
 
-        // * ↓ 3. Simulated distance calculation:
+        // ↓ 2.1. Check if sensor exists:
+        if (!SENSOR) {
+            return {
+                accurate: null,
+                simulation: null,
+                error: 'Sensor not found'
+            };
+        }
+
+        // ↓ 2.2. Check if environment is valid:
+        if (!ENVIRONMENT || ENVIRONMENT.length === 0) {
+            return {
+                accurate: ACCURATE_DISTANCE,
+                simulation: null,
+                error: 'Could not match data with any material'
+            };
+        }
+
+        // * ↓ 3. SIMULATED DISTANCE CALCULATION:
         // 
+        MEASUREMENT = setMeasurement(
+            coords, 
+            SENSOR, 
+            ENVIRONMENT
+        );
 
-        // * ↓ 4. Return:
+        // * ↓ 4. RETURN:
         return {
             accurate: ACCURATE_DISTANCE,
-            simulation: {}
+            simulation: {},
+            error: null
         };
     }
 
