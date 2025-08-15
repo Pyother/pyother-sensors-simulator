@@ -4,28 +4,28 @@
       "id": "e5f6g7h8-i9j0-1234-efab-531234567894",
       "name": "HCSR04",
       "measurementType": "distance",
-      "precision": 0.003,
+      "precision": 3,
       "frequency": 40,
       "fieldOfView": 15,
-      "range": 4
+      "range": 4000
     },
     {
       "id": "f6g7h8i9-j0k1-2345-fabc-631234567895",
       "name": "VL53L0X",
       "measurementType": "distance",
-      "precision": 0.001,
+      "precision": 1,
       "frequency": 50,
       "fieldOfView": 25,
-      "range": 2
+      "range": 2000
     },
     {
       "id": "g7h8i9j0-k1l2-3456-abcd-731234567896",
       "name": "LIDAR-Lite v3",
       "measurementType": "distance",
-      "precision": 0.025,
+      "precision": 25,
       "frequency": 500,
       "fieldOfView": 0.5,
-      "range": 40
+      "range": 40000
     }
   ],
   "availableMeasurementTypes": [
