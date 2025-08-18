@@ -95,6 +95,7 @@ const calculate = ({
             accurate: ACCURATE_DISTANCE,
             accurate_including_range: MEASUREMENT.accurate_including_range,
             simulation: MEASUREMENT.simulation,
+            globalSimulatedPoint: MEASUREMENT.globalSimulatedPoint,
             error: null
         };
     }

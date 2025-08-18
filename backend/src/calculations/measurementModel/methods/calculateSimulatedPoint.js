@@ -9,4 +9,4 @@ const calculateSimulatedPoint = (startPoint, direction, distance) => {
     return crossingPoint;
 }
 
-console.log(JSON.stringify(calculateSimulatedPoint({ x: 0, y: 0 }, -120, 1), null, 2));
+module.exports = { calculateSimulatedPoint };

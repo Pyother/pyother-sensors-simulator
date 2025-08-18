@@ -293,13 +293,11 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
             
             ctx.setLineDash([]);
             
-            // Draw field of view boundaries and angle step lines
             if (sensorPosition.fieldOfView !== undefined && sensorPosition.fieldOfView > 0) {
                 const fieldOfViewRad = sensorPosition.fieldOfView * Math.PI / 180;
                 const leftBoundaryRad = directionRad - fieldOfViewRad / 2;
                 const rightBoundaryRad = directionRad + fieldOfViewRad / 2;
                 
-                // Draw field of view boundaries
                 const leftEndX = sensorCanvasX + Math.cos(leftBoundaryRad) * lineLength;
                 const leftEndY = sensorCanvasY - Math.sin(leftBoundaryRad) * lineLength;
                 const rightEndX = sensorCanvasX + Math.cos(rightBoundaryRad) * lineLength;
@@ -309,19 +307,16 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
                 ctx.lineWidth = 1;
                 ctx.setLineDash([5, 5]);
                 
-                // Draw left boundary
                 ctx.beginPath();
                 ctx.moveTo(sensorCanvasX, sensorCanvasY);
                 ctx.lineTo(leftEndX, leftEndY);
                 ctx.stroke();
                 
-                // Draw right boundary
                 ctx.beginPath();
                 ctx.moveTo(sensorCanvasX, sensorCanvasY);
                 ctx.lineTo(rightEndX, rightEndY);
                 ctx.stroke();
                 
-                // Draw angle step lines inside field of view
                 if (sensorPosition.angleStep !== undefined && sensorPosition.angleStep > 0) {
                     const angleStepRad = sensorPosition.angleStep * Math.PI / 180;
                     
@@ -329,13 +324,10 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
                     ctx.lineWidth = 1;
                     ctx.setLineDash([3, 2]);
                     
-                    // Calculate how many lines we need on each side
                     const halfFieldOfView = fieldOfViewRad / 2;
                     const numSteps = Math.floor(halfFieldOfView / angleStepRad);
                     
-                    // Draw lines on both sides of the main direction
                     for (let i = 1; i <= numSteps; i++) {
-                        // Left side lines
                         const leftStepRad = directionRad - (i * angleStepRad);
                         const leftStepEndX = sensorCanvasX + Math.cos(leftStepRad) * lineLength;
                         const leftStepEndY = sensorCanvasY - Math.sin(leftStepRad) * lineLength;
@@ -345,7 +337,6 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
                         ctx.lineTo(leftStepEndX, leftStepEndY);
                         ctx.stroke();
                         
-                        // Right side lines
                         const rightStepRad = directionRad + (i * angleStepRad);
                         const rightStepEndX = sensorCanvasX + Math.cos(rightStepRad) * lineLength;
                         const rightStepEndY = sensorCanvasY - Math.sin(rightStepRad) * lineLength;
@@ -371,14 +362,25 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
                 const crossingCanvasX = (calcResult.accurate.crossingPoint.x - centerXValue) * scaleX + width / 2;
                 const crossingCanvasY = height / 2 - (calcResult.accurate.crossingPoint.y - centerYValue) * scaleY;
                 
-                ctx.fillStyle = '#ff6600';  
+                ctx.fillStyle = '#0066ff'; 
                 ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 3;
                 
                 ctx.beginPath();
-                ctx.arc(crossingCanvasX, crossingCanvasY, 8, 0, 2 * Math.PI);
+                ctx.arc(crossingCanvasX, crossingCanvasY, 10, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.stroke();
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(crossingCanvasX, crossingCanvasY, 3, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                ctx.fillStyle = '#0066ff';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('A', crossingCanvasX, crossingCanvasY - 12);
             }
         });
 
@@ -388,18 +390,112 @@ function drawCarthesianPlane(canvas, zoom = 1, centerXValue = 0, centerYValue = 
                 const crossingCanvasX = (calcResult.accurate_including_range.point.crossingPoint.x - centerXValue) * scaleX + width / 2;
                 const crossingCanvasY = height / 2 - (calcResult.accurate_including_range.point.crossingPoint.y - centerYValue) * scaleY;
 
-                ctx.fillStyle = '#00ff66';
+                ctx.fillStyle = '#00cc44'; 
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 2;
                 
                 ctx.beginPath();
-                ctx.arc(crossingCanvasX, crossingCanvasY, 6, 0, 2 * Math.PI);
+                ctx.arc(crossingCanvasX, crossingCanvasY, 8, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.stroke();
+                
+                // Add cross pattern inside
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(crossingCanvasX - 4, crossingCanvasY);
+                ctx.lineTo(crossingCanvasX + 4, crossingCanvasY);
+                ctx.moveTo(crossingCanvasX, crossingCanvasY - 4);
+                ctx.lineTo(crossingCanvasX, crossingCanvasY + 4);
+                ctx.stroke();
+                
+                // Label
+                ctx.fillStyle = '#00cc44';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('R', crossingCanvasX, crossingCanvasY - 10);
             }
         });
 
+        // * ↓ 3. Draw simulation data:
+        calcs.forEach((calcResult, index) => {
+            if (calcResult.simulation && Array.isArray(calcResult.simulation)) {
+                calcResult.simulation.forEach((simulationPoint, simIndex) => {
+                    if (simulationPoint.simulation && simulationPoint.simulation.crossingPoint) {
+                        const crossingCanvasX = (simulationPoint.simulation.crossingPoint.x - centerXValue) * scaleX + width / 2;
+                        const crossingCanvasY = height / 2 - (simulationPoint.simulation.crossingPoint.y - centerYValue) * scaleY;
 
+                        const likelihood = simulationPoint.likelihood || 0;
+                        const normalizedLikelihood = Math.max(0, Math.min(100, likelihood)) / 100;
+                        
+                        let r, g, b;
+                        if (normalizedLikelihood < 0.5) {
+                            const t = normalizedLikelihood / 0.5;
+                            r = 255;
+                            g = Math.floor(255 * t);
+                            b = 0;
+                        } else {
+                            const t = (normalizedLikelihood - 0.5) / 0.5;
+                            r = Math.floor(255 * (1 - t));
+                            g = 255;
+                            b = 0;
+                        }
+                        
+                        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 1;
+                        
+                        const pointSize = 2 + (normalizedLikelihood * 4); 
+                        
+                        ctx.beginPath();
+                        ctx.arc(crossingCanvasX, crossingCanvasY, pointSize, 0, 2 * Math.PI);
+                        ctx.fill();
+                        ctx.stroke();
+                        
+                        if (normalizedLikelihood > 0.7) {
+                            ctx.fillStyle = '#000000';
+                            ctx.font = '10px sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(`${Math.round(likelihood)}%`, crossingCanvasX, crossingCanvasY - pointSize - 8);
+                        }
+                    }
+                });
+            }
+        });
+
+        // * ↓ 4. Draw global simulated point:
+        calcs.forEach((calcResult, index) => {
+            if (calcResult.globalSimulatedPoint && calcResult.globalSimulatedPoint.x !== undefined && calcResult.globalSimulatedPoint.y !== undefined) {
+                const globalCanvasX = (calcResult.globalSimulatedPoint.x - centerXValue) * scaleX + width / 2;
+                const globalCanvasY = height / 2 - (calcResult.globalSimulatedPoint.y - centerYValue) * scaleY;
+
+                ctx.fillStyle = '#ffff00';  
+                ctx.strokeStyle = '#000000'; 
+                ctx.lineWidth = 2;
+                
+                ctx.beginPath();
+                ctx.arc(globalCanvasX, globalCanvasY, 12, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(globalCanvasX - 8, globalCanvasY);
+                ctx.lineTo(globalCanvasX + 8, globalCanvasY);
+                ctx.moveTo(globalCanvasX, globalCanvasY - 8);
+                ctx.lineTo(globalCanvasX, globalCanvasY + 8);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#000000';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('G', globalCanvasX, globalCanvasY - 14);
+            }
+        });
     }
 }
 
